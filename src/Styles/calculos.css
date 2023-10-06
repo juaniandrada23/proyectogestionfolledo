@@ -1,0 +1,134 @@
+.parametroscalculos{
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    background-color: #fff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    margin-top: 10px;
+  }
+
+  .todoslosparametros,
+  .parametrostotal {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: 30%;
+    margin-right: 30%;
+    gap: 10px;
+  }
+  
+  .todoslosparametros button,
+  .parametrostotal button {
+    padding: 8px 12px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+    margin-left: 45px;
+    margin-right: 45px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    transition: background-color 0.2s ease-in-out;
+    background-color: #007bff;
+    color: white;
+  }
+
+  .tablamontototalfiltrado button {
+    padding: 8px 12px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    margin-left: 60vh;
+    margin-right: 60vh;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    transition: background-color 0.2s ease-in-out;
+    background-color: #FF5714;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 12px;
+    align-items: center;
+  }
+  
+  .parametroscalculos h1{
+    font-size: 24px;
+    padding: 10px;
+    margin-left: 5px;
+  }
+
+  .tablacalculostotales{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    background-color: #fff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    margin-top: 10px;
+    overflow-x: auto;
+  }
+  
+  .tablacalculostotales h1{
+    font-size: 24px;
+    margin-bottom: 10px;
+    padding: 10px;
+    margin-left: 5px;
+  }
+
+  .tablacalculos{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    background-color: #fff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    margin-top: 10px;
+    overflow-x: auto;
+  }
+
+  .tablamontototalfiltrado{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    background-color: #fff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    margin-top: 10px;
+    overflow-x: auto;
+  }
+
+  .tablamontototalfiltrado h1{
+    font-size: 24px;
+    margin-bottom: 10px;
+    padding: 10px;
+    margin-left: 5px;
+  }
+
+  .tablacalculos h1{
+    font-size: 24px;
+    margin-bottom: 10px;
+    padding: 10px;
+    margin-left: 5px;
+  }
+
+  @media (max-width: 821px) {
+
+    .todoslosparametros button,
+    .parametrostotal button {
+      margin-left: 1px;
+      margin-right: 1px;
+    }
+
+    .tablamontototalfiltrado button {
+      margin-left: 5vh;
+      margin-right: 5vh;
+      display: flex;
+      justify-content: center;
+    }
+}
