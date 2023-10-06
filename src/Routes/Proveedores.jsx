@@ -112,7 +112,7 @@ const Proveedores = () => {
             setSnackbarOpen(true);
             setTimeout(() => {
               setSnackbarOpen(false);
-              window.location.reload();
+              window.location.reload('./Proveedores.jsx');
             }, 1000);
           } else {
             console.error('Error al modificar el proveedor');
