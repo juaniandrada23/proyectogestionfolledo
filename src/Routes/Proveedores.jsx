@@ -16,7 +16,6 @@ import Alert from '@mui/material/Alert';
 import useAuthorization from '../Functions/useAuthorization';
 import { useTimeout } from '../Functions/timeOut';
 import AuthAdmin from '../Functions/authAdmin';
-import { useNavigate } from 'react-router-dom';
 
 const Proveedores = () => {
   useAuthorization();
@@ -33,15 +32,8 @@ const Proveedores = () => {
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [isMobileScreen, setIsMobileScreen] = useState(window.innerWidth <= 600);
   const [error, setError] = useState('');
-  const navigate = useNavigate();
-
+  
   useTimeout();
-
-  const handleSnackbarClose = () => {
-    setSnackbarOpen(false);
-    // Reiniciar la página usando navigate después de cerrar el Snackbar
-    navigate('/proveedores');
-  };
 
   const handleWindowResize = () => {
     setIsMobileScreen(window.innerWidth <= 600);
@@ -120,7 +112,7 @@ const Proveedores = () => {
             setSnackbarOpen(true);
             setTimeout(() => {
               setSnackbarOpen(false);
-              handleSnackbarClose();
+              window.location.reload();
             }, 1000);
           } else {
             console.error('Error al modificar el proveedor');
