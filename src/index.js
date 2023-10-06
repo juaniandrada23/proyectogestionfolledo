@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import Principal from './Components/Principal';
+import AppRouter from './Routes/AppRouter';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Principal />
+    <AppRouter />
   </React.StrictMode>
 );
 
