@@ -40,7 +40,7 @@ const Proveedores = () => {
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
     // Reiniciar la página usando navigate después de cerrar el Snackbar
-    navigate('/');
+    navigate('/proveedores');
   };
 
   const handleWindowResize = () => {

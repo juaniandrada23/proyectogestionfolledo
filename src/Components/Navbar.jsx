@@ -57,7 +57,7 @@ const Navbar = () => {
                 <button className="text-white px-3 py-2 rounded-md text-sm font-medium transition-colors hover:text-blue-300" onClick={() => navigate(`/pagos/${userId}`)}>Pagos</button>
                 {rolUsuario === 'Administrador' && (
                   <>
-                    <button className="text-white px-3 py-2 rounded-md text-sm font-medium transition-colors hover:text-blue-300" onClick={() => navigate(`/proveedores/${userId}`)}>Proveedores</button>
+                    <button className="text-white px-3 py-2 rounded-md text-sm font-medium transition-colors hover:text-blue-300" onClick={() => navigate(`/proveedores`)}>Proveedores</button>
                     <button className="text-white px-3 py-2 rounded-md text-sm font-medium transition-colors hover:text-blue-300" onClick={() => navigate(`/calculos/${userId}`)}>Calculos</button>
                   </>
                 )}
@@ -87,7 +87,7 @@ const Navbar = () => {
                 <button className="text-white px-3 py-2 rounded-md text-sm font-medium transition-colors hover:text-blue-300" onClick={() => navigate(`/pagos/${userId}`)}>Pagos</button>
                 {rolUsuario === 'Administrador' && (
                   <>
-                    <button className="text-white px-3 py-2 rounded-md text-sm font-medium transition-colors hover:text-blue-300" onClick={() => navigate(`/proveedores/${userId}`)}>Proveedores</button>
+                    <button className="text-white px-3 py-2 rounded-md text-sm font-medium transition-colors hover:text-blue-300" onClick={() => navigate(`/proveedores`)}>Proveedores</button>
                     <button className="text-white px-3 py-2 rounded-md text-sm font-medium transition-colors hover:text-blue-300" onClick={() => navigate(`/calculos/${userId}`)}>Calculos</button>
                   </>
                 )}
