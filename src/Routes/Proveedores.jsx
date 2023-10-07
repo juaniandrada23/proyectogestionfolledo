@@ -16,6 +16,7 @@ import Alert from '@mui/material/Alert';
 import useAuthorization from '../Functions/useAuthorization';
 import { useTimeout } from '../Functions/timeOut';
 import AuthAdmin from '../Functions/authAdmin';
+import LinearProgress from '@mui/material/LinearProgress';
 
 const Proveedores = () => {
   useAuthorization();
@@ -28,14 +29,12 @@ const Proveedores = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [proveedorAEliminar, setProveedorAEliminar] = useState(null);
   const [borradoExitoso, setBorradoExitoso] = useState(false);
-
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [snackbarSeverity, setSnackbarSeverity] = useState('success');
-
   const [isMobileScreen, setIsMobileScreen] = useState(window.innerWidth <= 600);
   const [error, setError] = useState('');
-  
+  const [isLoading, setLoading] = useState(false);
+
   useTimeout();
 
   const handleWindowResize = () => {
@@ -78,11 +77,12 @@ const Proveedores = () => {
   };
 
   const agregarOEditarProveedor = () => {
-    // Validación: Verifica si el campo nombre está vacío
     if (!nuevoProveedor.nombre) {
       setError('Error: El campo nombre es requerido');
       return;
     }
+
+    setLoading(true);
 
     // Verificar si el proveedor ya existe en la lista
     const proveedorExistente = proveedores.find(
@@ -113,16 +113,13 @@ const Proveedores = () => {
             setIdProveedorEditar(null);
             setSnackbarMessage('Proveedor modificado correctamente');
             setSnackbarOpen(true);
-            setSnackbarSeverity('success');
+            setLoading(false);
             setTimeout(() => {
               setSnackbarOpen(false);
               window.location.reload();
             }, 1000);
           } else {
             console.error('Error al modificar el proveedor');
-            setSnackbarOpen(true)
-            setSnackbarSeverity('error');
-            setSnackbarMessage('Error con la conexión del servidor, intente nuevamente');
           }
         })
         .catch(error => console.error('Error al modificar el proveedor', error));
@@ -144,51 +141,38 @@ const Proveedores = () => {
           setError('');
           setSnackbarMessage('Proveedor agregado correctamente');
           setSnackbarOpen(true);
-          setSnackbarSeverity('success');
+          setLoading(false);
           setTimeout(() => {
             setSnackbarOpen(false);
             window.location.reload();
           }, 1000);
         })
-        .catch(error => {
-          console.error('Error al agregar el proveedor', error)
-          setSnackbarOpen(true)
-          setSnackbarSeverity('error');
-          setSnackbarMessage('Error con la conexión del servidor, intente nuevamente');
-        });
+        .catch(error => console.error('Error al agregar el proveedor', error));
     }
   };  
 
   const modificarProveedor = (id) => {
-    // Obtener los datos del proveedor a editar
     const proveedorAEditar = proveedores.find(proveedor => proveedor.id === id);
   
     if (proveedorAEditar) {
-      // Establecer los datos del proveedor en el formulario de edición
       setNuevoProveedor({
         nombre: proveedorAEditar.nombre,
       });
   
-      // Establecer el modo edición y el ID del proveedor a editar
       setModoEdicion(true);
       setIdProveedorEditar(id);
     }
   };
   
   const borrarProveedor = (id) => {
-    // Cerrar el modal de confirmación
+
     setModalOpen(false);
-  
-    // Lógica para enviar la solicitud DELETE al servidor
+
     fetch(`https://apifolledo.onrender.com/proveedores/${id}`, {
       method: 'DELETE',
     })
       .then(response => {
         if (response.ok) {
-          // Eliminar el proveedor de la lista de proveedores después de borrarlo
-          // Puedes implementar una función para cargar los proveedores nuevamente aquí
-  
-          // Indicar que el borrado fue exitoso
           setBorradoExitoso(true);
         } else {
           console.error('Error al borrar el proveedor');
@@ -247,14 +231,15 @@ const Proveedores = () => {
             <h1>{modoEdicion ? `Modificar Proveedor ${idProveedorEditar}` : 'Agregar Proveedor'}</h1>
             <form>
               <div className='formAgregar'>
-                <TextField label="Proveedor" name="nombre" value={nuevoProveedor.nombre} onChange={handleNuevoProveedorChange}/>
-                <div style={{display:'flex', flexDirection:'column', justifyContent:'center',textAlign:'center', marginTop:'5px', marginBottom:'5px', color:'red'}}>
+                <div style={{display:'flex', flexDirection:'column', justifyContent:'center',textAlign:'center', marginBottom:'5px', color:'red'}}>
                   {error && <p className="error-message">{error}</p>}
                 </div>
+                <TextField label="Proveedor" name="nombre" value={nuevoProveedor.nombre} onChange={handleNuevoProveedorChange}/>
               </div>
               <div className='btnAgregar'>
               <button className='agregarProv' type="button" onClick={agregarOEditarProveedor}>
-                {modoEdicion ? 'Modificar proveedor' : 'Agregar proveedor'}
+                {modoEdicion ? 'Modificar proveedor' : 'Agregar proveedor'} <br />
+                {isLoading && <LinearProgress />}
               </button>
               </div>
             </form>
@@ -283,7 +268,7 @@ const Proveedores = () => {
       </Dialog>
 
       <Snackbar open={snackbarOpen} autoHideDuration={2000} onClose={handleCloseSnackbar} anchorOrigin={isMobileScreen ? { vertical: 'top', horizontal: 'center' } : { vertical: 'bottom', horizontal: 'left' }}>
-        <Alert severity={snackbarSeverity} sx={{ width: '100%' }}>
+        <Alert severity="success" sx={{ width: '100%' }}>
           {snackbarMessage}
         </Alert>
       </Snackbar>
