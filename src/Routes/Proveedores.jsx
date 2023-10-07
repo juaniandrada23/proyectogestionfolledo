@@ -28,8 +28,11 @@ const Proveedores = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [proveedorAEliminar, setProveedorAEliminar] = useState(null);
   const [borradoExitoso, setBorradoExitoso] = useState(false);
+
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+
   const [isMobileScreen, setIsMobileScreen] = useState(window.innerWidth <= 600);
   const [error, setError] = useState('');
   
@@ -110,12 +113,16 @@ const Proveedores = () => {
             setIdProveedorEditar(null);
             setSnackbarMessage('Proveedor modificado correctamente');
             setSnackbarOpen(true);
+            setSnackbarSeverity('success');
             setTimeout(() => {
               setSnackbarOpen(false);
               window.location.reload();
             }, 1000);
           } else {
             console.error('Error al modificar el proveedor');
+            setSnackbarOpen(true)
+            setSnackbarSeverity('error');
+            setSnackbarMessage('Error con la conexión del servidor, intente nuevamente');
           }
         })
         .catch(error => console.error('Error al modificar el proveedor', error));
@@ -137,12 +144,18 @@ const Proveedores = () => {
           setError('');
           setSnackbarMessage('Proveedor agregado correctamente');
           setSnackbarOpen(true);
+          setSnackbarSeverity('success');
           setTimeout(() => {
             setSnackbarOpen(false);
             window.location.reload();
           }, 1000);
         })
-        .catch(error => console.error('Error al agregar el proveedor', error));
+        .catch(error => {
+          console.error('Error al agregar el proveedor', error)
+          setSnackbarOpen(true)
+          setSnackbarSeverity('error');
+          setSnackbarMessage('Error con la conexión del servidor, intente nuevamente');
+        });
     }
   };  
 
@@ -270,7 +283,7 @@ const Proveedores = () => {
       </Dialog>
 
       <Snackbar open={snackbarOpen} autoHideDuration={2000} onClose={handleCloseSnackbar} anchorOrigin={isMobileScreen ? { vertical: 'top', horizontal: 'center' } : { vertical: 'bottom', horizontal: 'left' }}>
-        <Alert severity="success" sx={{ width: '100%' }}>
+        <Alert severity={snackbarSeverity} sx={{ width: '100%' }}>
           {snackbarMessage}
         </Alert>
       </Snackbar>

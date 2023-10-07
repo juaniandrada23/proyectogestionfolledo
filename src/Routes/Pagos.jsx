@@ -12,6 +12,8 @@ import { useNavigate } from 'react-router-dom';
 import useAuthorization from '../Functions/useAuthorization';
 import { useTimeout } from '../Functions/timeOut';
 import BotonEliminarPago from '../Components/BotonEliminarPago';
+import LinearProgress from '@mui/material/LinearProgress';
+import Alert from '@mui/material/Alert';
 
 const Pagos = () => {
   useAuthorization();
@@ -19,14 +21,18 @@ const Pagos = () => {
   const [pagos, setPagos] = useState([]);
   const [nombreproveedores, setNombreProveedores] = useState([]);
   const [agregadaExitosa, setAgregadaExitosa] = useState(false);
+
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [fechaDesde, setFechaDesde] = useState("");
   const [fechaHasta, setFechaHasta] = useState("");
   const [nombreProveedorFiltro, setNombreProveedorFiltro] = useState("");
+
   const [error, setError] = useState('');
+
   const [isMobileScreen, setIsMobileScreen] = useState(window.innerWidth <= 600);
   const ITEMS_PER_PAGE = 5;
   const [currentPage, setCurrentPage] = useState(1);
+
   const [formData, setFormData] = useState({
     nombre: "",
     monto: "",
@@ -36,8 +42,13 @@ const Pagos = () => {
   });
   const rolUsuario = localStorage.getItem("userRole");
   const userId = localStorage.getItem('userId');
+
   const [esPositivo, setEsPositivo] = useState(false);
   const [esNegativo, setEsNegativo] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [cargandoForm, setCargandoForm] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success');
 
   const handleEsPositivoChange = (e) => {
     setEsPositivo(e.target.checked);
@@ -126,7 +137,9 @@ const Pagos = () => {
     }
 
     const token = localStorage.getItem('token');
-    const userId = JSON.parse(atob(token.split('.')[1])).userId; // Obtén el userId del token
+    const userId = JSON.parse(atob(token.split('.')[1])).userId;
+
+    setCargandoForm(true);
 
     fetch(`https://apifolledo.onrender.com/pagos/${userId}`, {
       method: "POST",
@@ -139,8 +152,18 @@ const Pagos = () => {
       .then((data) => {
         console.log("Respuesta del servidor:", data);
         setAgregadaExitosa(true);
+        setCargandoForm(false);
+        setSnackbarMessage('Pago agregado correctamente');
+        setSnackbarOpen(true);
+        setSnackbarSeverity('success');
       })
-      .catch((error) => console.error("Error al enviar el formulario:", error));
+      .catch(error => {
+        console.error("Error al enviar el formulario:", error)
+        setSnackbarOpen(true)
+        setSnackbarSeverity('error');
+        setCargandoForm(false);
+        setSnackbarMessage('Error con la conexión del servidor, intente nuevamente');
+    });
   };
 
   useEffect(() => {
@@ -199,12 +222,12 @@ const Pagos = () => {
       .catch(error => console.error('Error al obtener los datos: ', error));
   }, []);
 
-const aplicarFiltros = () => {
-  if (!fechaDesde || !fechaHasta) {
-    setError('Error: Datos deben ser requeridos para poder aplicar el filtrado');
-    return;
-  } else if (fechaDesde > fechaHasta) {
+  const aplicarFiltros = () => {
+  if (fechaDesde > fechaHasta) {
     setError('Error: La fecha desde es mayor que la fecha hasta');
+    return;
+  } else if ( !fechaDesde && !fechaHasta && !nombreProveedorFiltro) {
+    setError('Error: Debe ingresar los datos para filtrar')
     return;
   }
 
@@ -214,23 +237,30 @@ const aplicarFiltros = () => {
     apiUrl = `https://apifolledo.onrender.com/pagos/filtrando?fechadesde=${fechaDesde}&fechahasta=${fechaHasta}&nombreProveedor=${nombreProveedorFiltro}`;
   }
 
+  setIsLoading(true);
+
   fetch(apiUrl)
     .then((response) => {
       if (!response.ok) {
-        throw new Error('Error en la solicitud');
+        if (response.status >= 500 && response.status <= 503) {
+          throw new Error('Error: Conexión con el servidor perdida, intente nuevamente');
+        } else {
+          throw new Error('Error en la solicitud');
+        }
       }
       return response.json();
     })
     .then((data) => {
       setPagos(data);
-      setError(''); // Limpia el mensaje de error si la solicitud es exitosa
+      setError('');
+      setIsLoading(false);
       console.log(data);
     })
     .catch((error) => {
-      setError('Error al aplicar filtros: ' + error.message); // Muestra el mensaje de error
-      console.error("Error al aplicar filtros:", error);
+      setError('Error de conexion con el servidor, intente nuevamente');
+      setIsLoading(false);
     });
-};
+  };
 
   const onPageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -266,10 +296,10 @@ const aplicarFiltros = () => {
                     </option>
                   ))}
                 </select>
-              <button onClick={aplicarFiltros}>Aplicar Filtros</button>
+              <button onClick={aplicarFiltros}>Aplicar Filtros <br />{isLoading && <LinearProgress />}</button>            
             </div>
-            <div style={{display:'flex', flexDirection:'column', justifyContent:'center', marginTop:'5px', marginBottom:'5px', color:'red'}}>
-              {error && <p className="error-message">{error}</p>}
+            <div className='alerta' style={{display:'flex', flexDirection:'column', justifyContent:'center', marginTop:'5px', marginBottom:'5px', color:'red'}}>
+              {error && <Alert severity="error">{error}</Alert>}
             </div>
         </div>
 
@@ -336,7 +366,7 @@ const aplicarFiltros = () => {
                   <br />
 
                   <div className='botonera' style={{display:'flex', justifyContent:'center'}}>
-                    <button type="submit">Agregar Pago</button>
+                    <button type="submit">Agregar Pago  <br />{cargandoForm && <LinearProgress />}</button>
                   </div>
                 </form>
               </div>
@@ -398,7 +428,11 @@ const aplicarFiltros = () => {
         
       <Footer/>
 
-      <Snackbar open={snackbarOpen} autoHideDuration={2000} onClose={handleCloseSnackbar} anchorOrigin={ isMobileScreen ? { vertical: 'top', horizontal: 'center' } : { vertical: 'bottom', horizontal: 'left' }} message="Pago agregado correctamente"/>
+      <Snackbar open={snackbarOpen} autoHideDuration={2000} onClose={handleCloseSnackbar} anchorOrigin={isMobileScreen ? { vertical: 'top', horizontal: 'center' } : { vertical: 'bottom', horizontal: 'left' }}>
+        <Alert severity={snackbarSeverity} sx={{ width: '100%' }}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   )
 }
