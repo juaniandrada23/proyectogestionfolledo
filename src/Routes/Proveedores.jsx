@@ -82,9 +82,6 @@ const Proveedores = () => {
       return;
     }
 
-    setLoading(true);
-
-    // Verificar si el proveedor ya existe en la lista
     const proveedorExistente = proveedores.find(
       (proveedor) => proveedor.nombre === nuevoProveedor.nombre
     );
@@ -93,6 +90,8 @@ const Proveedores = () => {
       setError('Error: Ya existe un proveedor con ese nombre, elija otro');
       return;
     }
+
+    setLoading(true);
   
     if (modoEdicion) {
       // Si estamos en modo edición, enviar la solicitud PUT al servidor
@@ -232,7 +231,7 @@ const Proveedores = () => {
             <form>
               <div className='formAgregar'>
                 <div style={{display:'flex', flexDirection:'column', justifyContent:'center',textAlign:'center', marginBottom:'5px', color:'red'}}>
-                  {error && <p className="error-message">{error}</p>}
+                {error && <Alert severity="error"><strong>{error} </strong></Alert>}
                 </div>
                 <TextField label="Proveedor" name="nombre" value={nuevoProveedor.nombre} onChange={handleNuevoProveedorChange}/>
               </div>
