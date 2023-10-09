@@ -230,7 +230,7 @@ const Proveedores = () => {
             <h1>{modoEdicion ? `Modificar Proveedor ${idProveedorEditar}` : 'Agregar Proveedor'}</h1>
             <form>
               <div className='formAgregar'>
-                <div style={{display:'flex', flexDirection:'column', justifyContent:'center',textAlign:'center', marginBottom:'5px', color:'red'}}>
+                <div style={{display:'flex', flexDirection:'column', justifyContent:'center',textAlign:'center', marginBottom:'10px', color:'red'}}>
                 {error && <Alert severity="error"><strong>{error} </strong></Alert>}
                 </div>
                 <TextField label="Proveedor" name="nombre" value={nuevoProveedor.nombre} onChange={handleNuevoProveedorChange}/>

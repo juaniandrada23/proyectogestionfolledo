@@ -83,6 +83,49 @@
     margin-top: 10px;
   }
 
+  .alerta{
+    margin-left: 65vh;
+    margin-right: 65vh;
+  }
+
+  .date-input-container {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .date-input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #EAEBED;
+    color: #006989;
+    border-radius: 5px;
+    font-size: 16px;
+    outline: none; 
+    width: 150px;
+  }
+  
+  .date-input:focus {
+    border-color: #006989;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); 
+  }
+
+  ::-webkit-calendar-picker-indicator {
+    filter: invert(18%) sepia(80%) saturate(2476%) hue-rotate(171deg) brightness(97%) contrast(103%);
+  }
+
+  .formulario{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .tabla h1 {
+    text-align: center;
+  }
+
   @media (max-width: 800px) {
     .inputfiltro{
       display: flex;
@@ -90,6 +133,10 @@
       justify-content: center;
       padding-bottom: 10px;
       gap: 10px;
+    }
+
+    .nombreproveedor{
+      margin-left: 15px;
     }
 
     .inputfiltro button {
@@ -103,5 +150,14 @@
       font-size: 24px;
       margin-bottom: 1px;
       padding-top: 1px;
+    }
+
+    .alerta{
+      margin-right: 15px;
+      margin-left: 15px;
+    }
+
+    .tabla h1 {
+      text-align: center;
     }
 }

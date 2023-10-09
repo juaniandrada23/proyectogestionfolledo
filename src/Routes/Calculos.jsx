@@ -279,25 +279,25 @@ const Calculos = () => {
       <Grid container spacing={2} style={{ flexGrow: 1 }}>
             <Grid item xs={12} lg={4}>
               <div className='parametroscalculos'>
-                <h1>Filtrar fechas para monto total</h1>
+                <h1>Filtrar fechas para generación de PDF</h1>
                 <div className='parametrostotal'>
                   <label htmlFor="fechaDesdeTotal">Fecha desde total:</label>
-                  <input type="date" id="fechaDesdeTotal" value={fechaDesdeTotal} onChange={handlefechaDesdeTotalChange}/>
+                  <input className='date-input' type="date" id="fechaDesdeTotal" value={fechaDesdeTotal} onChange={handlefechaDesdeTotalChange}/>
                   <label htmlFor="fechaHastaTotal">Fecha hasta total:</label>
-                  <input type="date" id="fechaHastaTotal" value={fechaHastaTotal} onChange={handlefechaHastaTotalChange}/>
+                  <input className='date-input' type="date" id="fechaHastaTotal" value={fechaHastaTotal} onChange={handlefechaHastaTotalChange}/>
                   <button onClick={aplicarFiltroTotal}>Aplicar Calculos Totales</button>
                   {errorTotal && <p style={{marginBottom:'5px', color:'red'}} className="error-message">{errorTotal}</p>}
                   {errorPDF && <p style={{marginBottom:'5px', color:'red'}} className="error-message">{errorPDF}</p>}
                 </div>
                 <br />
-                <h1>Filtrar montos por proveedor</h1>
+                <h1>Filtrar para montos totales por Proveedor</h1>
                 <div className='todoslosparametros'>
                     <label htmlFor="fechaDesde">Fecha Desde:</label>
-                    <input type="date" id="fechaDesde" value={fechaDesde} onChange={handleFechaDesdeChange} />
+                    <input className='date-input' type="date" id="fechaDesde" value={fechaDesde} onChange={handleFechaDesdeChange} />
                     <label htmlFor="fechaHasta">Fecha Hasta:</label>
-                    <input type="date" id="fechaHasta" value={fechaHasta} onChange={handleFechaHastaChange} />
+                    <input className='date-input' type="date" id="fechaHasta" value={fechaHasta} onChange={handleFechaHastaChange} />
                     <label htmlFor="nombreProveedorFiltro">Nombre del Proveedor:</label>
-                    <select id="nombreProveedorFiltro" value={nombreProveedorFiltro} onChange={handleNombreProveedorFiltroChange}>
+                    <select className='date-input' id="nombreProveedorFiltro" value={nombreProveedorFiltro} onChange={handleNombreProveedorFiltroChange}>
                       <option value="">Seleccione</option>
                       {nombreproveedores.map((proveedor) => (
                         <option key={proveedor.nombre} value={proveedor.nombre}>
@@ -319,7 +319,7 @@ const Calculos = () => {
             </Grid>
             <Grid item xs={12} lg={8}>
               <div className='tablamontototalfiltrado'>
-                <h1>Tabla de monto total filtrado con ingresos y egresos</h1>
+                <h1>Tabla generada para el PDF</h1>
                 <table>
                   <thead>
                     <tr>
@@ -351,7 +351,7 @@ const Calculos = () => {
                 <button onClick={generarPDF}>Generar PDF <FaRegFilePdf style={{width:'20px', height:'20px'}}/></button>
               </div>
               <div className='tablacalculostotales'>
-                <h1>Tabla de montos totales por proveedor</h1>
+                <h1>Montos totales de proveedores</h1>
                 <table>
                   <thead>
                     <tr>
@@ -380,7 +380,7 @@ const Calculos = () => {
                 </table>
               </div>
               <div className='tablacalculos'>
-                <h1>Tabla de montos totales filtrados por proveedor</h1>
+                <h1>Monto total filtrados por proveedor</h1>
                 <table>
                   <thead>
                     <tr>

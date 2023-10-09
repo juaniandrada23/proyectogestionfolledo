@@ -27,6 +27,9 @@ const Pagos = () => {
   const [fechaHasta, setFechaHasta] = useState("");
   const [nombreProveedorFiltro, setNombreProveedorFiltro] = useState("");
 
+  const [nombreusuarios, setNombreUsuarios] = useState([]);
+  const [nombreUsuarioFiltro, setNombreUsuarioFiltro] = useState("");
+
   const [error, setError] = useState('');
 
   const [isMobileScreen, setIsMobileScreen] = useState(window.innerWidth <= 600);
@@ -74,6 +77,10 @@ const Pagos = () => {
   
   const handleNombreProveedorFiltroChange = (event) => {
     setNombreProveedorFiltro(event.target.value);
+  };
+
+  const handleNombreUsuarioFiltroChange = (event) => {
+    setNombreUsuarioFiltro(event.target.value);
   };
   
   const handleWindowResize = () => {
@@ -210,6 +217,13 @@ const Pagos = () => {
   }, []);
 
   useEffect(() => {
+    fetch('https://apifolledo.onrender.com/usuarios/nombres')
+      .then(response => response.json())
+      .then(data => setNombreUsuarios(data))
+      .catch(error => console.error('Error al cargar los nombres de los proveedores', error));
+  }, []);
+
+  useEffect(() => {
     fetch('https://api.bluelytics.com.ar/v2/latest')
       .then(response => response.json())
       .then(data => {
@@ -234,7 +248,7 @@ const Pagos = () => {
   let apiUrl = `https://apifolledo.onrender.com/pagos/filtrando/${userId}?fechadesde=${fechaDesde}&fechahasta=${fechaHasta}&nombreProveedor=${nombreProveedorFiltro}`;
 
   if (rolUsuario === 'Administrador') {
-    apiUrl = `https://apifolledo.onrender.com/pagos/filtrando?fechadesde=${fechaDesde}&fechahasta=${fechaHasta}&nombreProveedor=${nombreProveedorFiltro}`;
+    apiUrl = `https://apifolledo.onrender.com/pagos/filtrando?fechadesde=${fechaDesde}&fechahasta=${fechaHasta}&nombreProveedor=${nombreProveedorFiltro}&usuarioFiltrado=${nombreUsuarioFiltro}`;
   }
 
   setIsLoading(true);
@@ -279,12 +293,18 @@ const Pagos = () => {
         <div className="filtros" style={{textAlign:'center', marginTop:'10px'}}>
             <div className='inputfiltro'>
             <h1>Filtros</h1>
-              <label htmlFor="fechaDesde">Fecha Desde:</label>
-              <input type="date" id="fechaDesde" value={fechaDesde} onChange={handleFechaDesdeChange} />
-              <label htmlFor="fechaHasta">Fecha Hasta:</label>
-              <input type="date" id="fechaHasta" value={fechaHasta} onChange={handleFechaHastaChange} />
-              <label htmlFor="nombreProveedorFiltro">Nombre del Proveedor:</label>
+              <div className='date-input-container'>
+                <label htmlFor="fechaDesde">Fecha Desde:</label>
+                <input className='date-input' type="date" id="fechaDesde" value={fechaDesde} onChange={handleFechaDesdeChange} />
+              </div>
+              <div className='date-input-container'>
+                <label htmlFor="fechaHasta">Fecha Hasta:</label>
+                <input className='date-input' type="date" id="fechaHasta" value={fechaHasta} onChange={handleFechaHastaChange} />
+              </div>
+              <div className='nombreproveedor date-input-container'>
+                <label htmlFor="nombreProveedorFiltro">Proveedor:</label>
                 <select
+                  className='date-input'
                   id="nombreProveedorFiltro"
                   value={nombreProveedorFiltro}
                   onChange={handleNombreProveedorFiltroChange}
@@ -296,10 +316,28 @@ const Pagos = () => {
                     </option>
                   ))}
                 </select>
+              </div>
+              <div className='date-input-container'>
+                <label htmlFor="nombreUsuarioFiltro">Usuario:</label>
+                <select
+                  className='date-input'
+                  id="nombreUsuarioFiltro"
+                  value={nombreProveedorFiltro}
+                  onChange={handleNombreUsuarioFiltroChange}
+                >
+                  <option value="">Seleccione</option>
+                  {nombreusuarios.map((usuario) => (
+                    <option key={usuario.username} value={usuario.username}>
+                      {usuario.username}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               <button onClick={aplicarFiltros}>Aplicar Filtros <br />{isLoading && <LinearProgress />}</button>            
             </div>
             <div className='alerta' style={{display:'flex', flexDirection:'column', justifyContent:'center', marginTop:'5px', marginBottom:'5px', color:'red'}}>
-              {error && <Alert severity="error">{error}</Alert>}
+              {error && <Alert severity="error"><strong>{error} </strong></Alert>}
             </div>
         </div>
 
@@ -308,26 +346,30 @@ const Pagos = () => {
             <Grid item xs={12} lg={4}>
               <div className='tabla'>
                 <h1>Agregar pago</h1>
-                <form style={{display:'flex', flexDirection:'column', justifyContent:'center'}} onSubmit={handleFormSubmit}>
-                  <label htmlFor="nombre">Nombre del Proveedor</label>
-                  <select id="nombre" name="nombre" value={formData.nombre} onChange={handleInputChange} required>
-                    <option value="" disabled>Seleccione</option>
-                    {nombreproveedores.map(proveedor => (
-                      <option key={proveedor.nombre} value={proveedor.nombre}>
-                        {proveedor.nombre}
-                      </option>
-                    ))}
-                  </select>
-                  {formErrors.nombre && <span className="error-message">Este campo es obligatorio</span>}
+                <form className='formulario' style={{display:'flex', flexDirection:'column', justifyContent:'center'}} onSubmit={handleFormSubmit}>
+                  <div style={{display:'flex', flexDirection:'row', alignItems:'center', gap:'10px'}}>
+                    <label htmlFor="nombre">Proveedor</label>
+                    <select className='date-input' id="nombre" name="nombre" value={formData.nombre} onChange={handleInputChange} required>
+                      <option value="" disabled>Seleccione</option>
+                      {nombreproveedores.map(proveedor => (
+                        <option key={proveedor.nombre} value={proveedor.nombre}>
+                          {proveedor.nombre}
+                        </option>
+                      ))}
+                    </select>
+                    {formErrors.nombre && <span className="error-message">Este campo es obligatorio</span>}
+                  </div>
                   <br />
 
-                  <InputLabel htmlFor="outlined-adornment-amount">Monto</InputLabel>
-                  <OutlinedInput type='number' id="monto" name='monto' value={formData.monto} onChange={handleInputChange} required startAdornment={<InputAdornment position="start">$</InputAdornment>}/>
-                  {formErrors.monto && <span className="error-message">Este campo es obligatorio</span>}
+                  <div style={{display:'flex', flexDirection:'row', alignItems:'center', gap:'10px'}}>
+                    <InputLabel htmlFor="outlined-adornment-amount">Monto</InputLabel>
+                    <OutlinedInput type='number' id="monto" name='monto' value={formData.monto} onChange={handleInputChange} required startAdornment={<InputAdornment position="start">$</InputAdornment>}/>
+                    {formErrors.monto && <span className="error-message">Este campo es obligatorio</span>}
+                  </div>
                   <br/>
                   
-                  <div style={{display:'flex', flexDirection:'row', justifyContent:'space-between'}}>
-                    <label>Valor del monto:</label>
+                  <div style={{display:'flex', flexDirection:'row', justifyContent:'flex-start', gap:'20px'}}>
+                    <label>Valor del monto</label>
                     <label>
                       <input type="checkbox" name="esPositivo" checked={esPositivo} onChange={handleEsPositivoChange} />
                       Positivo
@@ -340,29 +382,35 @@ const Pagos = () => {
                   </div>
                   <br/>
 
-                  <label htmlFor="medioPago">Medio de Pago</label>
-                  <select id="medioPago" name="medioPago" value={formData.medioPago} onChange={handleInputChange} required>
-                    <option value="" disabled>Seleccione</option>
-                    <option value="Efectivo">Efectivo</option>
-                    <option value="Transferencia">Transferencia</option>
-                    <option value="Cheque">Cheque</option>
-                    <option value="Cuenta corriente">Cuenta corriente</option>
-                    <option value="Tarjeta">Tarjeta</option>
-                    <option value="Erni">Erni</option>
-                    <option value="A/D">A/D</option>
-                    <option value="Tomy">Tomy</option>
-                  </select>
-                  {formErrors.medioPago && <span className="error-message">Este campo es obligatorio</span>}
+                  <div style={{display:'flex', flexDirection:'row', alignItems:'center', gap:'10px'}}>
+                    <label htmlFor="medioPago">Medio de Pago</label>
+                    <select className='date-input' id="medioPago" name="medioPago" value={formData.medioPago} onChange={handleInputChange} required>
+                      <option value="" disabled>Seleccione</option>
+                      <option value="Efectivo">Efectivo</option>
+                      <option value="Transferencia">Transferencia</option>
+                      <option value="Cheque">Cheque</option>
+                      <option value="Cuenta corriente">Cuenta corriente</option>
+                      <option value="Tarjeta">Tarjeta</option>
+                      <option value="Erni">Erni</option>
+                      <option value="A/D">A/D</option>
+                      <option value="Tomy">Tomy</option>
+                    </select>
+                    {formErrors.medioPago && <span className="error-message">Este campo es obligatorio</span>}
+                  </div>
                   <br/>
 
+                  <div style={{display:'flex', flexDirection:'row', alignItems:'center', gap:'10px'}}>
                   <label htmlFor="fecha">Fecha</label>
-                  <input type="date" id="fecha" name="fecha" value={formData.fecha} onChange={handleInputChange} required/>
+                  <input className='date-input' type="date" id="fecha" name="fecha" value={formData.fecha} onChange={handleInputChange} required/>
                   {formErrors.fecha && <span className="error-message">Este campo es obligatorio</span>}
+                  </div>
                   <br/>
 
-                  <InputLabel htmlFor="outlined-adornment-amount">Dolar del dia</InputLabel>
-                  <OutlinedInput type='number' id="usdDelDia" name='usdDelDia' value={formData.usdDelDia} onChange={handleInputChange} required startAdornment={<InputAdornment position="start">$</InputAdornment>}/>
-                  {formErrors.usdDelDia && <span className="error-message">Este campo es obligatorio</span>}
+                  <div style={{display:'flex', flexDirection:'row', alignItems:'center', gap:'10px'}}>
+                    <InputLabel htmlFor="outlined-adornment-amount">Dolar del dia</InputLabel>
+                    <OutlinedInput type='number' id="usdDelDia" name='usdDelDia' value={formData.usdDelDia} onChange={handleInputChange} required startAdornment={<InputAdornment position="start">$</InputAdornment>}/>
+                    {formErrors.usdDelDia && <span className="error-message">Este campo es obligatorio</span>}
+                  </div>
                   <br />
 
                   <div className='botonera' style={{display:'flex', justifyContent:'center'}}>
