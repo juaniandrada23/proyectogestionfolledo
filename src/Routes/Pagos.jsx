@@ -240,7 +240,7 @@ const Pagos = () => {
   if (fechaDesde > fechaHasta) {
     setError('Error: La fecha desde es mayor que la fecha hasta');
     return;
-  } else if ( !fechaDesde && !fechaHasta && !nombreProveedorFiltro) {
+  } else if ( !fechaDesde && !fechaHasta && !nombreProveedorFiltro && !nombreUsuarioFiltro) {
     setError('Error: Debe ingresar los datos para filtrar')
     return;
   }
@@ -322,7 +322,7 @@ const Pagos = () => {
                 <select
                   className='date-input'
                   id="nombreUsuarioFiltro"
-                  value={nombreProveedorFiltro}
+                  value={nombreUsuarioFiltro}
                   onChange={handleNombreUsuarioFiltroChange}
                 >
                   <option value="">Seleccione</option>
