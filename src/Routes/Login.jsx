@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../Components/Navbar'
 import Footer from '../Components/Footer';
+import EstadoServicio from '../Components/EstadoServicio';
 import '../Styles/login.css'
 import isLogged from '../Functions/isLogged';
 import Alert from '@mui/material/Alert';
@@ -72,6 +73,8 @@ const Login = () => {
         </div>
       </div>
       <Footer style={{ flexShrink: 0 }}/>
+
+      <EstadoServicio/>
 
       <Modal open={isLoading} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '10px', textAlign: 'center' }}>

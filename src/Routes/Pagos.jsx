@@ -14,6 +14,7 @@ import { useTimeout } from '../Functions/timeOut';
 import BotonEliminarPago from '../Components/BotonEliminarPago';
 import LinearProgress from '@mui/material/LinearProgress';
 import Alert from '@mui/material/Alert';
+import EstadoServicio from '../Components/EstadoServicio.jsx'
 
 const Pagos = () => {
   useAuthorization();
@@ -473,8 +474,9 @@ const Pagos = () => {
             </Grid>           
           </Grid>
         </div>
-        
       <Footer/>
+
+      <EstadoServicio/>
 
       <Snackbar open={snackbarOpen} autoHideDuration={2000} onClose={handleCloseSnackbar} anchorOrigin={isMobileScreen ? { vertical: 'top', horizontal: 'center' } : { vertical: 'bottom', horizontal: 'left' }}>
         <Alert severity={snackbarSeverity} sx={{ width: '100%' }}>

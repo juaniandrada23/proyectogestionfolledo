@@ -8,6 +8,7 @@ import { Typography, Paper } from '@mui/material';
 import useAuthorization from '../Functions/useAuthorization';
 import { useTimeout } from '../Functions/timeOut';
 import Alert from '@mui/material/Alert';
+import EstadoServicio from '../Components/EstadoServicio.jsx'
 
 const Principal = () => {
   useAuthorization();
@@ -126,7 +127,9 @@ const Principal = () => {
           </div>
         </Container>
       </div>
-      <Footer />
+      <Footer/>
+
+      <EstadoServicio/>
     </div>
   );
 };

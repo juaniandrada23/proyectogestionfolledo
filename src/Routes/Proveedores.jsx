@@ -17,6 +17,7 @@ import useAuthorization from '../Functions/useAuthorization';
 import { useTimeout } from '../Functions/timeOut';
 import AuthAdmin from '../Functions/authAdmin';
 import LinearProgress from '@mui/material/LinearProgress';
+import EstadoServicio from '../Components/EstadoServicio';
 
 const Proveedores = () => {
   useAuthorization();
@@ -265,6 +266,8 @@ const Proveedores = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <EstadoServicio/>
 
       <Snackbar open={snackbarOpen} autoHideDuration={2000} onClose={handleCloseSnackbar} anchorOrigin={isMobileScreen ? { vertical: 'top', horizontal: 'center' } : { vertical: 'bottom', horizontal: 'left' }}>
         <Alert severity="success" sx={{ width: '100%' }}>

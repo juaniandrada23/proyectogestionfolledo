@@ -11,6 +11,7 @@ import 'jspdf-autotable';
 import { FaRegFilePdf } from "react-icons/fa6";
 import { format } from 'date-fns';
 import html2canvas from 'html2canvas';
+import EstadoServicio from '../Components/EstadoServicio.jsx'
 
 const Calculos = () => {
   useAuthorization();
@@ -407,6 +408,8 @@ const Calculos = () => {
             </Grid>
         </Grid>
         <Footer style={{ flexShrink: 0 }}/>
+                      
+        <EstadoServicio/>
     </div>
   )
 }

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../Components/Navbar';
 import Footer from '../Components/Footer';
+import EstadoServicio from '../Components/EstadoServicio.jsx'
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -57,6 +58,8 @@ const SignUp = () => {
         </div>
       </div>
       <Footer style={{ flexShrink: 0 }}/>
+
+      <EstadoServicio/>
     </div>
   );
 };
