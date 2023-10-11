@@ -9,7 +9,7 @@ const EstadoServicio = () => {
     useEffect(() => {
         const fetchData = async () => {
           try {
-            const response = await fetch('https://apifolledo.onrender.com/usuarios/nombres');
+            const response = await fetch('https://apifolledo.onrender.com/servidor/estado');
             const data = await response.json();
             setErrorSnackbarOpen(false);
             console.log("Usuarios disponibles:", data)
