@@ -15,6 +15,10 @@ import BotonEliminarPago from '../Components/BotonEliminarPago';
 import LinearProgress from '@mui/material/LinearProgress';
 import Alert from '@mui/material/Alert';
 import EstadoServicio from '../Components/EstadoServicio.jsx'
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import { MdExpandMore } from "react-icons/md";
 
 const Pagos = () => {
   useAuthorization();
@@ -301,50 +305,60 @@ const Pagos = () => {
       <Navbar/>
         <div className="filtros" style={{textAlign:'center', marginTop:'10px'}}>
             <div className='inputfiltro'>
-            <h1>Filtros</h1>
+            <Accordion style={{ textAlign: 'center', marginTop: '10px' }}>
+              <AccordionSummary expandIcon={< MdExpandMore/>} aria-controls="panel1a-content" id="panel1a-header">
+                <h1>Filtros</h1>
+              </AccordionSummary>
+              <AccordionDetails>
               <div className='date-input-container'>
-                <label htmlFor="fechaDesde">Fecha Desde:</label>
-                <input className='date-input' type="date" id="fechaDesde" value={fechaDesde} onChange={handleFechaDesdeChange} />
-              </div>
-              <div className='date-input-container'>
-                <label htmlFor="fechaHasta">Fecha Hasta:</label>
-                <input className='date-input' type="date" id="fechaHasta" value={fechaHasta} onChange={handleFechaHastaChange} />
-              </div>
-              <div className='nombreproveedor date-input-container'>
-                <label htmlFor="nombreProveedorFiltro">Proveedor:</label>
-                <select
-                  className='date-input'
-                  id="nombreProveedorFiltro"
-                  value={nombreProveedorFiltro}
-                  onChange={handleNombreProveedorFiltroChange}
-                >
-                  <option value="">Seleccione</option>
-                  {nombreproveedores.map((proveedor) => (
-                    <option key={proveedor.nombre} value={proveedor.nombre}>
-                      {proveedor.nombre}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className='date-input-container'>
-                <label htmlFor="nombreUsuarioFiltro">Usuario:</label>
-                <select
-                  className='date-input'
-                  id="nombreUsuarioFiltro"
-                  value={nombreUsuarioFiltro}
-                  onChange={handleNombreUsuarioFiltroChange}
-                >
-                  <option value="">Seleccione</option>
-                  {nombreusuarios.map((usuario) => (
-                    <option key={usuario.username} value={usuario.username}>
-                      {usuario.username}
-                    </option>
-                  ))}
-                </select>
-              </div>
+                        <label htmlFor="fechaDesde">Fecha Desde:</label>
+                        <input className='date-input' type="date" id="fechaDesde" value={fechaDesde} onChange={handleFechaDesdeChange} />
+                      </div>
+                      <div className='date-input-container'>
+                        <label htmlFor="fechaHasta">Fecha Hasta:</label>
+                        <input className='date-input' type="date" id="fechaHasta" value={fechaHasta} onChange={handleFechaHastaChange} />
+                      </div>
+                      <div className='nombreproveedor date-input-container'>
+                        <label htmlFor="nombreProveedorFiltro">Proveedor:</label>
+                        <select
+                          className='date-input'
+                          id="nombreProveedorFiltro"
+                          value={nombreProveedorFiltro}
+                          onChange={handleNombreProveedorFiltroChange}
+                        >
+                          <option value="">Seleccione</option>
+                          {nombreproveedores.map((proveedor) => (
+                            <option key={proveedor.nombre} value={proveedor.nombre}>
+                              {proveedor.nombre}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      
+                      {rolUsuario === 'Administrador' && (
+                        <div className='usuarios date-input-container'>
+                          <label htmlFor="nombreUsuarioFiltro">Usuario:</label>
+                          <select
+                            className='date-input'
+                            id="nombreUsuarioFiltro"
+                            value={nombreUsuarioFiltro}
+                            onChange={handleNombreUsuarioFiltroChange}
+                          >
+                            <option value="">Seleccione</option>
+                            {nombreusuarios.map((usuario) => (
+                              <option key={usuario.username} value={usuario.username}>
+                                {usuario.username}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      )}
 
-              <button onClick={aplicarFiltros}>Aplicar Filtros <br />{isLoading && <LinearProgress />}</button>            
+                      <button onClick={aplicarFiltros}>Aplicar Filtros <br />{isLoading && <LinearProgress />}</button>   
+              </AccordionDetails>
+            </Accordion>
             </div>
+
             <div className='alerta' style={{display:'flex', flexDirection:'column', justifyContent:'center', marginTop:'5px', marginBottom:'5px', color:'red'}}>
               {error && <Alert severity="error"><strong>{error} </strong></Alert>}
             </div>
@@ -356,68 +370,72 @@ const Pagos = () => {
               <div className='tabla'>
                 <h1>Agregar pago</h1>
                 <form className='formulario' style={{display:'flex', flexDirection:'column', justifyContent:'center'}} onSubmit={handleFormSubmit}>
-                  <div style={{display:'flex', flexDirection:'row', alignItems:'center', gap:'10px'}}>
-                    <label htmlFor="nombre">Proveedor</label>
-                    <select className='date-input' id="nombre" name="nombre" value={formData.nombre} onChange={handleInputChange} required>
-                      <option value="" disabled>Seleccione</option>
-                      {nombreproveedores.map(proveedor => (
-                        <option key={proveedor.nombre} value={proveedor.nombre}>
-                          {proveedor.nombre}
-                        </option>
-                      ))}
-                    </select>
-                    {formErrors.nombre && <span className="error-message">Este campo es obligatorio</span>}
-                  </div>
-                  <br />
-
-                  <div style={{display:'flex', flexDirection:'row', alignItems:'center', gap:'10px'}}>
-                    <InputLabel htmlFor="outlined-adornment-amount">Monto</InputLabel>
-                    <OutlinedInput type='number' id="monto" name='monto' value={formData.monto} onChange={handleInputChange} required startAdornment={<InputAdornment position="start">$</InputAdornment>}/>
-                    {formErrors.monto && <span className="error-message">Este campo es obligatorio</span>}
-                  </div>
-                  <br/>
-                  
-                  <div style={{display:'flex', flexDirection:'row', justifyContent:'flex-start', gap:'20px'}}>
-                    <label>Valor del monto</label>
-                    <label>
-                      <input type="checkbox" name="esPositivo" checked={esPositivo} onChange={handleEsPositivoChange} />
-                      Positivo
-                    </label>
-
-                    <label>
-                      <input type="checkbox" name="esNegativo" checked={esNegativo} onChange={handleEsNegativoChange} />
-                      Negativo
-                    </label>
-                  </div>
-                  <br/>
-
-                  <div style={{display:'flex', flexDirection:'row', alignItems:'center', gap:'10px'}}>
-                    <label htmlFor="medioPago">Medio de Pago</label>
-                    <select className='date-input' id="medioPago" name="medioPago" value={formData.medioPago} onChange={handleInputChange} required>
-                      <option value="" disabled>Seleccione</option>
-                        {mediodepago.map(pagomedio => (
-                          <option key={pagomedio.nombreMedioPago} value={pagomedio.nombreMedioPago}>
-                            {pagomedio.nombreMedioPago}
+                  <div style={{display:'flex', flexDirection:'column', alignItems:'flex-start'}}>
+                    
+                    <div style={{display:'flex', flexDirection:'column', alignItems:'flex-start', gap:'5px'}}>
+                      <label htmlFor="nombre">Proveedor</label>
+                      <select className='date-input' id="nombre" name="nombre" value={formData.nombre} onChange={handleInputChange} required>
+                        <option value="" disabled>Seleccione</option>
+                        {nombreproveedores.map(proveedor => (
+                          <option key={proveedor.nombre} value={proveedor.nombre}>
+                            {proveedor.nombre}
                           </option>
                         ))}
-                    </select>
-                    {formErrors.medioPago && <span className="error-message">Este campo es obligatorio</span>}
-                  </div>
-                  <br/>
+                      </select>
+                      {formErrors.nombre && <span className="error-message">Este campo es obligatorio</span>}
+                    </div>
+                    <br />
 
-                  <div style={{display:'flex', flexDirection:'row', alignItems:'center', gap:'10px'}}>
-                  <label htmlFor="fecha">Fecha</label>
-                  <input className='date-input' type="date" id="fecha" name="fecha" value={formData.fecha} onChange={handleInputChange} required/>
-                  {formErrors.fecha && <span className="error-message">Este campo es obligatorio</span>}
-                  </div>
-                  <br/>
+                    <div style={{display:'flex', flexDirection:'column', alignItems:'flex-start', gap:'5px'}}>
+                      <InputLabel htmlFor="outlined-adornment-amount">Monto</InputLabel>
+                      <OutlinedInput type='number' id="monto" name='monto' value={formData.monto} onChange={handleInputChange} required startAdornment={<InputAdornment position="start">$</InputAdornment>}/>
+                      {formErrors.monto && <span className="error-message">Este campo es obligatorio</span>}
+                    </div>
+                    <br/>
+                    
+                    <div style={{display:'flex', flexDirection:'row', justifyContent:'flex-start', gap:'20px'}}>
+                      <label>Valor del monto</label>
+                      <label>
+                        <input type="checkbox" name="esPositivo" checked={esPositivo} onChange={handleEsPositivoChange} />
+                        Positivo
+                      </label>
 
-                  <div style={{display:'flex', flexDirection:'row', alignItems:'center', gap:'10px'}}>
-                    <InputLabel htmlFor="outlined-adornment-amount">Dolar del dia</InputLabel>
-                    <OutlinedInput type='number' id="usdDelDia" name='usdDelDia' value={formData.usdDelDia} onChange={handleInputChange} required startAdornment={<InputAdornment position="start">$</InputAdornment>}/>
-                    {formErrors.usdDelDia && <span className="error-message">Este campo es obligatorio</span>}
+                      <label>
+                        <input type="checkbox" name="esNegativo" checked={esNegativo} onChange={handleEsNegativoChange} />
+                        Negativo
+                      </label>
+                    </div>
+                    <br/>
+
+                    <div style={{display:'flex', flexDirection:'column', alignItems:'flex-start', gap:'5px'}}>
+                      <label htmlFor="medioPago">Medio de Pago</label>
+                      <select className='date-input' id="medioPago" name="medioPago" value={formData.medioPago} onChange={handleInputChange} required>
+                        <option value="" disabled>Seleccione</option>
+                          {mediodepago.map(pagomedio => (
+                            <option key={pagomedio.nombreMedioPago} value={pagomedio.nombreMedioPago}>
+                              {pagomedio.nombreMedioPago}
+                            </option>
+                          ))}
+                      </select>
+                      {formErrors.medioPago && <span className="error-message">Este campo es obligatorio</span>}
+                    </div>
+                    <br/>
+
+                    <div style={{display:'flex', flexDirection:'column', alignItems:'flex-start', gap:'5px'}}>
+                    <label htmlFor="fecha">Fecha</label>
+                    <input className='date-input' type="date" id="fecha" name="fecha" value={formData.fecha} onChange={handleInputChange} required/>
+                    {formErrors.fecha && <span className="error-message">Este campo es obligatorio</span>}
+                    </div>
+                    <br/>
+
+                    <div style={{display:'flex', flexDirection:'column', alignItems:'flex-start', gap:'5px'}}>
+                      <InputLabel htmlFor="outlined-adornment-amount">Dolar del dia</InputLabel>
+                      <OutlinedInput type='number' id="usdDelDia" name='usdDelDia' value={formData.usdDelDia} onChange={handleInputChange} required startAdornment={<InputAdornment position="start">$</InputAdornment>}/>
+                      {formErrors.usdDelDia && <span className="error-message">Este campo es obligatorio</span>}
+                    </div>
+                    <br />
+                  
                   </div>
-                  <br />
 
                   <div className='botonera' style={{display:'flex', justifyContent:'center'}}>
                     <button type="submit">Agregar Pago  <br />{cargandoForm && <LinearProgress />}</button>

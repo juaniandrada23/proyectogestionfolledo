@@ -245,7 +245,7 @@ const Calculos = () => {
         const rowsPagos = pagosTotales.map(pago => [
           pago.nombre,
           pago.monto,
-          pago.medioPago,
+          pago.nombreMedioPago,
           pago.montoUSD,
           pago.usdDelDia,
           format(new Date(pago.fecha), 'yyyy-MM-dd'),
