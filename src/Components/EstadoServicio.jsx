@@ -7,26 +7,24 @@ const EstadoServicio = () => {
     const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
 
     useEffect(() => {
-        const fetchData = async () => {
-          try {
-            const response = await fetch('https://apifolledo.onrender.com/servidor/estado');
-            const data = await response.json();
-            setErrorSnackbarOpen(false);
-            console.log("Server status:", data)
-          } catch (error) {
-            console.error('Error: servidor caído, inténtelo nuevamente', error);
-            setErrorSnackbarOpen(true);
-          }
-        };
-    
+      const fetchData = async () => {
+        try {
+          await fetch('https://apifolledo.onrender.com/servidor/estado');
+          setErrorSnackbarOpen(false);
+        } catch (error) {
+          console.error('Error: servidor caído, inténtelo nuevamente', error);
+          setErrorSnackbarOpen(true);
+        }
+      };
+  
+      fetchData();
+  
+      const intervalId = setInterval(() => {
         fetchData();
-    
-        const intervalId = setInterval(() => {
-          fetchData();
-        }, 3000);
-    
-        return () => clearInterval(intervalId);
-      }, []);
+      }, 3000);
+  
+      return () => clearInterval(intervalId);
+    }, []);
 
   return (
     <Snackbar anchorOrigin={{

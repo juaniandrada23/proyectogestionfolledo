@@ -19,8 +19,12 @@ const MediosPago = () => {
       <Navbar/>
       <Grid container spacing={1} style={{ flexGrow: 1 }}>
         <Grid item xs={12} lg={12}>
-          <h1 style={{textAlign:'center'}}>Tabla para medios de pagos</h1>
-          <h1>{mediopago}</h1>
+          <h1 style={{ textAlign: 'center' }}>Tabla para medios de pagos</h1>
+          <ul>
+            {mediopago.map((item, index) => (
+              <li key={index}>{item.nombreMedioPago}</li>
+            ))}
+          </ul>
         </Grid>
       </Grid>
       <Footer/>

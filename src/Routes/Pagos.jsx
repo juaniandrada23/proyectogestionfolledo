@@ -396,8 +396,8 @@ const Pagos = () => {
                     <select className='date-input' id="medioPago" name="medioPago" value={formData.medioPago} onChange={handleInputChange} required>
                       <option value="" disabled>Seleccione</option>
                         {mediodepago.map(pagomedio => (
-                          <option key={pagomedio.nombre} value={pagomedio.nombre}>
-                            {pagomedio.nombre}
+                          <option key={pagomedio.nombreMedioPago} value={pagomedio.nombreMedioPago}>
+                            {pagomedio.nombreMedioPago}
                           </option>
                         ))}
                     </select>
@@ -454,7 +454,7 @@ const Pagos = () => {
                         <td>{pago.monto}</td>
                         <td>{pago.montoUSD}</td>
                         <td>{pago.usdDelDia}</td>
-                        <td>{pago.medioPago}</td>
+                        <td>{pago.nombreMedioPago}</td>
                         <td>{format(new Date(pago.fecha), 'yyyy-MM-dd')}</td>
                         <td><BotonEliminarPago pago={pago} /></td>
                         {rolUsuario === 'Administrador' && (
