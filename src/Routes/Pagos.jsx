@@ -21,6 +21,7 @@ const Pagos = () => {
 
   const [pagos, setPagos] = useState([]);
   const [nombreproveedores, setNombreProveedores] = useState([]);
+  const [mediodepago, setMedioDePago] = useState([]);
   const [agregadaExitosa, setAgregadaExitosa] = useState(false);
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -225,6 +226,13 @@ const Pagos = () => {
   }, []);
 
   useEffect(() => {
+    fetch('https://apifolledo.onrender.com/mediodepago/nombremediopago')
+      .then(response => response.json())
+      .then(data => setMedioDePago(data))
+      .catch(error => console.error('Error al cargar los nombres de los medios de pago', error));
+  }, []);
+
+  useEffect(() => {
     fetch('https://api.bluelytics.com.ar/v2/latest')
       .then(response => response.json())
       .then(data => {
@@ -387,14 +395,11 @@ const Pagos = () => {
                     <label htmlFor="medioPago">Medio de Pago</label>
                     <select className='date-input' id="medioPago" name="medioPago" value={formData.medioPago} onChange={handleInputChange} required>
                       <option value="" disabled>Seleccione</option>
-                      <option value="Efectivo">Efectivo</option>
-                      <option value="Transferencia">Transferencia</option>
-                      <option value="Cheque">Cheque</option>
-                      <option value="Cuenta corriente">Cuenta corriente</option>
-                      <option value="Tarjeta">Tarjeta</option>
-                      <option value="Erni">Erni</option>
-                      <option value="A/D">A/D</option>
-                      <option value="Tomy">Tomy</option>
+                        {mediodepago.map(pagomedio => (
+                          <option key={pagomedio.nombre} value={pagomedio.nombre}>
+                            {pagomedio.nombre}
+                          </option>
+                        ))}
                     </select>
                     {formErrors.medioPago && <span className="error-message">Este campo es obligatorio</span>}
                   </div>

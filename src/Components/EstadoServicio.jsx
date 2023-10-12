@@ -12,7 +12,7 @@ const EstadoServicio = () => {
             const response = await fetch('https://apifolledo.onrender.com/servidor/estado');
             const data = await response.json();
             setErrorSnackbarOpen(false);
-            console.log("Usuarios disponibles:", data)
+            console.log("Server status:", data)
           } catch (error) {
             console.error('Error: servidor caído, inténtelo nuevamente', error);
             setErrorSnackbarOpen(true);

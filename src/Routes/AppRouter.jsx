@@ -6,6 +6,7 @@ import Pagos from './Pagos';
 import Calculos from './Calculos';
 import Login from './Login';
 import SignUp from './SignUp';
+import MediosPago from './MediosPago.jsx'
 
 const AppRouter = () => {
   return (
@@ -18,6 +19,7 @@ const AppRouter = () => {
         <Route path="/proveedores/:userId" element={<Proveedores />} />
         <Route path="/calculos/:userId" element={<Calculos />} />
         <Route path="/pagos/:userId" element={<Pagos />} />
+        <Route path="/medios/:userId" element={<MediosPago />} />
       </Routes>
     </Router>
   );
