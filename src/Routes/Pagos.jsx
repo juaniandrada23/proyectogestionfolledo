@@ -305,11 +305,11 @@ const Pagos = () => {
       <Navbar/>
         <div className="filtros" style={{textAlign:'center', marginTop:'10px'}}>
             <div className='inputfiltro'>
-            <Accordion style={{ textAlign: 'center', marginTop: '10px' }}>
-              <AccordionSummary expandIcon={< MdExpandMore/>} aria-controls="panel1a-content" id="panel1a-header">
-                <h1>Filtros</h1>
+            <Accordion style={{ textAlign: 'center', marginTop: '10px', marginBottom:'10px', backgroundColor:'#006989 '}}>
+              <AccordionSummary expandIcon={< MdExpandMore style={{color:'#004E66', backgroundColor:'#EAEBED', borderRadius:'50px'}}/>} aria-controls="panel1a-content" id="panel1a-header">
+                <h1 style={{color:'#EAEBED'}}>Filtros</h1>
               </AccordionSummary>
-              <AccordionDetails>
+              <AccordionDetails className='inputfiltro'>
               <div className='date-input-container'>
                         <label htmlFor="fechaDesde">Fecha Desde:</label>
                         <input className='date-input' type="date" id="fechaDesde" value={fechaDesde} onChange={handleFechaDesdeChange} />
