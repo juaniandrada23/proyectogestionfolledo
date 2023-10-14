@@ -301,8 +301,9 @@ const Pagos = () => {
   );
 
   return (
-    <div>
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Navbar/>
+      <div style={{ flexGrow: 1 }}>
         <div className="filtros" style={{textAlign:'center', marginTop:'10px'}}>
             <div className='inputfiltro'>
             <Accordion style={{ textAlign: 'center', marginTop: '10px', marginBottom:'10px', backgroundColor:'#006989 '}}>
@@ -364,83 +365,89 @@ const Pagos = () => {
             </div>
         </div>
 
-        <div className='divTotal'>
+        <div className='divTotal' style={{marginBottom:'10px'}}>
           <Grid container spacing={2}>
             <Grid item xs={12} lg={4}>
-              <div className='tabla'>
-                <h1>Agregar pago</h1>
-                <form className='formulario' style={{display:'flex', flexDirection:'column', justifyContent:'center'}} onSubmit={handleFormSubmit}>
-                  <div style={{display:'flex', flexDirection:'column', alignItems:'flex-start'}}>
-                    
-                    <div style={{display:'flex', flexDirection:'column', alignItems:'flex-start', gap:'5px'}}>
-                      <label htmlFor="nombre">Proveedor</label>
-                      <select className='date-input' id="nombre" name="nombre" value={formData.nombre} onChange={handleInputChange} required>
-                        <option value="" disabled>Seleccione</option>
-                        {nombreproveedores.map(proveedor => (
-                          <option key={proveedor.nombre} value={proveedor.nombre}>
-                            {proveedor.nombre}
-                          </option>
-                        ))}
-                      </select>
-                      {formErrors.nombre && <span className="error-message">Este campo es obligatorio</span>}
-                    </div>
-                    <br />
+              <div className='tabla' style={{marginBottom:'10px'}}>
+                <Accordion style={{ textAlign: 'center', marginTop:'10px', marginBottom:'10px', backgroundColor:'#006989'}}>
+                  <AccordionSummary expandIcon={< MdExpandMore style={{color:'#004E66', backgroundColor:'#EAEBED', borderRadius:'50px'}}/>} aria-controls="panel1a-content" id="panel1a-header">
+                    <h1 style={{color:'#EAEBED'}}>Agregar pago</h1>
+                  </AccordionSummary>
+                  <AccordionDetails style={{backgroundColor:'white'}}>                
+                    <form className='formulario' style={{display:'flex', flexDirection:'column', justifyContent:'center'}} onSubmit={handleFormSubmit}>
+                      <div style={{display:'flex', flexDirection:'column', alignItems:'flex-start'}}>
+                        
+                        <div style={{display:'flex', flexDirection:'column', alignItems:'flex-start', gap:'5px'}}>
+                          <label htmlFor="nombre">Proveedor</label>
+                          <select className='date-input' id="nombre" name="nombre" value={formData.nombre} onChange={handleInputChange} required>
+                            <option value="" disabled>Seleccione</option>
+                            {nombreproveedores.map(proveedor => (
+                              <option key={proveedor.nombre} value={proveedor.nombre}>
+                                {proveedor.nombre}
+                              </option>
+                            ))}
+                          </select>
+                          {formErrors.nombre && <span className="error-message">Este campo es obligatorio</span>}
+                        </div>
+                        <br />
 
-                    <div style={{display:'flex', flexDirection:'column', alignItems:'flex-start', gap:'5px'}}>
-                      <InputLabel htmlFor="outlined-adornment-amount">Monto</InputLabel>
-                      <OutlinedInput type='number' id="monto" name='monto' value={formData.monto} onChange={handleInputChange} required startAdornment={<InputAdornment position="start">$</InputAdornment>}/>
-                      {formErrors.monto && <span className="error-message">Este campo es obligatorio</span>}
-                    </div>
-                    <br/>
-                    
-                    <div style={{display:'flex', flexDirection:'row', justifyContent:'flex-start', gap:'20px'}}>
-                      <label>Valor del monto</label>
-                      <label>
-                        <input type="checkbox" name="esPositivo" checked={esPositivo} onChange={handleEsPositivoChange} />
-                        Positivo
-                      </label>
+                        <div style={{display:'flex', flexDirection:'column', alignItems:'flex-start', gap:'5px'}}>
+                          <InputLabel htmlFor="outlined-adornment-amount">Monto</InputLabel>
+                          <OutlinedInput type='number' id="monto" name='monto' value={formData.monto} onChange={handleInputChange} required startAdornment={<InputAdornment position="start">$</InputAdornment>}/>
+                          {formErrors.monto && <span className="error-message">Este campo es obligatorio</span>}
+                        </div>
+                        <br/>
+                        
+                        <div style={{display:'flex', flexDirection:'row', justifyContent:'flex-start', gap:'20px'}}>
+                          <label>Valor del monto</label>
+                          <label>
+                            <input type="checkbox" name="esPositivo" checked={esPositivo} onChange={handleEsPositivoChange} />
+                            Positivo
+                          </label>
 
-                      <label>
-                        <input type="checkbox" name="esNegativo" checked={esNegativo} onChange={handleEsNegativoChange} />
-                        Negativo
-                      </label>
-                    </div>
-                    <br/>
+                          <label>
+                            <input type="checkbox" name="esNegativo" checked={esNegativo} onChange={handleEsNegativoChange} />
+                            Negativo
+                          </label>
+                        </div>
+                        <br/>
 
-                    <div style={{display:'flex', flexDirection:'column', alignItems:'flex-start', gap:'5px'}}>
-                      <label htmlFor="medioPago">Medio de Pago</label>
-                      <select className='date-input' id="medioPago" name="medioPago" value={formData.medioPago} onChange={handleInputChange} required>
-                        <option value="" disabled>Seleccione</option>
-                          {mediodepago.map(pagomedio => (
-                            <option key={pagomedio.nombreMedioPago} value={pagomedio.nombreMedioPago}>
-                              {pagomedio.nombreMedioPago}
-                            </option>
-                          ))}
-                      </select>
-                      {formErrors.medioPago && <span className="error-message">Este campo es obligatorio</span>}
-                    </div>
-                    <br/>
+                        <div style={{display:'flex', flexDirection:'column', alignItems:'flex-start', gap:'5px'}}>
+                          <label htmlFor="medioPago">Medio de Pago</label>
+                          <select className='date-input' id="medioPago" name="medioPago" value={formData.medioPago} onChange={handleInputChange} required>
+                            <option value="" disabled>Seleccione</option>
+                              {mediodepago.map(pagomedio => (
+                                <option key={pagomedio.nombreMedioPago} value={pagomedio.nombreMedioPago}>
+                                  {pagomedio.nombreMedioPago}
+                                </option>
+                              ))}
+                          </select>
+                          {formErrors.medioPago && <span className="error-message">Este campo es obligatorio</span>}
+                        </div>
+                        <br/>
 
-                    <div style={{display:'flex', flexDirection:'column', alignItems:'flex-start', gap:'5px'}}>
-                    <label htmlFor="fecha">Fecha</label>
-                    <input className='date-input' type="date" id="fecha" name="fecha" value={formData.fecha} onChange={handleInputChange} required/>
-                    {formErrors.fecha && <span className="error-message">Este campo es obligatorio</span>}
-                    </div>
-                    <br/>
+                        <div style={{display:'flex', flexDirection:'column', alignItems:'flex-start', gap:'5px'}}>
+                        <label htmlFor="fecha">Fecha</label>
+                        <input className='date-input' type="date" id="fecha" name="fecha" value={formData.fecha} onChange={handleInputChange} required/>
+                        {formErrors.fecha && <span className="error-message">Este campo es obligatorio</span>}
+                        </div>
+                        <br/>
 
-                    <div style={{display:'flex', flexDirection:'column', alignItems:'flex-start', gap:'5px'}}>
-                      <InputLabel htmlFor="outlined-adornment-amount">Dolar del dia</InputLabel>
-                      <OutlinedInput type='number' id="usdDelDia" name='usdDelDia' value={formData.usdDelDia} onChange={handleInputChange} required startAdornment={<InputAdornment position="start">$</InputAdornment>}/>
-                      {formErrors.usdDelDia && <span className="error-message">Este campo es obligatorio</span>}
-                    </div>
-                    <br />
-                  
-                  </div>
+                        <div style={{display:'flex', flexDirection:'column', alignItems:'flex-start', gap:'5px'}}>
+                          <InputLabel htmlFor="outlined-adornment-amount">Dolar del dia</InputLabel>
+                          <OutlinedInput type='number' id="usdDelDia" name='usdDelDia' value={formData.usdDelDia} onChange={handleInputChange} required startAdornment={<InputAdornment position="start">$</InputAdornment>}/>
+                          {formErrors.usdDelDia && <span className="error-message">Este campo es obligatorio</span>}
+                        </div>
+                        <br />
+                      
+                      </div>
 
-                  <div className='botonera' style={{display:'flex', justifyContent:'center'}}>
-                    <button type="submit">Agregar Pago  <br />{cargandoForm && <LinearProgress />}</button>
-                  </div>
-                </form>
+                      <div className='botonera' style={{display:'flex', justifyContent:'center'}}>
+                        <button type="submit">Agregar Pago  <br />{cargandoForm && <LinearProgress />}</button>
+                      </div>
+                    </form>
+                  </AccordionDetails>
+                </Accordion>
               </div>
             </Grid> 
             <Grid item xs={12} lg={8}>
@@ -497,7 +504,8 @@ const Pagos = () => {
             </Grid>           
           </Grid>
         </div>
-      <Footer/>
+      </div>
+      <Footer style={{ flexShrink: 0 }}/>
 
       <EstadoServicio/>
 

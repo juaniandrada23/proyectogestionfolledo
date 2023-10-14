@@ -12,6 +12,10 @@ import { FaRegFilePdf } from "react-icons/fa6";
 import { format } from 'date-fns';
 import html2canvas from 'html2canvas';
 import EstadoServicio from '../Components/EstadoServicio.jsx'
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import { MdExpandMore } from "react-icons/md";
 
 const Calculos = () => {
   useAuthorization();
@@ -279,36 +283,50 @@ const Calculos = () => {
       <Navbar/>
       <Grid container spacing={2} style={{ flexGrow: 1 }}>
             <Grid item xs={12} lg={4}>
+
               <div className='parametroscalculos'>
-                <h1>Filtrar fechas para generación de PDF</h1>
-                <div className='parametrostotal'>
-                  <label htmlFor="fechaDesdeTotal">Fecha desde total:</label>
-                  <input className='date-input' type="date" id="fechaDesdeTotal" value={fechaDesdeTotal} onChange={handlefechaDesdeTotalChange}/>
-                  <label htmlFor="fechaHastaTotal">Fecha hasta total:</label>
-                  <input className='date-input' type="date" id="fechaHastaTotal" value={fechaHastaTotal} onChange={handlefechaHastaTotalChange}/>
-                  <button onClick={aplicarFiltroTotal}>Aplicar Calculos Totales</button>
-                  {errorTotal && <p style={{marginBottom:'5px', color:'red'}} className="error-message">{errorTotal}</p>}
-                  {errorPDF && <p style={{marginBottom:'5px', color:'red'}} className="error-message">{errorPDF}</p>}
-                </div>
+                <Accordion style={{ textAlign: 'center', marginTop: '10px', marginBottom:'10px', backgroundColor:'#006989 '}}>
+                  <AccordionSummary expandIcon={< MdExpandMore style={{color:'#004E66', backgroundColor:'#EAEBED', borderRadius:'50px'}}/>} aria-controls="panel1a-content" id="panel1a-header">
+                    <h1 style={{color:'#EAEBED'}}>Filtrar fechas para generación de PDF</h1>
+                  </AccordionSummary>
+                  <AccordionDetails style={{backgroundColor:'white'}}>
+                    <div className='parametrostotal'>
+                      <label htmlFor="fechaDesdeTotal">Fecha desde total:</label>
+                      <input className='date-input' type="date" id="fechaDesdeTotal" value={fechaDesdeTotal} onChange={handlefechaDesdeTotalChange}/>
+                      <label htmlFor="fechaHastaTotal">Fecha hasta total:</label>
+                      <input className='date-input' type="date" id="fechaHastaTotal" value={fechaHastaTotal} onChange={handlefechaHastaTotalChange}/>
+                      <button onClick={aplicarFiltroTotal}>Aplicar Calculos Totales</button>
+                      {errorTotal && <p style={{marginBottom:'5px', color:'red'}} className="error-message">{errorTotal}</p>}
+                      {errorPDF && <p style={{marginBottom:'5px', color:'red'}} className="error-message">{errorPDF}</p>}
+                    </div>
+                  </AccordionDetails>
+                </Accordion>
                 <br />
-                <h1>Filtrar para montos totales por Proveedor</h1>
-                <div className='todoslosparametros'>
-                    <label htmlFor="fechaDesde">Fecha Desde:</label>
-                    <input className='date-input' type="date" id="fechaDesde" value={fechaDesde} onChange={handleFechaDesdeChange} />
-                    <label htmlFor="fechaHasta">Fecha Hasta:</label>
-                    <input className='date-input' type="date" id="fechaHasta" value={fechaHasta} onChange={handleFechaHastaChange} />
-                    <label htmlFor="nombreProveedorFiltro">Nombre del Proveedor:</label>
-                    <select className='date-input' id="nombreProveedorFiltro" value={nombreProveedorFiltro} onChange={handleNombreProveedorFiltroChange}>
-                      <option value="">Seleccione</option>
-                      {nombreproveedores.map((proveedor) => (
-                        <option key={proveedor.nombre} value={proveedor.nombre}>
-                          {proveedor.nombre}
-                        </option>
-                      ))}
-                    </select>
-                  <button onClick={aplicarFiltros}>Aplicar Filtros</button>
-                  {error && <p style={{marginBottom:'5px', color:'red'}} className="error-message">{error}</p>}
-                </div>  
+
+                <Accordion style={{ textAlign: 'center', marginTop: '10px', marginBottom:'10px', backgroundColor:'#006989 '}}>
+                  <AccordionSummary expandIcon={< MdExpandMore style={{color:'#004E66', backgroundColor:'#EAEBED', borderRadius:'50px'}}/>} aria-controls="panel1a-content" id="panel1a-header">
+                    <h1 style={{color:'#EAEBED'}}>Filtrar para montos totales por Proveedor</h1>
+                  </AccordionSummary>
+                  <AccordionDetails style={{backgroundColor:'white'}}>
+                    <div className='todoslosparametros'>
+                        <label htmlFor="fechaDesde">Fecha Desde:</label>
+                        <input className='date-input' type="date" id="fechaDesde" value={fechaDesde} onChange={handleFechaDesdeChange} />
+                        <label htmlFor="fechaHasta">Fecha Hasta:</label>
+                        <input className='date-input' type="date" id="fechaHasta" value={fechaHasta} onChange={handleFechaHastaChange} />
+                        <label htmlFor="nombreProveedorFiltro">Nombre del Proveedor:</label>
+                        <select className='date-input' id="nombreProveedorFiltro" value={nombreProveedorFiltro} onChange={handleNombreProveedorFiltroChange}>
+                          <option value="">Seleccione</option>
+                          {nombreproveedores.map((proveedor) => (
+                            <option key={proveedor.nombre} value={proveedor.nombre}>
+                              {proveedor.nombre}
+                            </option>
+                          ))}
+                        </select>
+                      <button onClick={aplicarFiltros}>Aplicar Filtros</button>
+                      {error && <p style={{marginBottom:'5px', color:'red'}} className="error-message">{error}</p>}
+                    </div>
+                  </AccordionDetails>
+                </Accordion>  
 
 
                 {/* VER BIEN ESTO!!!*/}
@@ -317,6 +335,10 @@ const Calculos = () => {
                 </div>
 
               </div>
+
+
+
+
             </Grid>
             <Grid item xs={12} lg={8}>
               <div className='tablamontototalfiltrado'>
