@@ -16,7 +16,8 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import { MdExpandMore } from "react-icons/md";
-
+import Skeleton from '@mui/material/Skeleton';
+  
 const Calculos = () => {
   useAuthorization();
 
@@ -34,13 +35,15 @@ const Calculos = () => {
   const [error, setError] = useState('');
   const [errorPDF, setErrorPDF] = useState('');
   const [errorTotal, setErrorTotal] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
   useTimeout();
 
   useEffect(() => {
     fetch('https://apifolledo.onrender.com/calculos/total')
       .then(response => response.json())
-      .then(data => setTotales(data))
+      .then(data => {setTotales(data); 
+                    setIsLoading(false);})
       .catch(error => console.error('Error al cargar los nombres de los calculos', error));
   }, []);
 
@@ -285,7 +288,7 @@ const Calculos = () => {
             <Grid item xs={12} lg={4}>
 
               <div className='parametroscalculos'>
-                <Accordion style={{ textAlign: 'center', marginTop: '10px', marginBottom:'10px', backgroundColor:'#006989 '}}>
+                <Accordion style={{ textAlign: 'center', marginTop: '10px', marginBottom:'10px', backgroundColor:'#006989', marginRight:'20px', marginLeft:'20px'}}>
                   <AccordionSummary expandIcon={< MdExpandMore style={{color:'#004E66', backgroundColor:'#EAEBED', borderRadius:'50px'}}/>} aria-controls="panel1a-content" id="panel1a-header">
                     <h1 style={{color:'#EAEBED'}}>Filtrar fechas para generación de PDF</h1>
                   </AccordionSummary>
@@ -303,7 +306,7 @@ const Calculos = () => {
                 </Accordion>
                 <br />
 
-                <Accordion style={{ textAlign: 'center', marginTop: '10px', marginBottom:'10px', backgroundColor:'#006989 '}}>
+                <Accordion style={{ textAlign: 'center', marginTop: '10px', marginBottom:'10px', backgroundColor:'#006989', marginRight:'20px', marginLeft:'20px'}}>
                   <AccordionSummary expandIcon={< MdExpandMore style={{color:'#004E66', backgroundColor:'#EAEBED', borderRadius:'50px'}}/>} aria-controls="panel1a-content" id="panel1a-header">
                     <h1 style={{color:'#EAEBED'}}>Filtrar para montos totales por Proveedor</h1>
                   </AccordionSummary>
@@ -335,9 +338,6 @@ const Calculos = () => {
                 </div>
 
               </div>
-
-
-
 
             </Grid>
             <Grid item xs={12} lg={8}>
@@ -388,7 +388,18 @@ const Calculos = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {totales.map((total, index) => (
+                  {isLoading ? (
+                    <tr>
+                      <td><Skeleton animation="wave" variant="rounded" width={210} height={30} /></td>
+                      <td><Skeleton animation="wave" variant="rounded" width={210} height={30} /></td>
+                      <td><Skeleton animation="wave" variant="rounded" width={210} height={30} /></td>
+                      <td><Skeleton animation="wave" variant="rounded" width={210} height={30} /></td>
+                      <td><Skeleton animation="wave" variant="rounded" width={210} height={30} /></td>
+                      <td><Skeleton animation="wave" variant="rounded" width={210} height={30} /></td>
+                      <td><Skeleton animation="wave" variant="rounded" width={210} height={30} /></td>
+                    </tr>
+                  ) : (
+                    totales.map((total, index) => (
                       <tr key={index}>
                         <td>{total.NombreProveedor}</td>
                         <td>{total.Ingresos}</td>
@@ -398,7 +409,9 @@ const Calculos = () => {
                         <td>{total.MontoTotalHastaElMomento}</td>
                         <td>{total.MontoTotalEnUSD}</td>
                       </tr>
-                    ))}
+                    ))
+                    )}
+
                   </tbody>
                 </table>
               </div>

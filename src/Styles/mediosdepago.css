@@ -1,0 +1,71 @@
+  .tabla {
+    background-color: #fff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    padding: 20px;
+    overflow-x: auto;
+  }
+  
+  .tabla h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+  
+  table th,
+  table td {
+    padding: 12px 15px;
+    text-align: left;
+  }
+  
+  table th {
+    background-color: #f8f8f8;
+    font-weight: bold;
+  }
+  
+  table tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  table tr:hover {
+    background-color: #e0e0e0;
+  }
+
+  .agregarMedioPago{
+    background-color: #007bff;
+    color: #fff;
+    padding: 8px 12px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: background-color 0.2s ease-in-out;
+  }
+
+  .botonera button.borrar {
+    background-color: #dc3545;
+    color: #fff;
+  }
+  
+  .botonera button:hover {
+    opacity: 0.8;
+  }
+
+  .botonera button.modificar {
+    background-color: blue;
+    color: #fff;
+  }
+
+  @media (max-width: 800px) {
+    .botonera{
+        display: flex;
+        justify-content: space-evenly;
+        flex-direction: row;
+    }
+}
+  

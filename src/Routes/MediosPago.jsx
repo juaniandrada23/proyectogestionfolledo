@@ -1,89 +1,83 @@
 import React, { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
-import Modal from '@mui/material/Modal';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
 import Navbar from '../Components/Navbar';
 import Footer from '../Components/Footer';
+import TextField from '@mui/material/TextField';
+import { MdAttachMoney, MdOutlineMoneyOffCsred } from "react-icons/md";
+import '../Styles/mediosdepago.css';
 
 const MediosPago = () => {
-  const [mediopago, setNombreMedioPago] = useState([]);
-  const [openModal, setOpenModal] = useState(false);
-  const [nuevoPago, setNuevoPago] = useState('');
+  const [mediopago, setMedioPago] = useState([]);
 
   useEffect(() => {
-    fetch('https://apifolledo.onrender.com/mediodepago/nombremediopago')
-      .then(response => response.json())
-      .then(data => setNombreMedioPago(data))
-      .catch(error => console.error('Error al cargar los nombres de los medios de pago', error));
+    cargarDatos();
   }, []);
 
-  const handleOpenModal = () => {
-    setOpenModal(true);
+  const cargarDatos = () => {
+    fetch('https://apifolledo.onrender.com/mediodepago/nombremediopago')
+      .then(response => response.json())
+      .then(data => setMedioPago(data))
+      .catch(error => console.error('Error al cargar los nombres de los medios de pago', error));
   };
 
-  const handleCloseModal = () => {
-    setOpenModal(false);
+  const handleBorrar = (id) => {
+    // Lógica para borrar el medio de pago con el ID proporcionado
+    console.log(`Borrando medio de pago con ID: ${id}`);
   };
 
-  const handleAgregarPago = () => {
-    // Lógica para enviar el nuevo pago al backend
-    // ...
-
-    // Cerrar el modal después de agregar el pago
-    handleCloseModal();
+  const handleModificar = (id) => {
+    // Lógica para modificar el medio de pago con el ID proporcionado
+    console.log(`Modificando medio de pago con ID: ${id}`);
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: '#EAEBED' }}>
       <Navbar />
-      <Grid container spacing={1} style={{ flexGrow: 1, padding: 20 }}>
-        <Grid item xs={12} lg={12} style={{textAlign:'center', alignItems:'center', justifyContent:'center'}}>
-          <h1 style={{ textAlign: 'center' }}>Tabla para medios de pagos</h1>
-          <ul>
-            {mediopago.map((item, index) => (
-              <li key={index}>{item.nombreMedioPago}</li>
-            ))}
-          </ul>
-          <Button variant="contained" color="primary" onClick={handleOpenModal}>
-            Agregar Medio de Pago
-          </Button>
+
+      <Grid container spacing={1} style={{ flexGrow: 1, padding: '20px', justifyContent: 'center' }}>
+        <Grid item xs={12} lg={12}>
+          <div className='tabla'>
+            <h1>Agregar/Modificar medio de pago</h1>
+            <form>
+              <div style={{display:'flex', justifyContent:'center'}}>
+                <TextField label="Medio de Pago" name="medioDePago"/>
+              </div>
+              <div style={{display:'flex', justifyContent:'center', alignItems:'center', marginTop:'12px'}}>
+                <button>Agregar/Modificar medio de pago</button>
+              </div>
+            </form>
+          </div>
+        </Grid>
+
+        <Grid item xs={12} lg={12} className="input-container">
+        <div className='tabla'>
+            <h1>Tabla de Medios de Pago</h1>
+            <table>
+              <thead>
+                <tr>
+                  <th>Medio de Pago</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {mediopago.map(pagomedio => (
+                  <tr key={pagomedio.idMedioPago}>
+                    <td>{pagomedio.nombreMedioPago}</td>
+                    <td>
+                      <div className='botonera'>
+                        <button className='modificar' onClick={() => handleModificar(pagomedio.idMedioPago)}><MdAttachMoney/></button>
+                        <button className='borrar' onClick={() => handleBorrar(pagomedio.idMedioPago, pagomedio.nombreMedioPago)}><MdOutlineMoneyOffCsred/></button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </Grid>
       </Grid>
-      <Footer />
 
-      {/* Modal para agregar medio de pago */}
-      <Modal open={openModal} onClose={handleCloseModal}>
-        <Box
-          sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: 400,
-            bgcolor: 'background.paper',
-            boxShadow: 24,
-            p: 4,
-          }}
-        >
-          <Typography variant="h6" component="div" gutterBottom>
-            Agregar Medio de Pago
-          </Typography>
-          <TextField
-            label="Nombre del nuevo medio de pago"
-            variant="outlined"
-            fullWidth
-            value={nuevoPago}
-            onChange={e => setNuevoPago(e.target.value)}
-            style={{ marginBottom: 16 }}
-          />
-          <Button variant="contained" color="primary" onClick={handleAgregarPago}>
-            Agregar
-          </Button>
-        </Box>
-      </Modal>
+      <Footer />
     </div>
   );
 };
