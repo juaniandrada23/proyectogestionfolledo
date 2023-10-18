@@ -95,7 +95,6 @@ const Proveedores = () => {
     setLoading(true);
   
     if (modoEdicion) {
-      // Si estamos en modo edición, enviar la solicitud PUT al servidor
       const proveedorModificado = {
         nombre: nuevoProveedor.nombre,
       };
@@ -124,7 +123,6 @@ const Proveedores = () => {
         })
         .catch(error => console.error('Error al modificar el proveedor', error));
     } else {
-      // Si no estamos en modo edición, enviar la solicitud POST para agregar un nuevo proveedor
       fetch('https://apifolledo.onrender.com/proveedores', {
         method: 'POST',
         headers: {
