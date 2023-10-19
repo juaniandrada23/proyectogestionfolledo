@@ -17,10 +17,16 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import useAuthorization from '../Functions/useAuthorization';
+import { useTimeout } from '../Functions/timeOut';
 import '../Styles/mediosdepago.css';
 import { AlertTitle } from '@mui/material';
 
 const MediosPago = () => {
+  useAuthorization();
+  useTimeout();
+
+
   const [mediopago, setMedioPago] = useState([]);
   const [nuevoMedioPago, setNuevoMedioPago] = useState('');
   const [actualizarMedioPago, setActualizarMedioPago] = useState('');

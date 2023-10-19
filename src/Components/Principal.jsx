@@ -12,6 +12,7 @@ import EstadoServicio from '../Components/EstadoServicio.jsx'
 
 const Principal = () => {
   useAuthorization();
+  useTimeout();
 
   const nombreDelUsuario  = localStorage.getItem("userName");
   const [chartData, setChartData] = useState(null);
@@ -23,8 +24,6 @@ const Principal = () => {
     value_sell: null,
     value_buy: null,
   });
-
-  useTimeout();
 
   useEffect(() => {
     fetch('https://api.bluelytics.com.ar/v2/latest')
