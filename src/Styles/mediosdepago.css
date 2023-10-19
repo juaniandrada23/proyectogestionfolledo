@@ -72,7 +72,7 @@
     color: #fff;
   }
 
-  .editar-medio-pago button.borrar {
+  .editar-medio-pago button.cancelar {
     background-color: #dc3545;
     color: #fff;
   }
@@ -85,6 +85,7 @@
     display: flex;
     flex-direction: row;
     justify-content: center;
+    align-items: center;
     gap: 10px;
     margin-top: 10px;
   }

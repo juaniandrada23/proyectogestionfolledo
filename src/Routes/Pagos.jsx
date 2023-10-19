@@ -112,6 +112,7 @@ const Pagos = () => {
     usdDelDia: false
   });
   
+  //---------------------------------------------FORM------------------------------------------------------------------------------
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData({
@@ -179,18 +180,37 @@ const Pagos = () => {
     });
   };
 
+  //MANEJO PARA HACER EL REFRESH DE LA TABLA
   useEffect(() => {
     if (agregadaExitosa) {
-      setTimeout(() => {
-        setSnackbarOpen(true);
-        setTimeout(() => {
-          setAgregadaExitosa(false);
-          window.location.reload();
-        }, 1000);
-      }, 1000);
+      let apiUrl = `https://apifolledo.onrender.com/pagos/${userId}`;
+  
+      if (rolUsuario === 'Administrador') {
+        apiUrl = 'https://apifolledo.onrender.com/pagos';
+      }
+  
+      fetch(apiUrl)
+        .then((response) => response.json())
+        .then((data) => {
+          setPagos(data);
+          setSnackbarOpen(true);
+          setSnackbarSeverity('success');
+          setSnackbarMessage('Pago agregado correctamente');
+        })
+        .catch((error) => {
+          console.error('Error al cargar los pagos', error);
+          setSnackbarOpen(true);
+          setSnackbarSeverity('error');
+          setSnackbarMessage(
+            'Error con la conexión del servidor, intente nuevamente'
+          );
+        });
+      
+      setAgregadaExitosa(false);
     }
-  }, [agregadaExitosa]); 
+  }, [agregadaExitosa, userId, rolUsuario]);
 
+  //MANEJO PARA LA CARGA DE LOS DATOS EN LA TABLA
   useEffect(() => {
     let apiUrl = `https://apifolledo.onrender.com/pagos/${userId}`;
 
@@ -214,7 +234,24 @@ const Pagos = () => {
       .catch((error) => console.error('Error al cargar los pagos', error));  
       return () => clearTimeout(timeoutId);
   }, [navigate, rolUsuario, userId]);
+
+  const actualizarPagos = () => {
+    let apiUrl = `https://apifolledo.onrender.com/pagos/${userId}`;
   
+    if (rolUsuario === 'Administrador') {
+      apiUrl = 'https://apifolledo.onrender.com/pagos';
+    }
+  
+    fetch(apiUrl)
+      .then((response) => response.json())
+      .then((data) => {
+        setPagos(data);
+      })
+      .catch((error) => {
+        console.error('Error al cargar los pagos', error);
+      });
+  };  
+  //----------------------------------------------------------------------------------------//
   useEffect(() => {
     fetch('https://apifolledo.onrender.com/proveedores/nombreprov')
       .then(response => response.json())
@@ -481,7 +518,7 @@ const Pagos = () => {
                         <td>{pago.usdDelDia}</td>
                         <td>{pago.nombreMedioPago}</td>
                         <td>{format(new Date(pago.fecha), 'yyyy-MM-dd')}</td>
-                        <td><BotonEliminarPago pago={pago} /></td>
+                        <td><BotonEliminarPago pago={pago} actualizarPagos={actualizarPagos}/></td>
                         {rolUsuario === 'Administrador' && (
                         <>
                           <td>{pago.username}</td>
@@ -510,7 +547,7 @@ const Pagos = () => {
       <EstadoServicio/>
 
       <Snackbar open={snackbarOpen} autoHideDuration={2000} onClose={handleCloseSnackbar} anchorOrigin={isMobileScreen ? { vertical: 'top', horizontal: 'center' } : { vertical: 'bottom', horizontal: 'left' }}>
-        <Alert severity={snackbarSeverity} sx={{ width: '100%' }}>
+        <Alert variant='filled' severity={snackbarSeverity} sx={{ width: '100%' }}>
           {snackbarMessage}
         </Alert>
       </Snackbar>

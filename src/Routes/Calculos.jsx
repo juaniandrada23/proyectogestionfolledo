@@ -17,6 +17,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import { MdExpandMore } from "react-icons/md";
 import Skeleton from '@mui/material/Skeleton';
+import LinearProgress from '@mui/material/LinearProgress';
   
 const Calculos = () => {
   useAuthorization();
@@ -80,9 +81,11 @@ const Calculos = () => {
       setErrorTotal('');
     }    
 
+    setIsLoading(true);
+
     fetch(`https://apifolledo.onrender.com/calculos/totalgeneral?fechaDesde=${fechaDesdeTotal}&fechaHasta=${fechaHastaTotal}`)
     .then(response => response.json())
-    .then(data => setCalculosTotales(data))
+    .then((data => { setCalculosTotales(data); setIsLoading(false);}))
     .catch(error => console.error('Error al cargar los nombres de los calculos', error));
 
     var apiUrl = `https://apifolledo.onrender.com/pagos/filtrando?fechadesde=${fechaDesdeTotal}&fechahasta=${fechaHastaTotal}&nombreProveedor=${nombreProveedorFiltro}`;
@@ -298,7 +301,7 @@ const Calculos = () => {
                       <input className='date-input' type="date" id="fechaDesdeTotal" value={fechaDesdeTotal} onChange={handlefechaDesdeTotalChange}/>
                       <label htmlFor="fechaHastaTotal">Fecha hasta total:</label>
                       <input className='date-input' type="date" id="fechaHastaTotal" value={fechaHastaTotal} onChange={handlefechaHastaTotalChange}/>
-                      <button onClick={aplicarFiltroTotal}>Aplicar Calculos Totales</button>
+                      <button onClick={aplicarFiltroTotal}>Aplicar Calculos Totales <br />{isLoading && <LinearProgress />}</button>
                       {errorTotal && <p style={{marginBottom:'5px', color:'red'}} className="error-message">{errorTotal}</p>}
                       {errorPDF && <p style={{marginBottom:'5px', color:'red'}} className="error-message">{errorPDF}</p>}
                     </div>

@@ -268,7 +268,7 @@ const Proveedores = () => {
       <EstadoServicio/>
 
       <Snackbar open={snackbarOpen} autoHideDuration={2000} onClose={handleCloseSnackbar} anchorOrigin={isMobileScreen ? { vertical: 'top', horizontal: 'center' } : { vertical: 'bottom', horizontal: 'left' }}>
-        <Alert severity="success" sx={{ width: '100%' }}>
+        <Alert variant='filled' severity="success" sx={{ width: '100%' }}>
           {snackbarMessage}
         </Alert>
       </Snackbar>

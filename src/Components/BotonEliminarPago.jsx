@@ -9,10 +9,9 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import { MdDelete } from "react-icons/md";
 
-const BotonEliminarPago = ({ pago }) => {
+const BotonEliminarPago = ({ pago, actualizarPagos }) => {
 
   const [modalOpen, setModalOpen] = useState(false);
-  const [borradoExitoso, setBorradoExitoso] = useState(false);
   const [pagoAEliminar, setPagoAEliminar] = useState(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
@@ -40,32 +39,22 @@ const BotonEliminarPago = ({ pago }) => {
 
   const borrarPago = (idPago) => {
     setModalOpen(false);
+    setSnackbarOpen(false);
   
     fetch(`https://apifolledo.onrender.com/pagos/${idPago}`, {
       method: 'DELETE',
     })
       .then(response => {
         if (response.ok) {
-          setBorradoExitoso(true);
+          actualizarPagos();
+          setSnackbarMessage('Pago borrado correctamente');
+          setSnackbarOpen(true);
         } else {
           console.error('Error al borrar el pago');
         }
       })
       .catch(error => console.error('Error al borrar el pago', error));
   };
-
-  useEffect(() => {
-    if (borradoExitoso) {
-      setTimeout(() => {
-        setSnackbarMessage('Pago borrado correctamente');
-        setSnackbarOpen(true);
-        setTimeout(() => {
-          setBorradoExitoso(false);
-          window.location.reload();
-        }, 1000);
-      }, 1000);
-    }
-  }, [borradoExitoso]); 
 
   return (
   <>
@@ -92,7 +81,7 @@ const BotonEliminarPago = ({ pago }) => {
     </Dialog>
 
     <Snackbar open={snackbarOpen} autoHideDuration={2000} onClose={handleCloseSnackbar} anchorOrigin={isMobileScreen ? { vertical: 'top', horizontal: 'center' } : { vertical: 'bottom', horizontal: 'left' }}>
-      <Alert severity="success" sx={{ width: '100%' }}>
+      <Alert variant='filled' severity="success" sx={{ width: '100%' }}>
         {snackbarMessage}
       </Alert>
     </Snackbar>
