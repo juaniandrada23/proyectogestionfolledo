@@ -126,7 +126,7 @@ const Principal = () => {
           </div>
         </Container>
       </div>
-      <Footer/>
+      <Footer style={{ flexShrink: 0 }}/>
 
       <EstadoServicio/>
     </div>

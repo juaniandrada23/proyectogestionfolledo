@@ -16,3 +16,10 @@ body {
     background-color: #006989;
     color: #EAEBED;
   }
+
+  @media (max-width: 1401px) {
+
+    .navegacion{
+      margin-right: 110px;
+    }
+}

@@ -52,11 +52,11 @@ const Navbar = () => {
             </div>
           </div>
           <div className="hidden md:block">
-            <div className="ml-4 flex items-center md:ml-6 gap-2">
+            <div className="ml-4 flex items-center md:ml-6 gap-4 navegacion">
             {tokenAvailable && (
               <>
-                <button className="inline-flex items-center gap-x-1 text-sm font-semibold leading-6 transition ease-in-out delay-150 bg-white hover:-translate-y-1 hover:scale-110 hover:bg-blue-300 duration-300" style={{color:'black', padding:'5px', borderRadius:'50px'}} onClick={() => navigate(`/principal/${userId}`)}><LuHome style={{width:'3vh', height:'3vh'}}/></button>
                 <ButtonSlice/>
+                <button className="inline-flex items-center gap-x-1 text-sm font-semibold leading-6 transition ease-in-out delay-150 bg-white hover:-translate-y-1 hover:scale-110 hover:bg-blue-200 duration-300" style={{color:'black', padding:'5px', borderRadius:'50px'}} onClick={() => navigate(`/principal/${userId}`)}><LuHome style={{width:'3vh', height:'3vh'}}/></button>
               </>
               )}
             </div>
