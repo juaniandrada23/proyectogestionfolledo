@@ -3,6 +3,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import '../Styles/app.css'
 import CircularProgress from '@mui/material/CircularProgress';
 import Modal from '@mui/material/Modal';
+import ButtonSlice from './ButtonSlice';
+import { LuHome } from "react-icons/lu";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -50,19 +52,11 @@ const Navbar = () => {
             </div>
           </div>
           <div className="hidden md:block">
-            <div className="ml-4 flex items-center md:ml-6">
+            <div className="ml-4 flex items-center md:ml-6 gap-2">
             {tokenAvailable && (
               <>
-                <button className="text-white px-3 py-2 rounded-md text-sm font-medium transition-colors hover:text-blue-300" onClick={() => navigate(`/principal/${userId}`)}>Inicio</button>
-                <button className="text-white px-3 py-2 rounded-md text-sm font-medium transition-colors hover:text-blue-300" onClick={() => navigate(`/pagos/${userId}`)}>Pagos</button>
-                {rolUsuario === 'Administrador' && (
-                  <>
-                    <button className="text-white px-3 py-2 rounded-md text-sm font-medium transition-colors hover:text-blue-300" onClick={() => navigate(`/proveedores/${userId}`)}>Proveedores</button>
-                    <button className="text-white px-3 py-2 rounded-md text-sm font-medium transition-colors hover:text-blue-300" onClick={() => navigate(`/calculos/${userId}`)}>Calculos</button>
-                    <button className="text-white px-3 py-2 rounded-md text-sm font-medium transition-colors hover:text-blue-300" onClick={() => navigate(`/medios/${userId}`)}>Medios de <br />Pagos</button>
-                  </>
-                )}
-                <button className="text-white px-3 py-2 rounded-md text-sm font-medium transition-colors hover:text-blue-300" onClick={handleLogout}>Cerrar Sesión</button>
+                <button className="inline-flex items-center gap-x-1 text-sm font-semibold leading-6 transition ease-in-out delay-150 bg-white hover:-translate-y-1 hover:scale-110 hover:bg-blue-300 duration-300" style={{color:'black', padding:'5px', borderRadius:'50px'}} onClick={() => navigate(`/principal/${userId}`)}><LuHome style={{width:'3vh', height:'3vh'}}/></button>
+                <ButtonSlice/>
               </>
               )}
             </div>
