@@ -80,7 +80,7 @@ const PruebaLogin = () => {
       </div>
       <div className="flex w-full lg:w-1/2 justify-center items-center bg-white space-y-8">
         <div className="w-full px-8 md:px-32 lg:px-24">
-          <div className="bg-white rounded-md shadow-2xl p-5">
+          <div className="bg-white rounded-md shadow-2xl hover:border-2 hover:border-sky-500 p-5 hover:-translate-y-2 hover:scale-100 duration-300">
             <h1 className="text-gray-800 font-bold text-2xl mb-1">¡Hola de nuevo!</h1>
             <p className="text-sm font-normal text-gray-600 mb-5">¡Bienvenido!</p>
             {errorMessage && <Alert className='mb-2' severity="error">{errorMessage}</Alert>}

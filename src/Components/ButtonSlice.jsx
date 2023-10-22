@@ -40,7 +40,7 @@ const ButtonSlice = () => {
     ]
       
     const callsToAction = [
-        { name: 'Usuarios', icon: UsersIcon },
+        { name: 'Usuarios', icon: UsersIcon, click: () => navigate('/usuarios') },
         { name: 'Cerrar sesión', icon: ArrowRightOnRectangleIcon, click: handleLogout },
     ]
 

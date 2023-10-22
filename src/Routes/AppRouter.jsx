@@ -7,6 +7,7 @@ import Calculos from './Calculos';
 import SignUp from './SignUp';
 import MediosPago from './MediosPago.jsx'
 import PruebaLogin from './PruebaLogin.jsx'
+import Usuarios from './Usuarios';
 
 const AppRouter = () => {
   return (
@@ -15,11 +16,12 @@ const AppRouter = () => {
         {/* VER BIEN COMO MANEJAR EL LOGIN DE REGRESO*/}
         <Route path="/" element={<PruebaLogin/>} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/principal/:userId" element={<Principal />} />
-        <Route path="/proveedores/:userId" element={<Proveedores />} />
-        <Route path="/calculos/:userId" element={<Calculos />} />
-        <Route path="/pagos/:userId" element={<Pagos />} />
-        <Route path="/medios/:userId" element={<MediosPago />} />
+        <Route path="/usuarios" element={<Usuarios/>} />
+        <Route path="/principal/:userId" element={<Principal/>} />
+        <Route path="/proveedores/:userId" element={<Proveedores/>} />
+        <Route path="/calculos/:userId" element={<Calculos/>} />
+        <Route path="/pagos/:userId" element={<Pagos/>} />
+        <Route path="/medios/:userId" element={<MediosPago/>} />
       </Routes>
     </Router>
   );
