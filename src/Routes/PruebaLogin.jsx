@@ -44,9 +44,11 @@ const PruebaLogin = () => {
           const userId = data.userId;
           const userName = data.userName;
           const userRole = data.userRole;
+          const imagen = data.imagen;
           localStorage.setItem('userName', userName);
           localStorage.setItem('userId', userId);
           localStorage.setItem('userRole', userRole);
+          localStorage.setItem('imagen', imagen);
           localStorage.setItem('token', data.token);
   
           navigate(`/principal/${userId}`);

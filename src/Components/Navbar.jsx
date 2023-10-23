@@ -4,6 +4,7 @@ import '../Styles/app.css'
 import CircularProgress from '@mui/material/CircularProgress';
 import Modal from '@mui/material/Modal';
 import ButtonSlice from './ButtonSlice';
+import Avatar from '@mui/material/Avatar';
 import { LuHome } from "react-icons/lu";
 
 const Navbar = () => {
@@ -12,6 +13,7 @@ const Navbar = () => {
   const [tokenAvailable, setTokenAvailable] = useState(false);
   const { userId } = useParams();
   const nombreDelUsuario  = localStorage.getItem("userName");
+  const imagenDelUsuario  = localStorage.getItem("imagen");
   const rolUsuario = localStorage.getItem("userRole");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -56,6 +58,9 @@ const Navbar = () => {
               <>
                 <ButtonSlice/>
                 <button className="inline-flex items-center gap-x-1 text-sm font-semibold leading-6 transition ease-in-out delay-150 bg-white hover:-translate-y-1 hover:scale-110 hover:bg-blue-200 duration-300" style={{color:'black', padding:'5px', borderRadius:'50px'}} onClick={() => navigate(`/principal/${userId}`)}><LuHome style={{width:'3vh', height:'3vh'}}/></button>
+                <button>
+                  <Avatar alt={`${nombreDelUsuario}`} sx={{ width: 34, height: 34 }} src={`${imagenDelUsuario}`} onClick={() => navigate(`/usuarios/${userId}`)}/>
+                </button>
               </>
               )}
             </div>
@@ -84,7 +89,7 @@ const Navbar = () => {
                     <button className="text-white px-3 py-2 rounded-md text-sm font-medium transition-colors hover:text-blue-300" onClick={() => navigate(`/proveedores/${userId}`)}>Proveedores</button>
                     <button className="text-white px-3 py-2 rounded-md text-sm font-medium transition-colors hover:text-blue-300" onClick={() => navigate(`/calculos/${userId}`)}>Calculos</button>
                     <button className="text-white px-3 py-2 rounded-md text-sm font-medium transition-colors hover:text-blue-300" onClick={() => navigate(`/medios/${userId}`)}>Medios de Pago</button>
-                    <button className="text-white px-3 py-2 rounded-md text-sm font-medium transition-colors hover:text-blue-300" onClick={() => navigate(`/usuarios`)}>Usuarios</button>
+                    <button className="text-white px-3 py-2 rounded-md text-sm font-medium transition-colors hover:text-blue-300" onClick={() => navigate(`/usuarios/${userId}`)}>Usuarios</button>
                   </>
                 )}
                 <button className="text-white px-3 py-2 rounded-md text-sm font-medium transition-colors hover:text-blue-300" onClick={handleLogout}>Cerrar Sesión</button>
@@ -93,12 +98,12 @@ const Navbar = () => {
           </div>
 
           <div className="pt-4 pb-3 border-t border-blue-800">
-            <div className="flex items-center px-5">
+            <div className="flex items-center px-5 mb-1">
             {tokenAvailable && (
             <>
               <div className="flex-shrink-0">
-                <button className="flex text-white items-center justify-center h-8 w-8 rounded-full bg-blue-800 hover:bg-blue-700 focus:outline-none focus:bg-blue-700 transition-colors" onClick={() => navigate(`/`)}>
-                  <img className="h-6 w-6 rounded-full" src="https://ih1.redbubble.net/image.4155785074.7045/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.jpg" alt="Foto de usuario" />
+                <button className="flex text-white items-center justify-center h-8 w-8 rounded-full bg-blue-800 hover:bg-blue-700 focus:outline-none focus:bg-blue-700 transition-colors" onClick={() => navigate(`/usuarios/${userId}`)}>
+                  <Avatar alt={`${nombreDelUsuario}`} src={`${imagenDelUsuario}`} onClick={() => navigate(`/usuarios/${userId}`)}/>
                 </button>
               </div>
               <div className="ml-3">
