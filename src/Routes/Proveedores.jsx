@@ -18,6 +18,7 @@ import { useTimeout } from '../Functions/timeOut';
 import AuthAdmin from '../Functions/authAdmin';
 import LinearProgress from '@mui/material/LinearProgress';
 import EstadoServicio from '../Components/EstadoServicio';
+import Skeleton from '@mui/material/Skeleton';
 
 const Proveedores = () => {
   useAuthorization();
@@ -34,6 +35,7 @@ const Proveedores = () => {
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [isMobileScreen, setIsMobileScreen] = useState(window.innerWidth <= 600);
   const [error, setError] = useState('');
+  const [isLoadingSkeleton, setIsLoadingSkeleton] = useState(true);
   const [isLoading, setLoading] = useState(false);
 
   useTimeout();
@@ -63,13 +65,19 @@ const Proveedores = () => {
     nombre: '',
   });
 
-  // Función para cargar los proveedores desde el endpoint
   useEffect(() => {
-    fetch('https://apifolledo.onrender.com/proveedores')
-      .then(response => response.json())
-      .then(data => setProveedores(data))
-      .catch(error => console.error('Error al cargar los proveedores', error));
+    cargarDatos();
   }, []);
+
+  const cargarDatos = () => {
+      fetch('https://apifolledo.onrender.com/proveedores')
+        .then(response => response.json())
+        .then(data => {
+          setProveedores(data);
+          setIsLoadingSkeleton(false);
+        })
+        .catch(error => console.error('Error al cargar los proveedores', error));
+  };
 
   // Función para manejar cambios en el formulario de agregar proveedores
   const handleNuevoProveedorChange = (e) => {
@@ -113,10 +121,11 @@ const Proveedores = () => {
             setSnackbarMessage('Proveedor modificado correctamente');
             setSnackbarOpen(true);
             setLoading(false);
-            setTimeout(() => {
-              setSnackbarOpen(false);
-              window.location.reload();
-            }, 1000);
+            setError('');
+            setNuevoProveedor({
+              nombre: '',
+            });
+            cargarDatos();
           } else {
             console.error('Error al modificar el proveedor');
           }
@@ -136,14 +145,11 @@ const Proveedores = () => {
             setNuevoProveedor({
             nombre: '',
           });
+          cargarDatos();
           setError('');
           setSnackbarMessage('Proveedor agregado correctamente');
           setSnackbarOpen(true);
           setLoading(false);
-          setTimeout(() => {
-            setSnackbarOpen(false);
-            window.location.reload();
-          }, 1000);
         })
         .catch(error => console.error('Error al agregar el proveedor', error));
     }
@@ -172,6 +178,7 @@ const Proveedores = () => {
       .then(response => {
         if (response.ok) {
           setBorradoExitoso(true);
+          cargarDatos();
         } else {
           console.error('Error al borrar el proveedor');
         }
@@ -184,10 +191,6 @@ const Proveedores = () => {
       setTimeout(() => {
         setSnackbarMessage('Proveedor borrado correctamente');
         setSnackbarOpen(true);
-        setTimeout(() => {
-          setBorradoExitoso(false);
-          window.location.reload();
-        }, 1000);
       }, 1000);
     }
   }, [borradoExitoso]); 
@@ -208,7 +211,14 @@ const Proveedores = () => {
                 </tr>
               </thead>
               <tbody>
-                {proveedores.map(proveedor => (
+              {isLoadingSkeleton ? (
+                    <tr>
+                      <td><Skeleton animation="wave" variant="rounded" width={210} height={30} /></td>
+                      <td><Skeleton animation="wave" variant="rounded" width={210} height={30} /></td>
+                      <td><Skeleton animation="wave" variant="rounded" width={210} height={30} /></td>
+                    </tr>
+                  ) : (
+                proveedores.map((proveedor => (
                   <tr key={proveedor.id}>
                     <td>{proveedor.id}</td>
                     <td>{proveedor.nombre}</td>
@@ -219,7 +229,8 @@ const Proveedores = () => {
                       </div>
                     </td>
                   </tr>
-                ))}
+                ))))
+              }
               </tbody>
             </table>
           </div>

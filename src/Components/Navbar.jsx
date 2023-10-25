@@ -58,7 +58,7 @@ const Navbar = () => {
               <>
                 <ButtonSlice/>
                 <button className="inline-flex items-center gap-x-1 text-sm font-semibold leading-6 transition ease-in-out delay-150 bg-white hover:-translate-y-1 hover:scale-110 hover:bg-blue-200 duration-300" style={{color:'black', padding:'5px', borderRadius:'50px'}} onClick={() => navigate(`/principal/${userId}`)}><LuHome style={{width:'3vh', height:'3vh'}}/></button>
-                <button>
+                <button className='transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300'>
                   <Avatar alt={`${nombreDelUsuario}`} sx={{ width: 34, height: 34 }} src={`${imagenDelUsuario}`} onClick={() => navigate(`/usuarios/${userId}`)}/>
                 </button>
               </>

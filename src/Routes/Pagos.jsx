@@ -18,6 +18,7 @@ import EstadoServicio from '../Components/EstadoServicio.jsx'
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
+import Skeleton from '@mui/material/Skeleton';
 import { MdExpandMore } from "react-icons/md";
 
 const Pagos = () => {
@@ -55,6 +56,7 @@ const Pagos = () => {
   const [esPositivo, setEsPositivo] = useState(false);
   const [esNegativo, setEsNegativo] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingSkeleton, setIsLoadingSkeleton] = useState(true);
   const [cargandoForm, setCargandoForm] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
@@ -150,9 +152,6 @@ const Pagos = () => {
       formData.monto = `-${monto}`;
     }
 
-    const token = localStorage.getItem('token');
-    const userId = JSON.parse(atob(token.split('.')[1])).userId;
-
     setCargandoForm(true);
 
     fetch(`https://apifolledo.onrender.com/pagos/${userId}`, {
@@ -195,6 +194,7 @@ const Pagos = () => {
           setPagos(data);
           setSnackbarOpen(true);
           setSnackbarSeverity('success');
+          setIsLoadingSkeleton(false);
           setSnackbarMessage('Pago agregado correctamente');
         })
         .catch((error) => {
@@ -230,7 +230,10 @@ const Pagos = () => {
 
     fetch(apiUrl)
       .then((response) => response.json())
-      .then((data) => setPagos(data))
+      .then((data) => {
+        setPagos(data);
+        setIsLoadingSkeleton(false);
+      })
       .catch((error) => console.error('Error al cargar los pagos', error));  
       return () => clearTimeout(timeoutId);
   }, [navigate, rolUsuario, userId]);
@@ -439,12 +442,12 @@ const Pagos = () => {
                           <label>Valor del monto</label>
                           <label>
                             <input type="checkbox" name="esPositivo" checked={esPositivo} onChange={handleEsPositivoChange} />
-                            Positivo
+                            Ingreso
                           </label>
 
                           <label>
                             <input type="checkbox" name="esNegativo" checked={esNegativo} onChange={handleEsNegativoChange} />
-                            Negativo
+                            Egreso
                           </label>
                         </div>
                         <br/>
@@ -509,7 +512,18 @@ const Pagos = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {paginatedPagos.map(pago => (
+                  {isLoadingSkeleton ? (
+                    <tr>
+                      <td><Skeleton animation="wave" variant="rounded" width={210} height={30} /></td>
+                      <td><Skeleton animation="wave" variant="rounded" width={210} height={30} /></td>
+                      <td><Skeleton animation="wave" variant="rounded" width={210} height={30} /></td>
+                      <td><Skeleton animation="wave" variant="rounded" width={210} height={30} /></td>
+                      <td><Skeleton animation="wave" variant="rounded" width={210} height={30} /></td>
+                      <td><Skeleton animation="wave" variant="rounded" width={210} height={30} /></td>
+                      <td><Skeleton animation="wave" variant="rounded" width={210} height={30} /></td>
+                    </tr>
+                  ) : (
+                    paginatedPagos.map((pago => (
                       <tr key={pago.idPago}>
                         <td>{pago.idPago}</td>
                         <td>{pago.nombre}</td>
@@ -525,7 +539,8 @@ const Pagos = () => {
                         </>
                       )}
                       </tr>
-                    ))}
+                    ))))
+                }
                   </tbody>
                 </table>
                 <div className='botonera boton1'>

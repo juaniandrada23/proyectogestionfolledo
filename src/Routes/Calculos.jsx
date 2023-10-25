@@ -15,6 +15,7 @@ import EstadoServicio from '../Components/EstadoServicio.jsx'
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
+import Alert from '@mui/material/Alert';
 import { MdExpandMore } from "react-icons/md";
 import Skeleton from '@mui/material/Skeleton';
 import LinearProgress from '@mui/material/LinearProgress';
@@ -37,6 +38,7 @@ const Calculos = () => {
   const [errorPDF, setErrorPDF] = useState('');
   const [errorTotal, setErrorTotal] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingFiltroProveedores, setIsLoadingFiltro] = useState(true);
 
   useTimeout();
 
@@ -44,7 +46,9 @@ const Calculos = () => {
     fetch('https://apifolledo.onrender.com/calculos/total')
       .then(response => response.json())
       .then(data => {setTotales(data); 
-                    setIsLoading(false);})
+                    setIsLoading(false);
+                    setIsLoadingFiltro(false);
+                  })
       .catch(error => console.error('Error al cargar los nombres de los calculos', error));
   }, []);
 
@@ -57,12 +61,15 @@ const Calculos = () => {
       return;
     }    
 
+    setIsLoadingFiltro(true);
+
     fetch(`https://apifolledo.onrender.com/calculos/filtrando?fechaDesde=${fechaDesde}&fechaHasta=${fechaHasta}&nombreProveedor=${nombreProveedorFiltro}`)
       .then((response) => response.json())
       .then((data) => {
         if (Array.isArray(data)) {
           setCalculos(data);
           setError('');
+          setIsLoadingFiltro(false);
         } else {
           console.error("La respuesta del servidor no es un arreglo:", data);
         }
@@ -85,7 +92,10 @@ const Calculos = () => {
 
     fetch(`https://apifolledo.onrender.com/calculos/totalgeneral?fechaDesde=${fechaDesdeTotal}&fechaHasta=${fechaHastaTotal}`)
     .then(response => response.json())
-    .then((data => { setCalculosTotales(data); setIsLoading(false);}))
+    .then((data => { 
+      setCalculosTotales(data); 
+      setIsLoading(false);
+    }))
     .catch(error => console.error('Error al cargar los nombres de los calculos', error));
 
     var apiUrl = `https://apifolledo.onrender.com/pagos/filtrando?fechadesde=${fechaDesdeTotal}&fechahasta=${fechaHastaTotal}&nombreProveedor=${nombreProveedorFiltro}`;
@@ -301,9 +311,9 @@ const Calculos = () => {
                       <input className='date-input' type="date" id="fechaDesdeTotal" value={fechaDesdeTotal} onChange={handlefechaDesdeTotalChange}/>
                       <label htmlFor="fechaHastaTotal">Fecha hasta total:</label>
                       <input className='date-input' type="date" id="fechaHastaTotal" value={fechaHastaTotal} onChange={handlefechaHastaTotalChange}/>
-                      <button onClick={aplicarFiltroTotal}>Aplicar Calculos Totales <br />{isLoading && <LinearProgress />}</button>
-                      {errorTotal && <p style={{marginBottom:'5px', color:'red'}} className="error-message">{errorTotal}</p>}
-                      {errorPDF && <p style={{marginBottom:'5px', color:'red'}} className="error-message">{errorPDF}</p>}
+                      <button onClick={aplicarFiltroTotal}>Aplicar Calculos Para PDF <br />{isLoading && <LinearProgress />}</button>
+                      {errorTotal && <Alert severity="error"><strong>{errorTotal} </strong></Alert>}
+                      {errorPDF && <Alert severity="error"><strong>{errorPDF} </strong></Alert>}
                     </div>
                   </AccordionDetails>
                 </Accordion>
@@ -328,8 +338,8 @@ const Calculos = () => {
                             </option>
                           ))}
                         </select>
-                      <button onClick={aplicarFiltros}>Aplicar Filtros</button>
-                      {error && <p style={{marginBottom:'5px', color:'red'}} className="error-message">{error}</p>}
+                      <button onClick={aplicarFiltros}>Aplicar Filtros <br />{isLoadingFiltroProveedores && <LinearProgress />}</button>
+                      {error && <Alert severity="error"><strong>{error} </strong></Alert>}
                     </div>
                   </AccordionDetails>
                 </Accordion>  
@@ -414,7 +424,6 @@ const Calculos = () => {
                       </tr>
                     ))
                     )}
-
                   </tbody>
                 </table>
               </div>

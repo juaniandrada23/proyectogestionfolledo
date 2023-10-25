@@ -18,6 +18,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import useAuthorization from '../Functions/useAuthorization';
+import Skeleton from '@mui/material/Skeleton';
 import { useTimeout } from '../Functions/timeOut';
 import '../Styles/mediosdepago.css';
 import { AlertTitle } from '@mui/material';
@@ -39,6 +40,7 @@ const MediosPago = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [titleMessage, setTitleMessage] = useState('');
+  const [isLoadingSkeleton, setIsLoadingSkeleton] = useState(true);
   const [isMobileScreen, setIsMobileScreen] = useState(window.innerWidth <= 600);
 
   const handleWindowResize = () => {
@@ -63,7 +65,10 @@ const MediosPago = () => {
   const cargarDatos = () => {
     fetch('https://apifolledo.onrender.com/mediodepago/nombremediopago')
       .then(response => response.json())
-      .then(data => setMedioPago(data))
+      .then(data => {
+        setMedioPago(data);
+        setIsLoadingSkeleton(false);
+      })
       .catch(error => console.error('Error al cargar los nombres de los medios de pago', error));
   };
 
@@ -202,7 +207,13 @@ const MediosPago = () => {
                 </tr>
               </thead>
               <tbody>
-                {mediopago.map(pagomedio => (
+              {isLoadingSkeleton ? (
+                    <tr>
+                      <td><Skeleton animation="wave" variant="rounded" width={210} height={30} /></td>
+                      <td><Skeleton animation="wave" variant="rounded" width={210} height={30} /></td>
+                    </tr>
+                  ) : (
+                mediopago.map((pagomedio => (
                   <tr key={pagomedio.nombreMedioPago}>
                     <td>{pagomedio.nombreMedioPago}</td>
                     <td>
@@ -217,7 +228,8 @@ const MediosPago = () => {
                       </div>
                     </td>
                   </tr>
-                ))}
+                ))))
+              }
               </tbody>
             </table>
             
