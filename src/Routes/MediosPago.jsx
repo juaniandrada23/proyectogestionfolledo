@@ -188,7 +188,7 @@ const MediosPago = () => {
                     <TextField  label="Medio de Pago"  name="medioDePago"  value={nuevoMedioPago} onChange={(e) => setNuevoMedioPago(e.target.value)}/>
                   </div>
                   <div style={{display:'flex', justifyContent:'center', alignItems:'center', marginTop:'12px'}}>
-                    <button type="button" onClick={handleAgregar}>Agregar {isLoading && <LinearProgress />}</button>
+                    <button className='font-semibold' type="button" onClick={handleAgregar}>Agregar {isLoading && <LinearProgress />}</button>
                   </div>
                 </form>
               </AccordionDetails>
@@ -222,7 +222,7 @@ const MediosPago = () => {
                         <button className='borrar' onClick={() => handleBorrarClick(pagomedio.nombreMedioPago)}>
                           <MdOutlineMoneyOffCsred />
                         </button>
-                        <button className='editar' onClick={() => setMedioPagoSeleccionado(pagomedio.nombreMedioPago)}>
+                        <button className='editar font-semibold' onClick={() => setMedioPagoSeleccionado(pagomedio.nombreMedioPago)}>
                           Editar
                         </button>
                       </div>

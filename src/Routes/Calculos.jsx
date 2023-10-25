@@ -9,7 +9,6 @@ import jsPDF from 'jspdf';
 import Chart from 'chart.js/auto';
 import 'jspdf-autotable';
 import { FaRegFilePdf } from "react-icons/fa6";
-import { format } from 'date-fns';
 import html2canvas from 'html2canvas';
 import EstadoServicio from '../Components/EstadoServicio.jsx'
 import Accordion from '@mui/material/Accordion';
@@ -268,7 +267,7 @@ const Calculos = () => {
           pago.nombreMedioPago,
           pago.montoUSD,
           pago.usdDelDia,
-          format(new Date(pago.fecha), 'yyyy-MM-dd'),
+          pago.fecha.slice(0, 10),
           pago.username,
         ]);
 
@@ -311,7 +310,7 @@ const Calculos = () => {
                       <input className='date-input' type="date" id="fechaDesdeTotal" value={fechaDesdeTotal} onChange={handlefechaDesdeTotalChange}/>
                       <label htmlFor="fechaHastaTotal">Fecha hasta total:</label>
                       <input className='date-input' type="date" id="fechaHastaTotal" value={fechaHastaTotal} onChange={handlefechaHastaTotalChange}/>
-                      <button onClick={aplicarFiltroTotal}>Aplicar Calculos Para PDF <br />{isLoading && <LinearProgress />}</button>
+                      <button className='font-semibold' onClick={aplicarFiltroTotal}>Aplicar Calculos Para PDF <br />{isLoading && <LinearProgress />}</button>
                       {errorTotal && <Alert severity="error"><strong>{errorTotal} </strong></Alert>}
                       {errorPDF && <Alert severity="error"><strong>{errorPDF} </strong></Alert>}
                     </div>
@@ -338,7 +337,7 @@ const Calculos = () => {
                             </option>
                           ))}
                         </select>
-                      <button onClick={aplicarFiltros}>Aplicar Filtros <br />{isLoadingFiltroProveedores && <LinearProgress />}</button>
+                      <button className='font-semibold' onClick={aplicarFiltros}>Aplicar Filtros <br />{isLoadingFiltroProveedores && <LinearProgress />}</button>
                       {error && <Alert severity="error"><strong>{error} </strong></Alert>}
                     </div>
                   </AccordionDetails>

@@ -111,7 +111,7 @@ const Principal = () => {
                 <input className="date-input" type="date" placeholder="FechaHasta" value={fechahasta} onChange={(e) => setFechaHasta(e.target.value)} />
               </div>
             </div>
-            <button className='botondatos' onClick={obtenerDatos}>Obtener Datos</button>
+            <button className='botondatos font-semibold' onClick={obtenerDatos}>Obtener Datos</button>
             <canvas id="miGrafico" width="400" height="400"></canvas>
           </div>
         </Container>

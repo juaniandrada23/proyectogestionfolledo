@@ -394,7 +394,7 @@ const Pagos = () => {
                         </div>
                       )}
 
-                      <button onClick={aplicarFiltros}>Aplicar Filtros <br />{isLoading && <LinearProgress />}</button>   
+                      <button className='font-semibold' onClick={aplicarFiltros}>Aplicar Filtros <br />{isLoading && <LinearProgress />}</button>   
               </AccordionDetails>
             </Accordion>
             </div>
@@ -482,7 +482,7 @@ const Pagos = () => {
                       </div>
 
                       <div className='botonera' style={{display:'flex', justifyContent:'center'}}>
-                        <button type="submit">Agregar Pago  <br />{cargandoForm && <LinearProgress />}</button>
+                        <button className='font-semibold' type="submit">Agregar Pago  <br />{cargandoForm && <LinearProgress />}</button>
                       </div>
                     </form>
                   </AccordionDetails>
