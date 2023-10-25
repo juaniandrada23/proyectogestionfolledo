@@ -3,7 +3,6 @@ import Navbar from '../Components/Navbar'
 import Footer from '../Components/Footer'
 import '../Styles/pagos.css'
 import { Button, Grid } from '@mui/material'
-import { format } from 'date-fns';
 import Snackbar from '@mui/material/Snackbar';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
@@ -40,7 +39,7 @@ const Pagos = () => {
   const [error, setError] = useState('');
 
   const [isMobileScreen, setIsMobileScreen] = useState(window.innerWidth <= 600);
-  const ITEMS_PER_PAGE = 5;
+  const ITEMS_PER_PAGE = 8;
   const [currentPage, setCurrentPage] = useState(1);
 
   const [formData, setFormData] = useState({
@@ -496,7 +495,6 @@ const Pagos = () => {
                 <table>
                   <thead>
                     <tr>
-                      <th>ID</th>
                       <th>Proveedor</th>
                       <th>Monto</th>
                       <th>Monto USD</th>
@@ -525,13 +523,12 @@ const Pagos = () => {
                   ) : (
                     paginatedPagos.map((pago => (
                       <tr key={pago.idPago}>
-                        <td>{pago.idPago}</td>
                         <td>{pago.nombre}</td>
                         <td>{pago.monto}</td>
                         <td>{pago.montoUSD}</td>
                         <td>{pago.usdDelDia}</td>
                         <td>{pago.nombreMedioPago}</td>
-                        <td>{format(new Date(pago.fecha), 'yyyy-MM-dd')}</td>
+                        <td>{pago.fecha.slice(0, 10)}</td>
                         <td><BotonEliminarPago pago={pago} actualizarPagos={actualizarPagos}/></td>
                         {rolUsuario === 'Administrador' && (
                         <>
