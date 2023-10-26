@@ -9,6 +9,7 @@ import useAuthorization from '../Functions/useAuthorization';
 import { useTimeout } from '../Functions/timeOut';
 import Alert from '@mui/material/Alert';
 import EstadoServicio from '../Components/EstadoServicio.jsx'
+import LinearProgress from '@mui/material/LinearProgress';
 
 const Principal = () => {
   useAuthorization();
@@ -19,6 +20,7 @@ const Principal = () => {
   const [fechadesde, setFechaDesde] = useState('');
   const [fechahasta, setFechaHasta] = useState('');
   const [errorMsg, setErrorMensaje] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const [blue, setBlue] = useState({
     value_avg: null,
     value_sell: null,
@@ -42,13 +44,18 @@ const Principal = () => {
 
   //VER BIEN EL MANEJO ACA CUANDO SE CAE EL SERVIDOR
   const obtenerDatos = () => {
+    setIsLoading(true);
+
+
     fetch(`https://apifolledo.onrender.com/calculos/ingresosyegresos?fechadesde=${fechadesde}&fechahasta=${fechahasta}`)
       .then((response) => {
         if (!response.ok) {
           if (response.status === 400) {
             setErrorMensaje('Parametros mal ingresados');
+            setIsLoading(false);
           } else if (response.status === 503) {
             setErrorMensaje('Error de conexion con el servidor');
+            setIsLoading(false);
           }
           throw new Error(`Error ${response.status}`);
         } else {
@@ -57,6 +64,7 @@ const Principal = () => {
         return response.json();
       })
       .then((data) => {
+        setIsLoading(false);
         const ingresos = data.Ingresos;
         const egresos = data.Egresos;
   
@@ -111,7 +119,7 @@ const Principal = () => {
                 <input className="date-input" type="date" placeholder="FechaHasta" value={fechahasta} onChange={(e) => setFechaHasta(e.target.value)} />
               </div>
             </div>
-            <button className='botondatos font-semibold' onClick={obtenerDatos}>Obtener Datos</button>
+            <button className='botondatos font-semibold' onClick={obtenerDatos}>Obtener Datos <br />{isLoading && <LinearProgress />}</button>
             <canvas id="miGrafico" width="400" height="400"></canvas>
           </div>
         </Container>

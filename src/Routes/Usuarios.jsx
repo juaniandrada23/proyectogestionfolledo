@@ -187,7 +187,6 @@ const Usuarios = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-900">{user.descripcion ? user.descripcion : 'Sin descripcion'}</div>
-                        <div className="text-sm text-gray-500">{user.descripcion ? user.descripcion : 'Sin subdescripcion'}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                         <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
@@ -236,8 +235,7 @@ const Usuarios = () => {
                         </AccordionSummary>
                         <AccordionDetails style={{backgroundColor:'#fffff'}}>
                         <h1>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-                            malesuada lacus ex, sit amet blandit leo lobortis eget.
+                            Funcionalidad en proceso para la modificacion de sus datos.
                         </h1>
                         </AccordionDetails>
                     </Accordion>
