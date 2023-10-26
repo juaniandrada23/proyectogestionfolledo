@@ -31,7 +31,7 @@ const Footer = () => {
         </div>
 
       </div>
-      <div className="py-6 text-sm text-center dark:text-white">Creado por Juan Ignacio Andrada Cabo 2023.</div>
+      <div className="py-6 text-sm text-center dark:text-white">Ante algun error comunicarse con Tomas Folledo.</div>
     </footer>
   );
 }
