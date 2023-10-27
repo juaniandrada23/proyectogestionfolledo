@@ -228,7 +228,7 @@ const Usuarios = () => {
                     <p className="text-gray-500">{rolUsuario}</p>
                 </div>
                 <div className="p-4 border-t mx-8 mt-2">
-                  <button className="block mx-auto rounded-full hover:shadow-lg font-semibold text-white px-6 py-2">                    
+                  <button className="block mx-auto rounded-full font-semibold text-white py-2">                    
                     <Accordion style={{backgroundColor:'#006989', borderRadius:'15px'}}>
                         <AccordionSummary expandIcon={<BiExpandVertical style={{color:'#004E66', backgroundColor:'#EAEBED', borderRadius:'50px'}} />} style={{color:'#ffffff'}} aria-controls="panel1a-content" id="panel1a-header">
                         <h1>Ver mis datos</h1>

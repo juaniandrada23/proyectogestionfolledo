@@ -49,7 +49,7 @@ const Navbar = () => {
               <img className="h-8 w-8 bg-white rounded-full p-66" src="https://previews.123rf.com/images/vecstock/vecstock2101/vecstock210100927/162213113-icono-de-edificio-de-oficinas-de-gran-altura-sobre-fondo-blanco-estilo-de-silueta-ilustraci%C3%B3n.jpg" alt="Logo"/>
             </div>
             <div className="md:block">
-              <span className="text-white text-lg ml-2 font-semibold">Gestion de pagos</span>
+              <span className="text-white text-lg ml-2 font-semibold">Gestión de pagos</span>
             </div>
           </div>
           <div className="hidden md:block">

@@ -18,7 +18,9 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Skeleton from '@mui/material/Skeleton';
+import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import { MdExpandMore } from "react-icons/md";
+import BotonVerDescripcion from '../Components/BotonVerDescripcion';
 
 const Pagos = () => {
   useAuthorization();
@@ -47,7 +49,8 @@ const Pagos = () => {
     monto: "",
     medioPago: "",
     fecha: "",
-    usdDelDia: ""
+    usdDelDia: "",
+    descripcion: "",
   });
   const rolUsuario = localStorage.getItem("userRole");
   const userId = localStorage.getItem('userId');
@@ -478,6 +481,18 @@ const Pagos = () => {
                           {formErrors.usdDelDia && <span className="error-message">Este campo es obligatorio</span>}
                         </div>
                         <br />
+
+                        <div className='inputdescripcion' style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '5px' }}>
+                            <InputLabel htmlFor="outlined-adornment-amount">Descripción 'Opcional'</InputLabel>
+                            <TextareaAutosize
+                                minRows={3}
+                                className="w-full md:w-96 h-32 px-4 py-2 border rounded-md focus:outline-none focus:ring"
+                                style={{ borderColor: '#B3ADA8',
+                                }}
+                                type='text' id="descripcion" name='descripcion' value={formData.descripcion} onChange={handleInputChange}
+                            />
+                        </div>
+                        <br />
                       
                       </div>
 
@@ -501,7 +516,7 @@ const Pagos = () => {
                       <th>Precio USD</th>
                       <th>Medio de pago</th>
                       <th>Fecha</th>
-                      <th>Acción</th>
+                      <th style={{textAlign:'center'}}>Acción</th>
                       {rolUsuario === 'Administrador' && (
                         <>
                           <th>Usuario</th>
@@ -529,7 +544,7 @@ const Pagos = () => {
                         <td>{pago.usdDelDia}</td>
                         <td>{pago.nombreMedioPago}</td>
                         <td>{pago.fecha.slice(0, 10)}</td>
-                        <td><BotonEliminarPago pago={pago} actualizarPagos={actualizarPagos}/></td>
+                        <td style={{display:'flex', flexDirection:'row', gap:'3px'}}><BotonVerDescripcion pago={pago}/> <BotonEliminarPago pago={pago} actualizarPagos={actualizarPagos}/></td>
                         {rolUsuario === 'Administrador' && (
                         <>
                           <td>{pago.username}</td>
