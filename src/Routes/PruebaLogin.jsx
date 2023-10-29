@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';import Navbar from '../Components/Navbar';
 import Footer from '../Components/Footer';
 import '../Styles/pruebalogin.css'
@@ -24,7 +24,24 @@ const PruebaLogin = () => {
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [modalText, setModalText] = useState('Cargando...');
   
+
+    useEffect(() => {
+      let timer;
+      if (isLoading) {
+          // Si isLoading es verdadero, inicia un temporizador después de 11 segundos
+          timer = setTimeout(() => {
+              setModalText('Iniciando servidor, por favor espere...');
+          }, 11000); // 11000 milisegundos = 11 segundos
+      } else {
+          clearTimeout(timer);
+      }
+      return () => {
+          clearTimeout(timer);
+      };
+    }, [isLoading]);
+
     const handleLogin = async () => {
       try {
         setIsLoading(true);
@@ -114,7 +131,7 @@ const PruebaLogin = () => {
     <Modal open={isLoading} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
     <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '10px', textAlign: 'center' }}>
         <CircularProgress />
-        <p>Cargando...</p>
+        <p>{modalText}</p>
     </div>
     </Modal>
       </>
