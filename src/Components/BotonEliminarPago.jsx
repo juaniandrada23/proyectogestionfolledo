@@ -63,7 +63,7 @@ const BotonEliminarPago = ({ pago, actualizarPagos }) => {
       </button>
 
     <Dialog open={modalOpen} onClose={() => setModalOpen(false)} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
-      <DialogTitle id="alert-dialog-title">Confirmación</DialogTitle>
+      <DialogTitle style={{ backgroundColor: '#006989', color: 'white', marginBottom: '5px' }} id="alert-dialog-title">Confirmar borrado de pago</DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
           ¿Está seguro de que quiere borrar el pago "{pagoAEliminar ? pagoAEliminar.idPago : ''}"? 

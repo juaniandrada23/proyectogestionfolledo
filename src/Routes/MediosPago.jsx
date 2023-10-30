@@ -235,9 +235,12 @@ const MediosPago = () => {
             
             {medioPagoSeleccionado && (
               <div className='editar-medio-pago'>
-                <TextField  label={`Actualizar ${medioPagoSeleccionado}`}  name="nuevoMedioPago" value={actualizarMedioPago} onChange={(e) => setActualizarMedioPago(e.target.value)}/>
-                <button className='guardar' onClick={handleActualizar}>Guardar <br />{isLoadingEdit && <LinearProgress />}</button>
-                <button className='cancelar' onClick={handleCancelar}>Cancelar</button>
+                <h2>Editar nombre de medio de pago</h2>
+                <TextField label={`Actualizar ${medioPagoSeleccionado}`}  name="nuevoMedioPago" value={actualizarMedioPago} onChange={(e) => setActualizarMedioPago(e.target.value)}/>
+                <div style={{display:'flex', flexDirection:'row'}} className='my-3 gap-2'>
+                  <button className='guardar' onClick={handleActualizar}>Guardar <br />{isLoadingEdit && <LinearProgress />}</button>
+                  <button className='cancelar' onClick={handleCancelar}>Cancelar</button>
+                </div>
               </div>
             )}
           </div>
@@ -248,7 +251,7 @@ const MediosPago = () => {
 
 
       <Dialog open={showModal} onClose={handleCancelarBorrar}>
-        <DialogTitle>Confirmar Borrado</DialogTitle>
+        <DialogTitle style={{ backgroundColor: '#006989', color: 'white', marginBottom: '5px' }}>Confirmar Borrado</DialogTitle>
         <DialogContent>
           <DialogContentText>
           ¿Está seguro que desea borrar el medio de pago '{medioPagoToDelete}'?
