@@ -251,7 +251,7 @@ const MediosPago = () => {
 
 
       <Dialog open={showModal} onClose={handleCancelarBorrar}>
-        <DialogTitle style={{ backgroundColor: '#006989', color: 'white', marginBottom: '5px' }}>Confirmar Borrado</DialogTitle>
+        <DialogTitle style={{ backgroundColor: '#006989', color: 'white', marginBottom: '5px' }}>Confirmar borrado de medio de pago</DialogTitle>
         <DialogContent>
           <DialogContentText>
           ¿Está seguro que desea borrar el medio de pago '{medioPagoToDelete}'?

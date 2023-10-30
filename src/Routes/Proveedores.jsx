@@ -258,7 +258,7 @@ const Proveedores = () => {
       <Footer style={{ flexShrink: 0 }}/>
 
       <Dialog open={modalOpen} onClose={() => setModalOpen(false)} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
-        <DialogTitle style={{ backgroundColor: '#006989', color: 'white', marginBottom: '5px' }} id="alert-dialog-title">Confirmación de borrado proveedor</DialogTitle>
+        <DialogTitle style={{ backgroundColor: '#006989', color: 'white', marginBottom: '5px' }} id="alert-dialog-title">Confirmar borrado de proveedor</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             ¿Está seguro de que quiere borrar el proveedor "{proveedorAEliminar ? proveedorAEliminar.nombre : ''}"? 
