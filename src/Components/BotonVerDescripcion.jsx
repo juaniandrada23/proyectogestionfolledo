@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { BsFileTextFill } from "react-icons/bs";
+import { GrClose } from "react-icons/gr";
 
 const BotonVerDescripcion = ({ pago }) => {
     const [modalOpen, setModalOpen] = useState(false);
@@ -25,18 +24,15 @@ const BotonVerDescripcion = ({ pago }) => {
         </button>
 
         <Dialog open={modalOpen} onClose={() => setModalOpen(false)} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
-        <DialogTitle style={{ backgroundColor: '#006989', color: 'white', marginBottom: '5px' }} id="alert-dialog-title">Descripción del pago</DialogTitle>
+          <div style={{display:'flex', flexDirection:'row', justifyContent:'space-between'}}>
+            <DialogTitle style={{ backgroundColor: '#006989', color: 'white', marginBottom: '5px' }} id="alert-dialog-title">Descripción del pago <button className='ml-8' style={{ backgroundColor: 'white', padding: '6px', borderRadius: '50px' }} onClick={() => setModalOpen(false)}> <GrClose></GrClose> </button></DialogTitle>
+          </div>
         <DialogContent>
-        <DialogContentText id="alert-dialog-description">
+        <h1 id="alert-dialog-description" className='text-slate-950 font-medium'>
         {descripcionDepago && descripcionDepago.descripcion ? descripcionDepago.descripcion : 'Este pago no posee descripción'}
         <br/>
-        </DialogContentText>
+        </h1>
         </DialogContent>
-        <DialogActions style={{display:'flex', flexDirection:'row', justifyContent:'center'}}>
-            <button style={{ backgroundColor: '#dc3545', color: '#fff', padding: '10px', borderRadius: '50px' }} onClick={() => setModalOpen(false)} variant='outlined' color='primary'>
-            Cerrar
-            </button>
-        </DialogActions>
         </Dialog>
     </>
   )

@@ -13,9 +13,14 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import LinearProgress from '@mui/material/LinearProgress';
+import Button from '@mui/material/Button';
 import { BiExpandVertical } from "react-icons/bi";
+import { useCloseOut } from '../Functions/closeOut';
+import { FiUserPlus } from "react-icons/fi";
 
 const Usuarios = () => {
+  useCloseOut();
+
   const [modalOpen, setModalOpen] = useState(false);  
   const rolUsuario = localStorage.getItem("userRole");
   const nombreDeUsuario = localStorage.getItem("userName");
@@ -133,11 +138,11 @@ const Usuarios = () => {
                   <p className="text-gray-500">{rolUsuario}</p>
               </div>
               <div className="p-4 border-t mt-2 flex flex-row">
-                <button className="block mx-auto rounded-full font-semibold text-white px-2 py-1 sm:px-4 sm:py-2 transition ease-in-out delay-150 bg-blue-600 hover:bg-blue-900 duration-300">
-                    Actualizar datos
+                <button style={{borderRadius:'10px'}} className="block mx-auto px-4 font-semibold text-white px-2 py-1 sm:px-4 sm:py-2 transition ease-in-out delay-150 bg-[#006989] hover:bg-[#053F61] duration-300">
+                    Actualizar <br />datos
                 </button>
-                <button className="block mx-auto rounded-full font-semibold text-white px-2 py-1 sm:px-4 sm:py-2 transition ease-in-out delay-150 bg-green-600 hover:bg-green-900 duration-300" onClick={handleModalOpen}>
-                    Agregar usuario
+                <button style={{borderRadius:'10px'}} className="block mx-auto font-semibold text-white px-2 py-1 sm:px-4 sm:py-2 transition ease-in-out delay-150 bg-[#006989] hover:bg-[#053F61] duration-300" onClick={handleModalOpen}>
+                  <FiUserPlus style={{width:'4vh', height:'4vh'}}></FiUserPlus>
                 </button>
               </div>
           </div>
@@ -247,12 +252,12 @@ const Usuarios = () => {
           <TextField margin="dense" id="contraseña" name="contraseña" label="Contraseña" type="password" fullWidth value={nuevoUsuario.contraseña} onChange={handleNuevoUsuarioChange}/>
         </DialogContent>
         <DialogActions style={{display:'flex', flexDirection:'row', justifyContent:'center'}}>
-          <button style={{ backgroundColor: '#dc3545', color: '#fff', padding: '10px', borderRadius: '50px' }} onClick={handleModalClose} color="primary">
+          <Button style={{padding: '10px', borderRadius: '50px' }} onClick={handleModalClose} variant='outlined' color='primary'>
             Cancelar
-          </button>
-          <button style={{ backgroundColor: '#007bff', color: '#fff', padding: '10px', borderRadius: '50px' }} onClick={handleAceptarClick}>
+          </Button>
+          <Button style={{padding: '10px', borderRadius: '50px' }} color='primary' variant='contained' onClick={handleAceptarClick}>
             Aceptar <br />{isLoading && <LinearProgress />}
-          </button>
+          </Button>
         </DialogActions>
       </Dialog>
 
@@ -265,12 +270,12 @@ const Usuarios = () => {
             </DialogContentText>
         </DialogContent>
         <DialogActions style={{display:'flex', flexDirection:'row', justifyContent:'center'}}>
-            <button style={{ backgroundColor: '#dc3545', color: '#fff', padding: '10px', borderRadius: '50px' }} onClick={() => setModalOpen2(false)}>
+            <Button style={{padding: '10px', borderRadius: '50px' }} variant='outlined' color='primary' onClick={() => setModalOpen2(false)}>
             Cancelar
-            </button>
-            <button style={{ backgroundColor: '#007bff', color: '#fff', padding: '10px', borderRadius: '50px' }} onClick={() => handleBorrarClick(usuarioAEliminar.id)}>
+            </Button>
+            <Button style={{padding: '10px', borderRadius: '50px' }} color='primary' variant='contained' onClick={() => handleBorrarClick(usuarioAEliminar.id)}>
             Confirmar <br />{isLoading2 && <LinearProgress />}
-            </button>
+            </Button>
         </DialogActions>
       </Dialog>
 

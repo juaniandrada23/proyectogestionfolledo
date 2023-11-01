@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Navbar from '../Components/Navbar'
 import Footer from '../Components/Footer'
 import '../Styles/pagos.css'
-import { Button, Grid } from '@mui/material'
+import { Grid } from '@mui/material'
 import Snackbar from '@mui/material/Snackbar';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
@@ -52,6 +52,18 @@ const Pagos = () => {
     usdDelDia: "",
     descripcion: "",
   });
+
+  const resetForm = () => {
+    setFormData({
+      nombre: "",
+      monto: "",
+      medioPago: "",
+      fecha: "",
+      usdDelDia: "",
+      descripcion: ""
+    });
+  };
+
   const rolUsuario = localStorage.getItem("userRole");
   const userId = localStorage.getItem('userId');
 
@@ -149,6 +161,7 @@ const Pagos = () => {
     }
 
     const monto = parseFloat(formData.monto);
+    
     if (esPositivo) {
     } else if (esNegativo) {
       formData.monto = `-${monto}`;
@@ -171,6 +184,7 @@ const Pagos = () => {
         setSnackbarMessage('Pago agregado correctamente');
         setSnackbarOpen(true);
         setSnackbarSeverity('success');
+        resetForm();
       })
       .catch(error => {
         console.error("Error al enviar el formulario:", error)
@@ -556,13 +570,13 @@ const Pagos = () => {
                   </tbody>
                 </table>
                 <div className='botonera boton1'>
-                  <Button variant="contained" onClick={() => onPageChange(currentPage - 1)} disabled={currentPage === 1}>
+                  <button style={{backgroundColor:'#006989', borderRadius:'10px'}} className='font-semibold text-white transition ease-in-out delay-150 bg-[#006989] hover:bg-[#053F61] duration-300' onClick={() => onPageChange(currentPage - 1)} disabled={currentPage === 1}>
                     Anterior
-                  </Button>
+                  </button>
                   <h5 variant="caption">Página {currentPage} de {totalPages}</h5>
-                  <Button variant="contained" onClick={() => onPageChange(currentPage + 1)} disabled={currentPage * ITEMS_PER_PAGE >= pagos.length}>
+                  <button style={{backgroundColor:'#006989', borderRadius:'10px'}} className='font-semibold text-white transition ease-in-out delay-150 bg-[#006989] hover:bg-[#053F61] duration-300' onClick={() => onPageChange(currentPage + 1)} disabled={currentPage * ITEMS_PER_PAGE >= pagos.length}>
                     Siguiente
-                  </Button>
+                  </button>
                 </div>
               </div>
             </Grid>           

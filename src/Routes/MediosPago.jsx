@@ -19,6 +19,7 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import useAuthorization from '../Functions/useAuthorization';
 import Skeleton from '@mui/material/Skeleton';
+import Button from '@mui/material/Button';
 import { useTimeout } from '../Functions/timeOut';
 import '../Styles/mediosdepago.css';
 import { AlertTitle } from '@mui/material';
@@ -258,12 +259,12 @@ const MediosPago = () => {
           </DialogContentText>
         </DialogContent>
         <DialogActions style={{display:'flex', flexDirection:'row', justifyContent:'center', gap:'5px'}}>
-            <button style={{backgroundColor:'#dc3545', color:'#fff', padding:'10px', borderRadius:'50px'}} onClick={handleCancelarBorrar} color="primary">
+            <Button style={{padding:'10px', borderRadius:'50px'}} onClick={handleCancelarBorrar} variant='outlined' color='primary'>
               Cancelar
-            </button>
-            <button style={{backgroundColor:'#007bff', color:'#fff', padding:'10px', borderRadius:'50px'}} onClick={handleBorrar} color="primary" disabled={isLoadingDelete}>
+            </Button>
+            <Button style={{padding:'10px', borderRadius:'50px'}} onClick={handleBorrar} color='primary' variant='contained' disabled={isLoadingDelete}>
               {isLoadingDelete ? <CircularProgress color="inherit"/> : 'Borrar'}
-            </button>
+            </Button>
         </DialogActions>
       </Dialog>
 
