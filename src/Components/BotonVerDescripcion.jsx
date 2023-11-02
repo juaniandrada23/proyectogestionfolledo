@@ -3,7 +3,8 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { BsFileTextFill } from "react-icons/bs";
-import { GrClose } from "react-icons/gr";
+import DialogActions from '@mui/material/DialogActions';
+import Button from '@mui/material/Button';
 
 const BotonVerDescripcion = ({ pago }) => {
     const [modalOpen, setModalOpen] = useState(false);
@@ -24,15 +25,18 @@ const BotonVerDescripcion = ({ pago }) => {
         </button>
 
         <Dialog open={modalOpen} onClose={() => setModalOpen(false)} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
-          <div style={{display:'flex', flexDirection:'row', justifyContent:'space-between'}}>
-            <DialogTitle style={{ backgroundColor: '#006989', color: 'white', marginBottom: '5px' }} id="alert-dialog-title">Descripción del pago <button className='ml-8' style={{ backgroundColor: 'white', padding: '6px', borderRadius: '50px' }} onClick={() => setModalOpen(false)}> <GrClose></GrClose> </button></DialogTitle>
-          </div>
-        <DialogContent>
-        <h1 id="alert-dialog-description" className='text-slate-950 font-medium'>
-        {descripcionDepago && descripcionDepago.descripcion ? descripcionDepago.descripcion : 'Este pago no posee descripción'}
-        <br/>
-        </h1>
-        </DialogContent>
+          <DialogTitle style={{ backgroundColor: '#006989', color: 'white', marginBottom: '5px' }} id="alert-dialog-title">Descripción del pago</DialogTitle>
+            <DialogContent>
+              <h1 id="alert-dialog-description" className='text-slate-950 font-medium'>
+              {descripcionDepago && descripcionDepago.descripcion ? descripcionDepago.descripcion : 'Este pago no posee descripción'}
+              <br/>
+              </h1>
+            </DialogContent>
+            <DialogActions style={{display:'flex', flexDirection:'row', justifyContent:'center'}}>
+            <Button onClick={() => setModalOpen(false)} variant='outlined' color='primary'>
+              Atrás
+            </Button>
+          </DialogActions>
         </Dialog>
     </>
   )
