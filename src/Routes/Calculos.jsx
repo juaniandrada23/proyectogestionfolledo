@@ -18,10 +18,8 @@ import Alert from '@mui/material/Alert';
 import { MdExpandMore } from "react-icons/md";
 import Skeleton from '@mui/material/Skeleton';
 import LinearProgress from '@mui/material/LinearProgress';
-import { useCloseOut } from '../Functions/closeOut';
   
 const Calculos = () => {
-  useCloseOut();
   useAuthorization();
 
   const [chartData, setChartData] = useState(null);

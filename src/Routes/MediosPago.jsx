@@ -23,11 +23,9 @@ import Button from '@mui/material/Button';
 import { useTimeout } from '../Functions/timeOut';
 import '../Styles/mediosdepago.css';
 import { AlertTitle } from '@mui/material';
-import { useCloseOut } from '../Functions/closeOut';
 
 
 const MediosPago = () => {
-  useCloseOut();
   useAuthorization();
   useTimeout();
 

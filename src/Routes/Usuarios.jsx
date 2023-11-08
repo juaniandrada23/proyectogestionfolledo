@@ -15,11 +15,9 @@ import DialogTitle from '@mui/material/DialogTitle';
 import LinearProgress from '@mui/material/LinearProgress';
 import Button from '@mui/material/Button';
 import { BiExpandVertical } from "react-icons/bi";
-import { useCloseOut } from '../Functions/closeOut';
 import { FiUserPlus } from "react-icons/fi";
 
 const Usuarios = () => {
-  useCloseOut();
 
   const [modalOpen, setModalOpen] = useState(false);  
   const rolUsuario = localStorage.getItem("userRole");
