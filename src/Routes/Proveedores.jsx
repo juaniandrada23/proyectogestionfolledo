@@ -19,8 +19,10 @@ import AuthAdmin from '../Functions/authAdmin';
 import LinearProgress from '@mui/material/LinearProgress';
 import EstadoServicio from '../Components/EstadoServicio';
 import Skeleton from '@mui/material/Skeleton';
+import { useCloseOut } from '../Functions/closeOut';
 
 const Proveedores = () => {
+  useCloseOut();
   useAuthorization();
   AuthAdmin();
   

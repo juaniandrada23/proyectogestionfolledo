@@ -138,7 +138,7 @@ const Usuarios = () => {
                   <p className="text-gray-500">{rolUsuario}</p>
               </div>
               <div className="p-4 border-t mt-2 flex flex-row">
-                <button style={{borderRadius:'10px'}} className="block mx-auto px-4 font-semibold text-white px-2 py-1 sm:px-4 sm:py-2 transition ease-in-out delay-150 bg-[#006989] hover:bg-[#053F61] duration-300">
+                <button style={{borderRadius:'10px'}} className="block mx-auto px-4 font-semibold text-white py-1 sm:px-4 sm:py-2 transition ease-in-out delay-150 bg-[#006989] hover:bg-[#053F61] duration-300">
                     Actualizar <br />datos
                 </button>
                 <button style={{borderRadius:'10px'}} className="block mx-auto font-semibold text-white px-2 py-1 sm:px-4 sm:py-2 transition ease-in-out delay-150 bg-[#006989] hover:bg-[#053F61] duration-300" onClick={handleModalOpen}>

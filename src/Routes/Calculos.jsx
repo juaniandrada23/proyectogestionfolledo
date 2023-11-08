@@ -18,8 +18,10 @@ import Alert from '@mui/material/Alert';
 import { MdExpandMore } from "react-icons/md";
 import Skeleton from '@mui/material/Skeleton';
 import LinearProgress from '@mui/material/LinearProgress';
+import { useCloseOut } from '../Functions/closeOut';
   
 const Calculos = () => {
+  useCloseOut();
   useAuthorization();
 
   const [chartData, setChartData] = useState(null);
@@ -134,7 +136,7 @@ const Calculos = () => {
           plugins: {
             title: {
               display: true,
-              text: 'Grafico Semanal',
+              text: 'Gráfico Ingresos/Egresos',
               font: {
                 size: 18,
                 weight: 'bold',

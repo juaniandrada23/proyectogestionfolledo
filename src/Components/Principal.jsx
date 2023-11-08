@@ -10,8 +10,10 @@ import { useTimeout } from '../Functions/timeOut';
 import Alert from '@mui/material/Alert';
 import EstadoServicio from '../Components/EstadoServicio.jsx'
 import LinearProgress from '@mui/material/LinearProgress';
+import { useCloseOut } from '../Functions/closeOut';
 
 const Principal = () => {
+  useCloseOut();
   useAuthorization();
   useTimeout();
 

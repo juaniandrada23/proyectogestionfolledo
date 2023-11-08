@@ -21,8 +21,10 @@ import Skeleton from '@mui/material/Skeleton';
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import { MdExpandMore } from "react-icons/md";
 import BotonVerDescripcion from '../Components/BotonVerDescripcion';
+import { useCloseOut } from '../Functions/closeOut';
 
 const Pagos = () => {
+  useCloseOut();
   useAuthorization();
 
   const [pagos, setPagos] = useState([]);
