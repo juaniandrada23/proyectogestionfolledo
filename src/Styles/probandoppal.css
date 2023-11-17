@@ -1,0 +1,23 @@
+.date-input-container {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .date-input {
+    padding: 10px; /* Ajusta el espacio interno del input */
+    border: 1px solid #ccc; /* Añade un borde */
+    background-color: #EAEBED;
+    color: #006989;
+    border-radius: 5px; /* Hace que los bordes sean redondeados */
+    font-size: 16px; /* Ajusta el tamaño del texto */
+    outline: none; /* Elimina el contorno al hacer clic en el input */
+    width: 150px; /* Ajusta el ancho del input según tus necesidades */
+  }
+  
+  .date-input:focus {
+    border-color: #006989; /* Cambia el color del borde al hacer clic en el input */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Añade una sombra al hacer clic en el input */
+  }

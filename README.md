@@ -1,1 +1,1 @@
-Aplicacion creada para la gestion contable del Licenciado Tomas Folledo, gran amigo!
+Aplicacion creada para la gestion contable del Licenciado.

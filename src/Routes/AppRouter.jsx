@@ -7,13 +7,13 @@ import Calculos from './Calculos';
 import MediosPago from './MediosPago.jsx'
 import PruebaLogin from './PruebaLogin.jsx'
 import Usuarios from './Usuarios';
-import ProbandoTabla from './ProbandoTabla.jsx'
+import ProbandoTabla from '../Custom/ProbandoTabla.jsx'
+import ProbandoPrincipal from '../Custom/ProbandoPrincipal.jsx'
 
 const AppRouter = () => {
   return (
     <Router>
       <Routes>
-        {/* VER BIEN COMO MANEJAR EL LOGIN DE REGRESO*/}
         <Route path="/" element={<PruebaLogin/>} />
         <Route path="/usuarios/:userId" element={<Usuarios/>} />
         <Route path="/principal/:userId" element={<Principal/>} />
@@ -21,7 +21,12 @@ const AppRouter = () => {
         <Route path="/calculos/:userId" element={<Calculos/>} />
         <Route path="/pagos/:userId" element={<Pagos/>} />
         <Route path="/medios/:userId" element={<MediosPago/>} />
+
+
         <Route path="/probandotabla" element={<ProbandoTabla/>} />
+        <Route path="/probandoprincipal" element={<ProbandoPrincipal/>} />
+
+        
       </Routes>
     </Router>
   );

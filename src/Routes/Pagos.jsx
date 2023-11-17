@@ -26,6 +26,7 @@ const Pagos = () => {
   useAuthorization();
 
   const [pagos, setPagos] = useState([]);
+  const [usdActualizado, setUsdActualizado] = useState(0);
   const [nombreproveedores, setNombreProveedores] = useState([]);
   const [mediodepago, setMedioDePago] = useState([]);
   const [agregadaExitosa, setAgregadaExitosa] = useState(false);
@@ -59,7 +60,7 @@ const Pagos = () => {
       monto: "",
       medioPago: "",
       fecha: "",
-      usdDelDia: "",
+      usdDelDia: usdActualizado,
       descripcion: ""
     });
   };
@@ -298,6 +299,7 @@ const Pagos = () => {
       .then(data => {
         const blueData = data.blue;
 
+        setUsdActualizado(blueData.value_sell);
         setFormData({
           usdDelDia: blueData.value_sell,
         });
