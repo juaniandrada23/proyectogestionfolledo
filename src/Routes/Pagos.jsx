@@ -21,6 +21,10 @@ import Skeleton from '@mui/material/Skeleton';
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import { MdExpandMore } from "react-icons/md";
 import BotonVerDescripcion from '../Components/BotonVerDescripcion';
+import Button from '@mui/material/Button';
+import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
+import Typography from '@mui/material/Typography';
+
 
 const Pagos = () => {
   useAuthorization();
@@ -42,7 +46,7 @@ const Pagos = () => {
   const [error, setError] = useState('');
 
   const [isMobileScreen, setIsMobileScreen] = useState(window.innerWidth <= 600);
-  const ITEMS_PER_PAGE = 8;
+  const ITEMS_PER_PAGE = 10;
   const [currentPage, setCurrentPage] = useState(1);
 
   const [formData, setFormData] = useState({
@@ -339,6 +343,7 @@ const Pagos = () => {
       setPagos(data);
       setError('');
       setIsLoading(false);
+      setCurrentPage(1);
       console.log(data);
     })
     .catch((error) => {
@@ -572,13 +577,19 @@ const Pagos = () => {
                   </tbody>
                 </table>
                 <div className='botonera boton1'>
-                  <button style={{backgroundColor:'#006989', borderRadius:'10px'}} className='font-semibold text-white transition ease-in-out delay-150 bg-[#006989] hover:bg-[#053F61] duration-300' onClick={() => onPageChange(currentPage - 1)} disabled={currentPage === 1}>
-                    Anterior
-                  </button>
+                  <Button style={{ backgroundColor: '#007090' }} onClick={() => onPageChange(currentPage - 1)} disabled={currentPage === 1}>
+                    <MdNavigateBefore />
+                    <Typography variant="button" style={{ fontFamily: 'Montserrat'}}>
+                      Anterior
+                    </Typography>
+                  </Button>
                   <h5 variant="caption">Página {currentPage} de {totalPages}</h5>
-                  <button style={{backgroundColor:'#006989', borderRadius:'10px'}} className='font-semibold text-white transition ease-in-out delay-150 bg-[#006989] hover:bg-[#053F61] duration-300' onClick={() => onPageChange(currentPage + 1)} disabled={currentPage * ITEMS_PER_PAGE >= pagos.length}>
-                    Siguiente
-                  </button>
+                  <Button style={{backgroundColor:'#007090'}} onClick={() => onPageChange(currentPage + 1)} disabled={currentPage * ITEMS_PER_PAGE >= pagos.length}>
+                    <Typography variant="button" style={{ fontFamily: 'Montserrat'}}>
+                      Siguiente
+                    </Typography>
+                    <MdNavigateNext/>
+                  </Button>
                 </div>
               </div>
             </Grid>           
