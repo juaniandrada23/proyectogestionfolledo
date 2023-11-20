@@ -578,12 +578,15 @@ const Pagos = () => {
                 </table>
                 <div className='botonera boton1'>
                   <Button style={{ backgroundColor: '#007090' }} onClick={() => onPageChange(currentPage - 1)} disabled={currentPage === 1}>
-                    <MdNavigateBefore />
+                    <MdNavigateBefore/>
                     <Typography variant="button" style={{ fontFamily: 'Montserrat'}}>
                       Anterior
                     </Typography>
                   </Button>
-                  <h5 variant="caption">Página {currentPage} de {totalPages}</h5>
+                  {isMobileScreen ? 
+                  <Typography variant="subtitle1" style={{textAlign:'center', fontFamily: 'Montserrat'}}>Página <br />{currentPage} de {totalPages}</Typography> :
+                  <Typography variant="subtitle1" style={{textAlign:'center', fontFamily: 'Montserrat'}}>Página {currentPage} de {totalPages}</Typography>
+                  }
                   <Button style={{backgroundColor:'#007090'}} onClick={() => onPageChange(currentPage + 1)} disabled={currentPage * ITEMS_PER_PAGE >= pagos.length}>
                     <Typography variant="button" style={{ fontFamily: 'Montserrat'}}>
                       Siguiente
