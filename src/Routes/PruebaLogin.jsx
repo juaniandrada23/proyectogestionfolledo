@@ -16,9 +16,16 @@ import Modal from '@mui/material/Modal';
         display: 'flex',
     };
 
+    const loginSectionStyle2 = {
+      background: `#F3F6F7`,
+      height: '100vh',
+      display: 'flex',
+    };
+
 const PruebaLogin = () => {
     isLogged();
 
+    const [isMobileScreen, setIsMobileScreen] = useState(window.innerWidth <= 600);
     const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -26,7 +33,17 @@ const PruebaLogin = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [modalText, setModalText] = useState('Cargando...');
   
+    const handleWindowResize = () => {
+      setIsMobileScreen(window.innerWidth <= 600);
+    };
 
+    useEffect(() => {
+      window.addEventListener('resize', handleWindowResize);
+      return () => {
+        window.removeEventListener('resize', handleWindowResize);
+      };
+    }, []);
+    
     useEffect(() => {
       let timer;
       if (isLoading) {
@@ -97,7 +114,7 @@ const PruebaLogin = () => {
             </div>*/}
         </div>
       </div>
-      <div className="flex w-full lg:w-1/2 justify-center items-center bg-white space-y-8">
+      <div style={isMobileScreen ? loginSectionStyle : loginSectionStyle2} className="flex w-full lg:w-1/2 justify-center items-center bg-white space-y-8">
         <div className="w-full px-8 md:px-32 lg:px-24">
           <div className="bg-white rounded-md shadow-2xl hover:border-2 hover:border-sky-500 p-5 hover:-translate-y-2 hover:scale-100 duration-300">
             <h1 className="text-gray-800 font-bold text-2xl mb-1">¡Hola de nuevo!</h1>
