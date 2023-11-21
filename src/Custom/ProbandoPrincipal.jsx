@@ -7,6 +7,7 @@ import { GiMoneyStack } from "react-icons/gi";
 import { FaUserTie } from "react-icons/fa6";
 import { MdPendingActions } from "react-icons/md";
 import { LuBadgeDollarSign } from "react-icons/lu";
+import Alert from '@mui/material/Alert';
 import "../Styles/probandoppal.css"
 
 const ProbandoPrincipal = () => {
@@ -16,6 +17,11 @@ const ProbandoPrincipal = () => {
   const [blueMes, setBlueMes] = useState(0);
   const [fechadesde, setFechaDesde] = useState('');
   const [fechahasta, setFechaHasta] = useState('');
+  const [error, setError] = useState('');
+  const [endpointDesdeHasta, setEndpointDesdeHasta] = useState([]);
+
+  const [numeroPagos, setNumeroPagos] = useState(0);
+  const [pagosTotal, setPagosTotal] = useState([]);
 
   useEffect(() => {
     const initChart1 = () => {
@@ -23,29 +29,37 @@ const ProbandoPrincipal = () => {
         if (chart1Ref.current.chart) {
           chart1Ref.current.chart.destroy();
         }
-
+  
         const ctx = chart1Ref.current.getContext('2d');
+  
+        const labels = endpointDesdeHasta.map(item => {
+          const parts = item.fecha.split('-');
+          return parts[2].substring(0, 2);
+        });
+
+        const cantidadPagos = endpointDesdeHasta.map(item => item.cantidad_pagos);
+  
         const data = {
-          labels: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'],
+          labels: labels,
           datasets: [{
             label: 'Cantidad de pagos',
-            data: [10, 15, 8, 12],
+            data: cantidadPagos,
             backgroundColor: 'rgb(59 130 246)',
             hoverBackgroundColor: 'rgb(3 105 161)',
             borderColor: 'rgb(23 37 84)',
             borderWidth: 1,
           }],
         };
-
+  
         chart1Ref.current.chart = new Chart(ctx, {
           type: 'bar',
           data: data,
         });
       }
     };
-
+  
     initChart1();
-  }, []); // La dependencia vacía asegura que la función se ejecute solo una vez al montar el componente
+  }, [endpointDesdeHasta]); 
 
   useEffect(() => {
     const initChart2 = () => {
@@ -156,13 +170,57 @@ const ProbandoPrincipal = () => {
     
     const porcentaje = (((usdBlue - blueMes) / usdBlue) * 100).toFixed(2);
 
+
+    // Endpoint consumido para fechadesde y fechahasta
+    const filtroDesdeHasta = () => {
+      if (fechadesde > fechahasta) {
+        setError('Error: La fecha desde es mayor que la fecha hasta');
+        return;
+      } else if ( !fechadesde && !fechahasta) {
+        setError('Error: Debe ingresar los datos para filtrar')
+        return;
+      }
+
+      let endpointFiltroDesdeHasta =  `https://apifolledo.onrender.com/principal/filtrando?fechadesde=${fechadesde}&fechahasta=${fechahasta}`;
+
+      fetch(endpointFiltroDesdeHasta)
+      .then((response) => {
+        if (!response.ok) {
+          if (response.status >= 500 && response.status <= 503) {
+            throw new Error('Error: Conexión con el servidor perdida, intente nuevamente');
+          } else {
+            throw new Error('Error en la solicitud');
+          }
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setEndpointDesdeHasta(data);
+        setNumeroPagos(data.length);
+        setError('');
+        console.log(data);
+      })
+      .catch((error) => {
+        setError('Error de conexion con el servidor, intente nuevamente');
+      });
+    }
+
+    useEffect(() => {
+      fetch('https://apifolledo.onrender.com/principal/contando')
+        .then(response => response.json())
+        .then(data => {
+          setPagosTotal(data);
+        })
+        .catch(error => console.error('Error al obtener los datos: ', error));
+    }, []);
+
   return (
     <>
         <div className='bg-blue-200' style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
           <Navbar/>
 
             <div style={{display:'flex', justifyContent:'center'}} className='mt-4'>
-              <div className='bg-white p-2 rounded-lg' style={{display:'flex', flexDirection:'row', gap:'5px', justifyContent:'center', alignItems:'center'}}>
+              <div className='bg-white p-2 rounded-lg divfiltros'>
                 <h5 className="text-blueGray-400 uppercase font-bold text-xs">Filtrar</h5>
                 <div className="date-input-container">
                   <h4 className="text-blueGray-400 uppercase font-bold text-xs">desde</h4>
@@ -171,8 +229,13 @@ const ProbandoPrincipal = () => {
                 <div className="date-input-container">
                   <h4 className="text-blueGray-400 uppercase font-bold text-xs">hasta</h4>
                   <input className="date-input" type="date" placeholder="FechaHasta" value={fechahasta} onChange={(e) => setFechaHasta(e.target.value)} />
-                </div>             
+                </div> 
+                <button className='text-blueGray-400 uppercase font-bold text-xs' onClick={filtroDesdeHasta}>Aplicar Filtros</button>               
               </div>
+            </div>
+
+            <div className='alerta' style={{display:'flex', flexDirection:'column', justifyContent:'center', marginTop:'5px', marginBottom:'5px', color:'red'}}>
+              {error && <Alert severity="error"><strong>{error} </strong></Alert>}
             </div>
 
             <Grid className='mb-4' container spacing={1} style={{ flexGrow: 1 }}>
@@ -184,7 +247,11 @@ const ProbandoPrincipal = () => {
                     <div className="flex flex-wrap">
                         <div className="relative w-full pr-4 max-w-full flex-grow flex-1">
                         <h5 className="text-blueGray-400 uppercase font-bold text-xs"> Pagos</h5>
-                        <span className="font-semibold text-xl text-blueGray-700">334,100</span>
+                          {pagosTotal.map((pagototal, index) => (
+                            <span key={index} className="font-semibold text-xl text-blueGray-700">
+                              {numeroPagos === 0 ? pagototal.total_pagos : numeroPagos}
+                            </span>
+                          ))}
                         </div>
                         <div className="relative w-auto pl-4 flex-initial">
                         <div className="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full  bg-blue-500">

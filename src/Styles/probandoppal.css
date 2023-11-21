@@ -21,3 +21,22 @@
     border-color: #006989; /* Cambia el color del borde al hacer clic en el input */
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Añade una sombra al hacer clic en el input */
   }
+
+  .divfiltros{
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    text-align: center;
+    align-items: center;
+    gap: 10px;
+  }
+
+  @media (max-width: 800px) {
+    .divfiltros{
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      gap: 10px;
+    }
+  }
