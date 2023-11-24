@@ -24,7 +24,7 @@
 
   .divfiltros{
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
     flex-direction: row;
     text-align: center;
     align-items: center;
