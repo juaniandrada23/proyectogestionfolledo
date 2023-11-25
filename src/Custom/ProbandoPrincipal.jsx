@@ -11,10 +11,10 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import { MdOutlineExpandCircleDown } from "react-icons/md";
+import { AiFillFilter } from "react-icons/ai";
 import Alert from '@mui/material/Alert';
 import "../Styles/probandoppal.css"
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
-import Button from '@mui/material/Button';
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 
@@ -32,6 +32,7 @@ const ProbandoPrincipal = () => {
   const añoActual = fechaActual.getFullYear();
 
   //-----------------------------------Parametros-------------------------------------
+  const [isMobileScreen, setIsMobileScreen] = useState(window.innerWidth <= 600);
   const chart1Ref = useRef(null);
   const chart2Ref = useRef(null);
   const [usdBlue, setUsdBlue] = useState(0);
@@ -50,6 +51,19 @@ const ProbandoPrincipal = () => {
   const [pagosTotal, setPagosTotal] = useState([]);
   const [cantidadDelAñoFiltrado, setCantidadDelAñoFiltrado] = useState([]);
   const [cantidadFechasDesdeHasta, setCantidadFechasDesdeHasta] = useState([]);
+
+    //Logica para hacer un breakpoint para el tamaño de la pantalla de celular
+    const handleWindowResize = () => {
+      setIsMobileScreen(window.innerWidth <= 600);
+    };
+
+    useEffect(() => {
+      window.addEventListener('resize', handleWindowResize);
+      return () => {
+        window.removeEventListener('resize', handleWindowResize);
+      };
+    }, []);
+    //-------------------------------------------------------------------------//
 
     // Logica para agregar un array de años para un select
     const años = [];
@@ -379,15 +393,17 @@ const ProbandoPrincipal = () => {
                   <h5 className="text-blueGray-400 uppercase font-bold text-xs" style={{color:'#EAEBED'}}>Filtrar</h5>
                   </AccordionSummary>
             <AccordionDetails>
-                <div className="date-input-container my-2">
+                <div className="date-input-container my-2 primerdiv">
                   <h4 className="text-blueGray-400 uppercase font-bold text-xs">desde</h4>
                   <input className="date-input" type="date" placeholder="FechaDesde" value={fechadesde} onChange={(e) => setFechaDesde(e.target.value)} />
                 </div>
-                <div className="date-input-container my-2">
+                <div className="date-input-container my-2 segundodiv">
                   <h4 className="text-blueGray-400 uppercase font-bold text-xs">hasta</h4>
                   <input className="date-input" type="date" placeholder="FechaHasta" value={fechahasta} onChange={(e) => setFechaHasta(e.target.value)} />
                 </div> 
-              <button className='text-blueGray-400 uppercase font-bold text-xs' onClick={filtroDesdeHasta}>Aplicar Filtros</button>
+                <div className='primerbotondiv'>
+                  <button className='text-blueGray-400 uppercase font-bold text-xs' onClick={filtroDesdeHasta}>Filtrar desde/hasta</button>
+                </div>
             </AccordionDetails>
           </Accordion> 
         </List>
@@ -398,7 +414,7 @@ const ProbandoPrincipal = () => {
               <h5 className="text-blueGray-400 uppercase font-bold text-xs" style={{color:'#EAEBED'}}>Filtrar por año</h5>
             </AccordionSummary>
             <AccordionDetails>
-              <div className="date-input-container">
+              <div className="date-input-container tercerdiv">
                 <h4 className="text-blueGray-400 uppercase font-bold text-xs">Año</h4>
                 <select className="date-input" value={añoFiltrado} onChange={(e) => setAñoFiltrado(e.target.value)}>
                     {años.map((año) => (
@@ -408,7 +424,9 @@ const ProbandoPrincipal = () => {
                     ))}
                 </select>
               </div>
-              <button className='text-blueGray-400 uppercase font-bold text-xs' onClick={filtroPagosPorAño}>Aplicar Filtros</button>
+              <div className='primerbotondiv'>
+                <button className='text-blueGray-400 uppercase font-bold text-xs' onClick={filtroPagosPorAño}>Filtrar por año</button>
+              </div>
             </AccordionDetails>
         </Accordion>    
         </List>
@@ -463,7 +481,7 @@ const ProbandoPrincipal = () => {
                         </div>
                     </div>
                     <p className="text-sm text-blueGray-400 mt-4">
-                        <span className="text-red-500 mr-2"><i className="fas fa-arrow-down"></i> Porcentaje%</span>
+                        <span className="text-red-500 mr-2"><i className="fas fa-arrow-down"></i> Porcentaje %</span>
                         <span className="whitespace-nowrap"> Desde... </span></p>
                     </div>
                 </div>
@@ -517,7 +535,7 @@ const ProbandoPrincipal = () => {
               
               <div className='mt-4 divfiltros'>
                 <div style={{display:'flex', justifyContent:'center', flexDirection:'column', alignItems:'center'}}>
-                  <Button variant="contained" onClick={toggleDrawer('bottom', true)}>Filtros</Button>
+                  <button className="text-blueGray-400 uppercase font-bold text-xs" onClick={toggleDrawer('bottom', true)}>Filtros <AiFillFilter style={{color:'white', width:'17px', height:'17px'}}/></button>
                 </div>
                 <SwipeableDrawer anchor="bottom" open={state.bottom} onClose={toggleDrawer('bottom', false)} onOpen={toggleDrawer('bottom', true)}>
                     {list('bottom')}
@@ -530,7 +548,7 @@ const ProbandoPrincipal = () => {
             <Grid className='mb-4' container spacing={2}>
               <Grid item xs={12} lg={6}>
                 <div className='bg-white mx-2 p-2 rounded-lg'>
-                  <canvas ref={chart1Ref}></canvas>
+                  <canvas ref={chart1Ref} width={300} height={isMobileScreen ? 270 : 150}></canvas>
                 </div>
               </Grid>
               <Grid item xs={12} lg={6}>

@@ -31,6 +31,51 @@
     gap: 10px;
   }
 
+  .primerdiv{
+    display: flex;
+    justify-content: center;
+  }
+
+  .segundodiv{
+    display: flex;
+    justify-content: center;
+  }
+
+  .tercerdiv{
+    display: flex;
+    justify-content: center;
+  }
+
+  .primerbotondiv{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+  }
+
+  .primerbotondiv button{
+    background-color: #006989;
+    color: #EAEBED;
+    padding: 10px;
+    border-radius: 50px;
+  }
+
+  .divfiltros button{
+    background-color: #006989;
+    color: #EAEBED;
+    padding: 10px;
+    border-radius: 50px;
+    display: flex;
+    flex-direction: row;
+    gap: 2px;
+    align-items: center;
+    transition: transform 0.3s;
+  }
+
+  .divfiltros button:hover {
+    transform: scale(1.1);
+  }
+
   @media (max-width: 800px) {
     .divfiltros{
       display: flex;
