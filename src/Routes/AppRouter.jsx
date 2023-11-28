@@ -8,6 +8,7 @@ import MediosPago from './MediosPago.jsx'
 import PruebaLogin from './PruebaLogin.jsx'
 import Usuarios from './Usuarios';
 import ProbandoPrincipal from '../Custom/ProbandoPrincipal.jsx'
+import ProbandoDesarrollos from '../Custom/ProbandoDesarrollos.jsx'
 
 const AppRouter = () => {
   return (
@@ -22,6 +23,7 @@ const AppRouter = () => {
         <Route path="/medios/:userId" element={<MediosPago/>} />
 
         <Route path="/probandoprincipal" element={<ProbandoPrincipal/>} />
+        <Route path="/pruebaendpoint" element={<ProbandoDesarrollos/>} />
       </Routes>
     </Router>
   );

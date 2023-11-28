@@ -17,6 +17,7 @@ import "../Styles/probandoppal.css"
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const ProbandoPrincipal = () => {
   // Obtén la fecha actual
@@ -32,6 +33,7 @@ const ProbandoPrincipal = () => {
   const añoActual = fechaActual.getFullYear();
 
   //-----------------------------------Parametros-------------------------------------
+  const [isLoading, setLoading] = useState(false);
   const [isMobileScreen, setIsMobileScreen] = useState(window.innerWidth <= 600);
   const chart1Ref = useRef(null);
   const chart2Ref = useRef(null);
@@ -51,6 +53,15 @@ const ProbandoPrincipal = () => {
   const [pagosTotal, setPagosTotal] = useState([]);
   const [cantidadDelAñoFiltrado, setCantidadDelAñoFiltrado] = useState([]);
   const [cantidadFechasDesdeHasta, setCantidadFechasDesdeHasta] = useState([]);
+
+  const [cantidadPagosMesActual, setCantidadPagosMesActual] = useState('');
+  const [cantidadPagosMesAnterior, setCantidadPagosMesAnterior] = useState('');
+
+  const [usuarios, setUsuarios] = useState('');
+
+  const [ingresosEgresosDesdeHasta, setCantidadIngresosEgresosDesdeHasta] = useState([]);
+  const [ingresosEgresosAnio, setCantidadIngresosEgresosAnio] = useState([]);
+  const [ingresosEgresosAnioFiltrado, setCantidadIngresosEgresosAnioFiltrado] = useState([]);
 
     //Logica para hacer un breakpoint para el tamaño de la pantalla de celular
     const handleWindowResize = () => {
@@ -129,12 +140,33 @@ const ProbandoPrincipal = () => {
           }
       
           const ctx = chart2Ref.current.getContext('2d');
+
+          let fecha = [];
+          let ingresos = [];
+          let egresos = [];
+
+          if (condicion1 === true) {
+            fecha = ingresosEgresosAnio.map(item => item.nombre_mes);
+            ingresos = ingresosEgresosAnio.map(item => item.ingresos);
+            egresos = ingresosEgresosAnio.map(item => item.egresos);
+
+          } else if (condicion3 === true) {
+            fecha = ingresosEgresosDesdeHasta.map(item => item.fecha);
+            ingresos = ingresosEgresosDesdeHasta.map(item => item.ingresos);
+            egresos = ingresosEgresosDesdeHasta.map(item => item.egresos);
+
+          } else if (condicion2 === true) {
+            fecha = ingresosEgresosAnioFiltrado.map(item => item.nombre_mes);
+            ingresos = ingresosEgresosAnioFiltrado.map(item => item.ingresos);
+            egresos = ingresosEgresosAnioFiltrado.map(item => item.egresos);
+          }
+
           const data = {
-            labels: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'],
+            labels: fecha,
             datasets: [
               {
                 label: 'Ingresos',
-                data: [300, 200, 400, 500],
+                data: ingresos,
                 backgroundColor: 'rgb(59 130 246)',
                 borderColor: 'rgb(59 130 246)',
                 borderWidth: 2,
@@ -145,7 +177,7 @@ const ProbandoPrincipal = () => {
               },
               {
                 label: 'Egresos',
-                data: [200, 550, 200, 100],
+                data: egresos,
                 backgroundColor: 'rgb(220 38 38)',
                 borderColor: 'rgb(220 38 38)',
                 borderWidth: 2,
@@ -189,7 +221,7 @@ const ProbandoPrincipal = () => {
       };
 
       initChart2();
-    }, []);
+    }, [condicion1, condicion3, ingresosEgresosAnio, ingresosEgresosDesdeHasta, condicion2, ingresosEgresosAnioFiltrado]);
 
     // Valor USD BLUE
     useEffect(() => {
@@ -222,6 +254,8 @@ const ProbandoPrincipal = () => {
 
     // Endpoint consumido para fechadesde y fechahasta
     const filtroDesdeHasta = () => {
+      setLoading(true);
+
       if (fechadesde > fechahasta) {
         setError('Error: La fecha desde es mayor que la fecha hasta');
         return;
@@ -233,6 +267,8 @@ const ProbandoPrincipal = () => {
       let endpointFiltroDesdeHasta =  `https://apifolledo.onrender.com/principal/filtrando?fechadesde=${fechadesde}&fechahasta=${fechahasta}`;
 
       let endpointCantidadPagosDesdeHasta =  `https://apifolledo.onrender.com/principal/filtrandocantidad?fechadesde=${fechadesde}&fechahasta=${fechahasta}`; 
+
+      let endpointIngresosEgresos =  `https://apifolledo.onrender.com/principal/ingresosegresosgrafico?fechadesde=${fechadesde}&fechahasta=${fechahasta}`; 
 
       fetch(endpointFiltroDesdeHasta)
       .then((response) => {
@@ -272,6 +308,30 @@ const ProbandoPrincipal = () => {
         setCondicion1(false);
         setCondicion2(false);
         setCondicion3(true);
+        setLoading(false);
+        setError('');
+      })
+      .catch((error) => {
+        setError('Error de conexion con el servidor, intente nuevamente');
+      });
+
+      fetch(endpointIngresosEgresos)
+      .then((response) => {
+        if (!response.ok) {
+          if (response.status >= 500 && response.status <= 503) {
+            throw new Error('Error: Conexión con el servidor perdida, intente nuevamente');
+          } else {
+            throw new Error('Error en la solicitud');
+          }
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setCantidadIngresosEgresosDesdeHasta(data);
+        setCondicion1(false);
+        setCondicion2(false);
+        setCondicion3(true);
+        setLoading(false);
         setError('');
       })
       .catch((error) => {
@@ -304,6 +364,8 @@ const ProbandoPrincipal = () => {
 
     // Endpoint para consumir por canvas para cantidad de pagos por año filtrado
     const filtroPagosPorAño = () => {
+      setLoading(true);
+
       if (!añoFiltrado) {
         setError('Error: Debe ingresar el año para filtrar')
         return;
@@ -312,6 +374,9 @@ const ProbandoPrincipal = () => {
       let endpointFiltroPagosPorAño =  `https://apifolledo.onrender.com/principal/pagosporaniofiltrado?añoFiltrado=${añoFiltrado}`;
 
       let endpointCantidadPorAño =  `https://apifolledo.onrender.com/principal/totalpagofiltradoporanio?añoFiltrado=${añoFiltrado}`;
+
+      let endpointIngresosEgresosAnioActual =  `https://apifolledo.onrender.com/principal/ingresosegresostotalpagofiltradoporanio?añoFiltrado=${añoFiltrado}`;
+
 
       fetch(endpointFiltroPagosPorAño)
       .then((response) => {
@@ -352,6 +417,30 @@ const ProbandoPrincipal = () => {
         setCondicion1(false);
         setCondicion2(true);
         setCondicion3(false);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError('Error de conexion con el servidor, intente nuevamente');
+      });
+
+      fetch(endpointIngresosEgresosAnioActual)
+      .then((response) => {
+        if (!response.ok) {
+          if (response.status >= 500 && response.status <= 503) {
+            throw new Error('Error: Conexión con el servidor perdida, intente nuevamente');
+          } else {
+            throw new Error('Error en la solicitud');
+          }
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setCantidadIngresosEgresosAnioFiltrado(data);
+        setError('');
+        setCondicion1(false);
+        setCondicion2(true);
+        setCondicion3(false);
+        setLoading(false);
       })
       .catch((error) => {
         setError('Error de conexion con el servidor, intente nuevamente');
@@ -434,6 +523,58 @@ const ProbandoPrincipal = () => {
     );
     //-------------------------------------------------------------------------------------------------------------------------------//
 
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const response = await fetch(`https://apifolledo.onrender.com/principal/mesactual`);
+          const data = await response.json();
+          setCantidadPagosMesActual(data[0].PagosMesActual);
+        } catch (error) {
+          console.error('Error al obtener los datos: ', error);
+        }
+      };
+    
+      const fetchDataAnterior = async () => {
+        try {
+          const response = await fetch(`https://apifolledo.onrender.com/principal/mesanterior`);
+          const data = await response.json();
+          setCantidadPagosMesAnterior(data[0].PagosMesAnterior);
+        } catch (error) {
+          console.error('Error al obtener los datos: ', error);
+        }
+      };
+    
+      const fetchUsuarios = async () => {
+        try {
+          const response = await fetch(`https://apifolledo.onrender.com/principal/usuarios`);
+          const data = await response.json();
+          setUsuarios(data[0].cantidad);
+        } catch (error) {
+          console.error('Error al obtener los datos: ', error);
+        }
+      };
+
+      fetchUsuarios();
+      fetchDataAnterior();
+      fetchData();
+    }, []);    
+    
+    const porcentajePagosMes = (((cantidadPagosMesActual - cantidadPagosMesAnterior) / cantidadPagosMesAnterior) * 100).toFixed(2);  
+    
+    //--------------------------ENDPOINT PARA EL SEGUNDO GRAFICO----------------------------------------------------------------------//
+    useEffect(() => {
+      fetch('https://apifolledo.onrender.com/principal/ingresosegresosanioactual')
+        .then(response => response.json())
+        .then(data => {
+          setCantidadIngresosEgresosAnio(data);
+          setCondicion1(true);
+          setCondicion2(false);
+          setCondicion3(false);
+        })
+        .catch(error => console.error('Error al obtener los datos: ', error));
+    }, []);
+    //--------------------------------------------------------------------------------------------------------------------------------//
+
   return (
     <>
         <div className='bg-blue-200' style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
@@ -451,7 +592,7 @@ const ProbandoPrincipal = () => {
                     <div className="flex flex-wrap">
                         <div className="relative w-full pr-4 max-w-full flex-grow flex-1">
                         <h5 className="text-blueGray-400 uppercase font-bold text-xs"> Pagos</h5>
-                          <span className="font-semibold text-xl text-blueGray-700">{cantidadDePagos}</span>
+                          <span className="font-semibold text-xl text-blueGray-700">{isLoading ? <CircularProgress style={{height:'25px', width:'25px', marginTop:'8px'}}/> : cantidadDePagos}</span>
                         </div>
                         <div className="relative w-auto pl-4 flex-initial">
                         <div className="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full  bg-blue-500">
@@ -460,8 +601,10 @@ const ProbandoPrincipal = () => {
                         </div>
                     </div>
                     <p className="text-sm text-blueGray-400 mt-4">
-                        <span className="text-emerald-500 mr-2"><i className="fas fa-arrow-up"></i> 2,99% </span>
-                        <span className="whitespace-nowrap"> Since last month </span></p>
+                        <span className={porcentajePagosMes >= 0 ? 'text-red-500 mr-2' : 'text-emerald-500 mr-2'}>
+                          <i className={`fas fa-arrow-${porcentajePagosMes >= 0 ? 'up' : 'down'}`}></i> {porcentajePagosMes}%
+                        </span>
+                        <span className="whitespace-nowrap">Desde hace un mes </span></p>
                     </div>
                 </div>
                 </div>
@@ -472,7 +615,7 @@ const ProbandoPrincipal = () => {
                     <div className="flex flex-wrap">
                         <div className="relative w-full pr-4 max-w-full flex-grow flex-1">
                         <h5 className="text-blueGray-400 uppercase font-bold text-xs">Usuarios</h5>
-                        <span className="font-semibold text-xl text-blueGray-700">5</span>
+                        <span className="font-semibold text-xl text-blueGray-700">{usuarios}</span>
                         </div>
                         <div className="relative w-auto pl-4 flex-initial">
                         <div className="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full  bg-blue-500">
@@ -481,8 +624,9 @@ const ProbandoPrincipal = () => {
                         </div>
                     </div>
                     <p className="text-sm text-blueGray-400 mt-4">
-                        <span className="text-red-500 mr-2"><i className="fas fa-arrow-down"></i> Porcentaje %</span>
-                        <span className="whitespace-nowrap"> Desde... </span></p>
+                        <span className="text-red-500 mr-2"><i className="fas fa-arrow-down"></i></span>
+                        <span className="whitespace-nowrap"></span>
+                    </p>
                     </div>
                 </div>
                 </div>
@@ -502,8 +646,9 @@ const ProbandoPrincipal = () => {
                         </div>
                     </div>
                     <p className="text-sm text-blueGray-400 mt-4">
-                        <span className="text-red-500 mr-2"><i className="fas fa-arrow-down"></i> 1,25% </span>
-                        <span className="whitespace-nowrap"> Since yesterday </span></p>
+                        <span className="text-red-500 mr-2"><i className="fas fa-arrow-down"></i></span>
+                        <span className="whitespace-nowrap"></span>
+                    </p>
                     </div>
                 </div>
                 </div>
