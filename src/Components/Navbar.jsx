@@ -8,14 +8,31 @@ import Avatar from '@mui/material/Avatar';
 import { LuHome } from "react-icons/lu";
 
 const Navbar = () => {
+  //IMPORTANTE!!!! VER COMO ACTUALIZAR LA IMAGEN DEL USUARIO EN NAVBAR CUANDO CARGA!!!!!!!!!!!!!!!!
+
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const [tokenAvailable, setTokenAvailable] = useState(false);
   const { userId } = useParams();
   const nombreDelUsuario  = localStorage.getItem("userName");
-  const imagenDelUsuario  = localStorage.getItem("imagen");
   const rolUsuario = localStorage.getItem("userRole");
   const [isLoading, setIsLoading] = useState(false);
+  const idUsuario = localStorage.getItem("userId");
+  const [imagenUsuario, setDatosDelUsuarioSesion] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`https://apifolledo.onrender.com/usuarios/datosusuariosesion?idUsuario=${idUsuario}`);
+        const data = await response.json();
+        setDatosDelUsuarioSesion(data[0].imagen);
+      } catch (error) {
+        console.error('Error al obtener los datos: ', error);
+      }
+    };
+
+    fetchData();
+  }, [idUsuario]);   
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -59,7 +76,7 @@ const Navbar = () => {
                 <ButtonSlice/>
                 <button className="inline-flex items-center gap-x-1 text-sm font-semibold leading-6 transition ease-in-out delay-150 bg-white hover:-translate-y-1 hover:scale-110 hover:bg-blue-200 duration-300" style={{color:'black', padding:'5px', borderRadius:'50px'}} onClick={() => navigate(`/principal/${userId}`)}><LuHome style={{width:'3vh', height:'3vh'}}/></button>
                 <button className='transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300'>
-                  <Avatar alt={`${nombreDelUsuario}`} sx={{ width: 34, height: 34 }} src={`${imagenDelUsuario}`} onClick={() => navigate(`/usuarios/${userId}`)}/>
+                  <Avatar alt={`${nombreDelUsuario}`} sx={{ width: 34, height: 34 }} src={`${imagenUsuario}`} onClick={() => navigate(`/usuarios/${userId}`)}/>
                 </button>
               </>
               )}
@@ -103,7 +120,7 @@ const Navbar = () => {
             <>
               <div className="flex-shrink-0">
                 <button className="flex text-white items-center justify-center h-8 w-8 rounded-full bg-blue-800 hover:bg-blue-700 focus:outline-none focus:bg-blue-700 transition-colors" onClick={() => navigate(`/usuarios/${userId}`)}>
-                  <Avatar alt={`${nombreDelUsuario}`} src={`${imagenDelUsuario}`} onClick={() => navigate(`/usuarios/${userId}`)}/>
+                  <Avatar alt={`${nombreDelUsuario}`} src={`${imagenUsuario}`} onClick={() => navigate(`/usuarios/${userId}`)}/>
                 </button>
               </div>
               <div className="ml-3">

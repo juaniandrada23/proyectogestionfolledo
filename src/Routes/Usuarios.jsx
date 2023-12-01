@@ -16,11 +16,13 @@ import LinearProgress from '@mui/material/LinearProgress';
 import Button from '@mui/material/Button';
 import { BiExpandVertical } from "react-icons/bi";
 import { FiUserPlus } from "react-icons/fi";
+import FileUpload from '../Components/FileUpload';
 
 const Usuarios = () => {
 
   const [modalOpen, setModalOpen] = useState(false);  
   const rolUsuario = localStorage.getItem("userRole");
+  const idUsuario = localStorage.getItem("userId");
   const nombreDeUsuario = localStorage.getItem("userName");
   const imagenDelUsuario = localStorage.getItem("imagen");
   const [usuarios, setUsuarios] = useState([]);
@@ -32,6 +34,7 @@ const Usuarios = () => {
   const [usuarioAEliminar, setUsuarioAEliminar] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoading2, setIsLoading2] = useState(false);
+  const [imagenUsuario, setDatosDelUsuarioSesion] = useState([]);
 
   const abrirModalBorrar = (id, username) => {
     setModalOpen2(true);
@@ -116,29 +119,51 @@ const Usuarios = () => {
         .catch(error => console.error('Error al cargar los usuarios', error));
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`https://apifolledo.onrender.com/usuarios/datosusuariosesion?idUsuario=${idUsuario}`);
+        const data = await response.json();
+        setDatosDelUsuarioSesion(data[0].imagen);
+      } catch (error) {
+        console.error('Error al obtener los datos: ', error);
+      }
+    };
+
+    fetchData();
+  }, [idUsuario]);   
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(`https://apifolledo.onrender.com/usuarios/datosusuariosesion?idUsuario=${idUsuario}`);
+      const data = await response.json();
+      setDatosDelUsuarioSesion(data[0].imagen);
+    } catch (error) {
+      console.error('Error al obtener los datos: ', error);
+    }
+  };
+
   return (
     <>
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      <Navbar />
+      <Navbar/>
       {rolUsuario === 'Administrador' && (
         <>
-        <Grid container spacing={2} style={{ flexGrow: 1 }}>
+        <Grid container spacing={2} style={{ flexGrow: 1, marginBottom:'20px' }}>
           <Grid item xs={12} lg={4}>
           <div className="max-w-2xl mx-4 sm:max-w-sm md:max-w-sm lg:max-w-sm xl:max-w-sm sm:mx-auto md:mx-auto lg:mx-auto xl:mx-auto mt-2 mb-2 bg-white shadow-xl rounded-lg text-gray-900">
               <div className="rounded-t-lg h-32 overflow-hidden">
                   <img className="object-cover object-top w-full" src='https://images.unsplash.com/photo-1549880338-65ddcdfd017b?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjE0NTg5fQ' alt='Mountain'/>
               </div>
               <div className="mx-auto w-32 h-32 relative -mt-16 border-4 border-white rounded-full overflow-hidden">
-                  <img className="object-cover object-center h-32" src={`${imagenDelUsuario}`} alt="Imagen del usuario"/>
+                  <img className="object-cover object-center h-32" src={`${imagenUsuario}`} alt="Imagen del usuario"/>
               </div>
               <div className="text-center mt-2">
                   <h2 className="font-semibold">{nombreDeUsuario}</h2>
                   <p className="text-gray-500">{rolUsuario}</p>
               </div>
               <div className="p-4 border-t mt-2 flex flex-row">
-                <button style={{borderRadius:'10px'}} className="block mx-auto px-4 font-semibold text-white py-1 sm:px-4 sm:py-2 transition ease-in-out delay-150 bg-[#006989] hover:bg-[#053F61] duration-300">
-                    Actualizar <br />datos
-                </button>
+                <FileUpload nombreDeUsuario={nombreDeUsuario} idUsuario={idUsuario} cargarDatos={cargarDatos} fetchData={fetchData}/>
                 <button style={{borderRadius:'10px'}} className="block mx-auto font-semibold text-white px-2 py-1 sm:px-4 sm:py-2 transition ease-in-out delay-150 bg-[#006989] hover:bg-[#053F61] duration-300" onClick={handleModalOpen}>
                   <FiUserPlus style={{width:'4vh', height:'4vh'}}></FiUserPlus>
                 </button>

@@ -207,7 +207,7 @@ const ProbandoPrincipal = () => {
             plugins: {
               legend: {
                 display: true,
-                position: 'bottom',
+                position: 'top',
               },
             },
           };
