@@ -17,14 +17,18 @@ import Button from '@mui/material/Button';
 import { BiExpandVertical } from "react-icons/bi";
 import { FiUserPlus } from "react-icons/fi";
 import FileUpload from '../Components/FileUpload';
+import EstadoServicio from '../Components/EstadoServicio.jsx'
+import useAuthorization from '../Functions/useAuthorization';
+import { useTimeout } from '../Functions/timeOut';
 
 const Usuarios = () => {
+  useAuthorization();
+  useTimeout();
 
   const [modalOpen, setModalOpen] = useState(false);  
   const rolUsuario = localStorage.getItem("userRole");
   const idUsuario = localStorage.getItem("userId");
   const nombreDeUsuario = localStorage.getItem("userName");
-  const imagenDelUsuario = localStorage.getItem("imagen");
   const [usuarios, setUsuarios] = useState([]);
   const [nuevoUsuario, setNuevoUsuario] = useState({
     nombre: '',
@@ -156,7 +160,7 @@ const Usuarios = () => {
                   <img className="object-cover object-top w-full" src='https://images.unsplash.com/photo-1549880338-65ddcdfd017b?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjE0NTg5fQ' alt='Mountain'/>
               </div>
               <div className="mx-auto w-32 h-32 relative -mt-16 border-4 border-white rounded-full overflow-hidden">
-                  <img className="object-cover object-center h-32" src={`${imagenUsuario}`} alt="Imagen del usuario"/>
+                  <img className="object-cover object-center h-32" src={`${imagenUsuario}`} alt="UserImg"/>
               </div>
               <div className="text-center mt-2">
                   <h2 className="font-semibold">{nombreDeUsuario}</h2>
@@ -241,7 +245,7 @@ const Usuarios = () => {
                     <img className="object-cover object-top w-full" src='https://images.unsplash.com/photo-1549880338-65ddcdfd017b?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjE0NTg5fQ' alt='Mountain'/>
                 </div>
                 <div className="mx-auto w-32 h-32 relative -mt-16 border-4 border-white rounded-full overflow-hidden">
-                    <img claclassNamess="object-cover object-center h-32" src={`${imagenDelUsuario}`} alt="Imagen del usuario"/>
+                    <img claclassNamess="object-cover object-center h-32" src={`${imagenUsuario}`} alt="Imagen del usuario"/>
                 </div>
                 <div className="text-center mt-2">
                     <h2 className="font-semibold">{nombreDeUsuario}</h2>
@@ -302,6 +306,7 @@ const Usuarios = () => {
         </DialogActions>
       </Dialog>
 
+      <EstadoServicio/>
     </div>
 
     </>

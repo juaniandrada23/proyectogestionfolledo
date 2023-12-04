@@ -9,7 +9,6 @@ import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
-
 const FileUpload = ({ nombreDeUsuario, idUsuario, cargarDatos, fetchData}) => {
   const [imageUpload, setImageUpload] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
@@ -45,7 +44,6 @@ const FileUpload = ({ nombreDeUsuario, idUsuario, cargarDatos, fetchData}) => {
 
   const uploadImage = () => {
     setIsLoading(true);
-    setModalOpen(false);
 
     if (imageUpload === null) return;
   
@@ -69,6 +67,8 @@ const FileUpload = ({ nombreDeUsuario, idUsuario, cargarDatos, fetchData}) => {
             if (response.ok) {
               cargarDatos();
               fetchData();
+              setModalOpen(false);
+              setIsLoading(false);
               console.log('Imagen actualizada correctamente en la base de datos');
             } else {
               console.error('Error al modificar la imagen en la base de datos');
@@ -117,7 +117,10 @@ const FileUpload = ({ nombreDeUsuario, idUsuario, cargarDatos, fetchData}) => {
             Selecciona
           </label>
           <div style={{display:'flex', justifyContent:'center', marginTop:'10px'}}>
-            <Button variant="contained" color="success" onClick={uploadImage} disabled={!previewUrl}>Actualizar<br />{isLoading && <CircularProgress color="success"/>}</Button>
+            <Button variant="contained" color="success" onClick={uploadImage} disabled={!previewUrl}>Actualizar</Button>
+          </div>
+          <div style={{display:'flex', justifyContent:'center', marginTop:'10px'}}>
+            {isLoading && <CircularProgress color="success"/>}
           </div>
 
         </DialogContent>

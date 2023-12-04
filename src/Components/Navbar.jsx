@@ -21,7 +21,7 @@ const Navbar = () => {
   const [imagenUsuario, setDatosDelUsuarioSesion] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchImagen = async () => {
       try {
         const response = await fetch(`https://apifolledo.onrender.com/usuarios/datosusuariosesion?idUsuario=${idUsuario}`);
         const data = await response.json();
@@ -31,7 +31,7 @@ const Navbar = () => {
       }
     };
 
-    fetchData();
+    fetchImagen();
   }, [idUsuario]);   
 
   const toggleMenu = () => {
