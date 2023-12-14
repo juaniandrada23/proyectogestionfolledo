@@ -8,7 +8,7 @@ const IsLogged = () => {
 
   useEffect(() => {
     if (token) {
-      navigate(`/principal/${id}`);
+      navigate(`/probandoprincipal/${id}`);
     }
   }, [navigate, token, id]);
 

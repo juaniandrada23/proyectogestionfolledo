@@ -85,7 +85,7 @@ const PruebaLogin = () => {
           localStorage.setItem('imagen', imagen);
           localStorage.setItem('token', data.token);
   
-          navigate(`/principal/${userId}`);
+          navigate(`/probandoprincipal/${userId}`);
         } else {
           if (response.status === 401) {
             setErrorMessage('Nombre de usuario o contraseña mal ingresados');
