@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Chart from 'chart.js/auto';
-import Navbar from '../Components/Navbar'
-import Footer from '../Components/Footer'
+import Navbar from '../Components/Navbar.jsx'
+import Footer from '../Components/Footer.jsx'
 import Grid from '@mui/material/Grid';
 import { GiMoneyStack } from "react-icons/gi";
 import { FaUserTie } from "react-icons/fa6";
-import { MdPendingActions } from "react-icons/md";
+import { CgProfile } from "react-icons/cg";
 import { LuBadgeDollarSign } from "react-icons/lu";
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -18,13 +18,22 @@ import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import CircularProgress from '@mui/material/CircularProgress';
+import EstadoServicio from '../Components/EstadoServicio.jsx'
+import useAuthorization from '../Functions/useAuthorization.js';
+import { useTimeout } from '../Functions/timeOut.js';
 
 const ProbandoPrincipal = () => {
+  useAuthorization();
+  useTimeout();
+
   // Obtén la fecha actual
   const fechaActual = new Date();
 
   // Obtiene el número del día actual
   const diaActual = fechaActual.getDate();
+
+  // Convierte el día a una cadena y agrega un cero al principio si es necesario
+  const diaActualConCero = diaActual < 10 ? '0' + diaActual : diaActual.toString();
 
   // Calcula el número del mes anterior
   const mesAnterior = fechaActual.getMonth();
@@ -62,6 +71,20 @@ const ProbandoPrincipal = () => {
   const [ingresosEgresosDesdeHasta, setCantidadIngresosEgresosDesdeHasta] = useState([]);
   const [ingresosEgresosAnio, setCantidadIngresosEgresosAnio] = useState([]);
   const [ingresosEgresosAnioFiltrado, setCantidadIngresosEgresosAnioFiltrado] = useState([]);
+
+  const nombreDelUsuario  = localStorage.getItem("userName");
+  const [fechaAhora, setFechaActual] = useState('');
+
+  useEffect(() => {
+    const obtenerFechaActual = () => {
+      const fecha = new Date();
+      const opciones = { year: 'numeric', month: 'long', day: 'numeric' };
+      const fechaFormateada = fecha.toLocaleDateString('es-ES', opciones);
+      setFechaActual(fechaFormateada);
+    };
+
+    obtenerFechaActual();
+  }, []);
 
     //Logica para hacer un breakpoint para el tamaño de la pantalla de celular
     const handleWindowResize = () => {
@@ -238,17 +261,18 @@ const ProbandoPrincipal = () => {
     useEffect(() => {
       const fetchData = async () => {
         try {
-          const response = await fetch(`https://api.bluelytics.com.ar/v2/historical?day=${añoActual}-${mesAnterior}-${diaActual}`);
+          const response = await fetch(`https://api.bluelytics.com.ar/v2/historical?day=${añoActual}-${mesAnterior}-${diaActualConCero}`);
           const data = await response.json();
           const blueData = data.blue;
           setBlueMes(blueData.value_sell);
+          console.log(blueMes)
         } catch (error) {
           console.error('Error al obtener los datos: ', error);
         }
       };
     
       fetchData();
-    }, [añoActual, mesAnterior, diaActual, blueMes]);
+    }, [añoActual, mesAnterior, diaActualConCero, blueMes]);
     
     const porcentaje = (((usdBlue - blueMes) / usdBlue) * 100).toFixed(2);
 
@@ -586,7 +610,29 @@ const ProbandoPrincipal = () => {
             <Grid className='mb-4' container spacing={1} style={{ flexGrow: 1 }}>
               <Grid item xs={12} lg={12}>
               <div className="flex flex-wrap">
-                <div className="mt-4 w-full lg:w-6/12 xl:w-3/12 px-5 mb-4">
+                <div className="mt-2 w-full lg:w-6/12 xl:w-3/12 px-5">
+                <div className="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg">
+                    <div className="flex-auto p-4">
+                    <div className="flex flex-wrap">
+                        <div className="relative w-full pr-4 max-w-full flex-grow flex-1">
+                        <h5 className="text-blueGray-400 uppercase font-bold text-xs">¡Bienvenido!</h5>
+                        <span className="font-semibold text-xs text-blueGray-700">{nombreDelUsuario}</span>
+                        <br />
+                        </div>
+                        <div className="relative w-auto pl-4 flex-initial">
+                        <div className="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full  bg-blue-500">
+                            <i className="fas fa-users"><CgProfile style={{width:'33px', height:'33px'}}/></i>
+                        </div>
+                        </div>
+                    </div>
+                    <p className="text-sm text-blueGray-400 mt-4">
+                      <span className="font-semibold text-xs text-blueGray-700">{fechaAhora}</span>
+                    </p>
+                    </div>
+                </div>
+                </div>
+
+                <div className="mt-2 w-full lg:w-6/12 xl:w-3/12 px-5">
                 <div className="relative flex flex-col min-w-0 break-words bg-white rounded mb-3 xl:mb-0 shadow-lg">
                     <div className="flex-auto p-4">
                     <div className="flex flex-wrap">
@@ -601,15 +647,16 @@ const ProbandoPrincipal = () => {
                         </div>
                     </div>
                     <p className="text-sm text-blueGray-400 mt-4">
-                        <span className={porcentajePagosMes >= 0 ? 'text-red-500 mr-2' : 'text-emerald-500 mr-2'}>
-                          <i className={`fas fa-arrow-${porcentajePagosMes >= 0 ? 'up' : 'down'}`}></i> {porcentajePagosMes}%
+                       <span className={porcentajePagosMes >= 0 ? 'text-red-500 mr-2' : 'text-emerald-500 mr-2'}>
+                           {/*<i className={`fas fa-arrow-${porcentajePagosMes >= 0 ? 'up' : 'down'}`}></i> {porcentajePagosMes}%*/}
                         </span>
-                        <span className="whitespace-nowrap">Desde hace un mes </span></p>
+                        <span className="whitespace-nowrap"></span>
+                    </p>
                     </div>
                 </div>
                 </div>
 
-                <div className=" mt-4 w-full lg:w-6/12 xl:w-3/12 px-5">
+                <div className="mt-2 w-full lg:w-6/12 xl:w-3/12 px-5">
                 <div className="relative flex flex-col min-w-0 break-words bg-white rounded mb-4 xl:mb-0 shadow-lg">
                     <div className="flex-auto p-4">
                     <div className="flex flex-wrap">
@@ -631,29 +678,7 @@ const ProbandoPrincipal = () => {
                 </div>
                 </div>
 
-                <div className="mt-4 w-full lg:w-6/12 xl:w-3/12 px-5">
-                <div className="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg">
-                    <div className="flex-auto p-4">
-                    <div className="flex flex-wrap">
-                        <div className="relative w-full pr-4 max-w-full flex-grow flex-1">
-                        <h5 className="text-blueGray-400 uppercase font-bold text-xs">Pagos pendientes</h5>
-                        <span className="font-semibold text-xl text-blueGray-700">901</span>
-                        </div>
-                        <div className="relative w-auto pl-4 flex-initial">
-                        <div className="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full  bg-blue-500">
-                            <i className="fas fa-users"><MdPendingActions style={{width:'33px', height:'33px'}}/></i>
-                        </div>
-                        </div>
-                    </div>
-                    <p className="text-sm text-blueGray-400 mt-4">
-                        <span className="text-red-500 mr-2"><i className="fas fa-arrow-down"></i></span>
-                        <span className="whitespace-nowrap"></span>
-                    </p>
-                    </div>
-                </div>
-                </div>
-
-                <div className="mt-4 w-full lg:w-6/12 xl:w-3/12 px-5">
+                <div className="mt-2 w-full lg:w-6/12 xl:w-3/12 px-5">
                 <div className="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg">
                     <div className="flex-auto p-4">
                     <div className="flex flex-wrap">
@@ -703,6 +728,8 @@ const ProbandoPrincipal = () => {
               </Grid>
             </Grid>
           <Footer style={{ flexShrink: 0 }}/>
+
+          <EstadoServicio/>
       </div>
     </>
   )
