@@ -36,10 +36,15 @@ const ProbandoPrincipal = () => {
   const diaActualConCero = diaActual < 10 ? '0' + diaActual : diaActual.toString();
 
   // Calcula el número del mes anterior
-  const mesAnterior = fechaActual.getMonth();
-
+  let mesAnterior = fechaActual.getMonth();
+  
   // Obtiene el número del año actual
-  const añoActual = fechaActual.getFullYear();
+  let añoActual = fechaActual.getFullYear();
+
+  if (mesAnterior === 0) {
+    mesAnterior = 11+1; 
+    añoActual -= 1; 
+  }
 
   //-----------------------------------Parametros-------------------------------------
   const [isLoading, setLoading] = useState(false);
