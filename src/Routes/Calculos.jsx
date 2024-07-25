@@ -21,6 +21,7 @@ import LinearProgress from '@mui/material/LinearProgress';
   
 const Calculos = () => {
   useAuthorization();
+  const apiUrl = process.env.REACT_APP_APIURL;
 
   const [chartData, setChartData] = useState(null);
   const [calculos, setCalculos] = useState([]);
@@ -42,14 +43,14 @@ const Calculos = () => {
   useTimeout();
 
   useEffect(() => {
-    fetch('https://apifolledo.onrender.com/calculos/total')
+    fetch(`${apiUrl}/calculos/total`)
       .then(response => response.json())
       .then(data => {setTotales(data); 
                     setIsLoading(false);
                     setIsLoadingFiltro(false);
                   })
       .catch(error => console.error('Error al cargar los nombres de los calculos', error));
-  }, []);
+  }, [apiUrl]);
 
   const aplicarFiltros = () => {  
     if (!nombreProveedorFiltro || !fechaDesde || !fechaHasta) {
@@ -62,7 +63,7 @@ const Calculos = () => {
 
     setIsLoadingFiltro(true);
 
-    fetch(`https://apifolledo.onrender.com/calculos/filtrando?fechaDesde=${fechaDesde}&fechaHasta=${fechaHasta}&nombreProveedor=${nombreProveedorFiltro}`)
+    fetch(`${apiUrl}/calculos/filtrando?fechaDesde=${fechaDesde}&fechaHasta=${fechaHasta}&nombreProveedor=${nombreProveedorFiltro}`)
       .then((response) => response.json())
       .then((data) => {
         if (Array.isArray(data)) {
@@ -89,7 +90,7 @@ const Calculos = () => {
 
     setIsLoading(true);
 
-    fetch(`https://apifolledo.onrender.com/calculos/totalgeneral?fechaDesde=${fechaDesdeTotal}&fechaHasta=${fechaHastaTotal}`)
+    fetch(`${apiUrl}/calculos/totalgeneral?fechaDesde=${fechaDesdeTotal}&fechaHasta=${fechaHastaTotal}`)
     .then(response => response.json())
     .then((data => { 
       setCalculosTotales(data); 
@@ -97,9 +98,9 @@ const Calculos = () => {
     }))
     .catch(error => console.error('Error al cargar los nombres de los calculos', error));
 
-    var apiUrl = `https://apifolledo.onrender.com/pagos/filtrando?fechadesde=${fechaDesdeTotal}&fechahasta=${fechaHastaTotal}&nombreProveedor=${nombreProveedorFiltro}`;
+    var apiUrls = `${apiUrl}/pagos/filtrando?fechadesde=${fechaDesdeTotal}&fechahasta=${fechaHastaTotal}&nombreProveedor=${nombreProveedorFiltro}`;
 
-    fetch(apiUrl)
+    fetch(apiUrls)
     .then((response) => {
       if (!response.ok) {
         throw new Error('Error en la solicitud');
@@ -114,7 +115,7 @@ const Calculos = () => {
       console.error("Error al aplicar filtros:", error);
     });
 
-    fetch(`https://apifolledo.onrender.com/calculos/ingresosyegresos?fechadesde=${fechaDesdeTotal}&fechahasta=${fechaHastaTotal}`)
+    fetch(`${apiUrl}/calculos/ingresosyegresos?fechadesde=${fechaDesdeTotal}&fechahasta=${fechaHastaTotal}`)
       .then((response) => response.json())
       .then((data) => {
         const ingresos = data.Ingresos;
@@ -151,11 +152,11 @@ const Calculos = () => {
   };
 
   useEffect(() => {
-    fetch('https://apifolledo.onrender.com/proveedores/nombreprov')
+    fetch(`${apiUrl}/proveedores/nombreprov`)
       .then(response => response.json())
       .then(data => setNombreProveedores(data))
       .catch(error => console.error('Error al cargar los nombres de los proveedores', error));
-  }, []);
+  }, [apiUrl]);
 
   const handleFechaDesdeChange = (event) => {
     setFechaDesde(event.target.value);

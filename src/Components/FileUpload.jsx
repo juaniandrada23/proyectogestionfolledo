@@ -10,6 +10,7 @@ import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
 const FileUpload = ({ nombreDeUsuario, idUsuario, cargarDatos, fetchData}) => {
+  const apiUrl = process.env.REACT_APP_APIURL;
   const [imageUpload, setImageUpload] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -60,7 +61,7 @@ const FileUpload = ({ nombreDeUsuario, idUsuario, cargarDatos, fetchData}) => {
         const encodedURL = encodeURIComponent(downloadURL);
     
         // Llama a la API para actualizar la imagen en la base de datos
-        fetch(`https://apifolledo.onrender.com/usuarios/actualizarimagen?imagen=${encodedURL}&idUsuario=${idUsuario}`, {
+        fetch(`${apiUrl}/usuarios/actualizarimagen?imagen=${encodedURL}&idUsuario=${idUsuario}`, {
           method: 'PUT',
         })
           .then(response => {
@@ -98,7 +99,7 @@ const FileUpload = ({ nombreDeUsuario, idUsuario, cargarDatos, fetchData}) => {
           {previewUrl && (
             <div style={{ position: 'relative', marginBottom: '20px' }}>
               <img src={previewUrl} alt="Preview" style={{ width: '100%', borderRadius: '8px', marginBottom: '10px' }} />
-              <button onClick={cancelUpload} style={{ position: 'absolute', top: '10px', right: '10px', background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '18px', color: '#333' }}>
+              <button className='pt-1 pr-1' onClick={cancelUpload} style={{ position: 'absolute', top: '10px', right: '10px', background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '18px', color: '#333' }}>
                 <MdOutlineCancel style={{width:'5vh', height:'5vh', color:'black', backgroundColor:'white', borderRadius:'50px'}}/>
               </button>
             </div>
@@ -107,22 +108,24 @@ const FileUpload = ({ nombreDeUsuario, idUsuario, cargarDatos, fetchData}) => {
           {/* Sección "Agrega una imagen" condicional */}
           {!previewUrl && (
             <div style={{ marginBottom: '20px', padding: '10px', border: '1px solid #ddd', borderRadius: '5px', background: '#f9f9f9' }}>
-              <p style={{ margin: '0', color: '#333', fontWeight: 'bold' }}>Agrega una imagen</p>
+              <p className='text-center' style={{ margin: '0', color: '#333', fontWeight: 'bold' }}>Agrega una imagen</p>
               <p style={{ margin: '0', color: '#777' }}>Selecciona o carga tu foto de perfil</p>
             </div>
           )}
 
-          <input id="fileInput" type="file" onChange={handleImageChange} style={{ display: 'none' }} />
-          <label htmlFor="fileInput" className="block mx-auto px-4 font-semibold text-white py-1 sm:px-4 sm:py-2 transition ease-in-out delay-150 bg-[#006989] hover:bg-[#053F61] duration-300">
+          <input id="fileInput" type="file" onChange={handleImageChange} style={{ display: 'none' }}/>
+          <label htmlFor="fileInput" className="rounded-2xl mx-20 flex justify-center px-4 font-semibold text-white py-1 sm:px-4 sm:py-2 transition ease-in-out delay-75 hover:-translate-y-1 bg-[#006989] hover:bg-[#053F61] duration-300">
             Selecciona
           </label>
           <div style={{display:'flex', justifyContent:'center', marginTop:'10px'}}>
-            <Button variant="contained" color="success" onClick={uploadImage} disabled={!previewUrl}>Actualizar</Button>
+              {!isLoading && (
+                <Button variant="contained" color="success" onClick={uploadImage} disabled={!previewUrl}>
+                  Actualizar
+                </Button>
+              )}
+              {isLoading && <CircularProgress color="success" />}
           </div>
-          <div style={{display:'flex', justifyContent:'center', marginTop:'10px'}}>
-            {isLoading && <CircularProgress color="success"/>}
-          </div>
-
+          
         </DialogContent>
         <DialogActions style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}></DialogActions>
       </Dialog>

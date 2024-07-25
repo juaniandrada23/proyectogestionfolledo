@@ -28,6 +28,7 @@ import Typography from '@mui/material/Typography';
 
 const Pagos = () => {
   useAuthorization();
+  const apiUrl = process.env.REACT_APP_APIURL;
 
   const [pagos, setPagos] = useState([]);
   const [usdActualizado, setUsdActualizado] = useState(0);
@@ -174,7 +175,7 @@ const Pagos = () => {
 
     setCargandoForm(true);
 
-    fetch(`https://apifolledo.onrender.com/pagos/${userId}`, {
+    fetch(`${apiUrl}/pagos/${userId}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -203,13 +204,13 @@ const Pagos = () => {
   //MANEJO PARA HACER EL REFRESH DE LA TABLA
   useEffect(() => {
     if (agregadaExitosa) {
-      let apiUrl = `https://apifolledo.onrender.com/pagos/${userId}`;
+      let apiUrls = `${apiUrl}/pagos/${userId}`;
   
       if (rolUsuario === 'Administrador') {
-        apiUrl = 'https://apifolledo.onrender.com/pagos';
+        apiUrls = `${apiUrl}/pagos`;
       }
   
-      fetch(apiUrl)
+      fetch(apiUrls)
         .then((response) => response.json())
         .then((data) => {
           setPagos(data);
@@ -229,14 +230,14 @@ const Pagos = () => {
       
       setAgregadaExitosa(false);
     }
-  }, [agregadaExitosa, userId, rolUsuario]);
+  }, [agregadaExitosa, userId, rolUsuario, apiUrl]);
 
   //MANEJO PARA LA CARGA DE LOS DATOS EN LA TABLA
   useEffect(() => {
-    let apiUrl = `https://apifolledo.onrender.com/pagos/${userId}`;
+    let apiUrls =  `${apiUrl}/pagos/${userId}`;
 
     if (rolUsuario === 'Administrador') {
-      apiUrl = 'https://apifolledo.onrender.com/pagos';
+      apiUrls =  `${apiUrl}/pagos`;
     }
 
     const token = localStorage.getItem('token');
@@ -249,7 +250,7 @@ const Pagos = () => {
       navigate('/');
     }, 300000);
 
-    fetch(apiUrl)
+    fetch(apiUrls)
       .then((response) => response.json())
       .then((data) => {
         setPagos(data);
@@ -257,16 +258,16 @@ const Pagos = () => {
       })
       .catch((error) => console.error('Error al cargar los pagos', error));  
       return () => clearTimeout(timeoutId);
-  }, [navigate, rolUsuario, userId]);
+  }, [navigate, rolUsuario, userId, apiUrl]);
 
   const actualizarPagos = () => {
-    let apiUrl = `https://apifolledo.onrender.com/pagos/${userId}`;
+    let apiUrls =  `${apiUrl}/pagos/${userId}`;
   
     if (rolUsuario === 'Administrador') {
-      apiUrl = 'https://apifolledo.onrender.com/pagos';
+      apiUrls =  `${apiUrl}/pagos`;
     }
   
-    fetch(apiUrl)
+    fetch(apiUrls)
       .then((response) => response.json())
       .then((data) => {
         setPagos(data);
@@ -277,25 +278,25 @@ const Pagos = () => {
   };  
   //----------------------------------------------------------------------------------------//
   useEffect(() => {
-    fetch('https://apifolledo.onrender.com/proveedores/nombreprov')
+    fetch(`${apiUrl}/proveedores/nombreprov`)
       .then(response => response.json())
       .then(data => setNombreProveedores(data))
       .catch(error => console.error('Error al cargar los nombres de los proveedores', error));
-  }, []);
+  }, [apiUrl]);
 
   useEffect(() => {
-    fetch('https://apifolledo.onrender.com/usuarios/nombres')
+    fetch(`${apiUrl}/usuarios/nombres`)
       .then(response => response.json())
       .then(data => setNombreUsuarios(data))
       .catch(error => console.error('Error al cargar los nombres de los proveedores', error));
-  }, []);
+  }, [apiUrl]);
 
   useEffect(() => {
-    fetch('https://apifolledo.onrender.com/mediodepago/nombremediopago')
+    fetch(`${apiUrl}/mediodepago/nombremediopago`)
       .then(response => response.json())
       .then(data => setMedioDePago(data))
       .catch(error => console.error('Error al cargar los nombres de los medios de pago', error));
-  }, []);
+  }, [apiUrl]);
 
   useEffect(() => {
     fetch('https://api.bluelytics.com.ar/v2/latest')
@@ -320,15 +321,15 @@ const Pagos = () => {
     return;
   }
 
-  let apiUrl = `https://apifolledo.onrender.com/pagos/filtrando/${userId}?fechadesde=${fechaDesde}&fechahasta=${fechaHasta}&nombreProveedor=${nombreProveedorFiltro}`;
+  let apiUrls = `${apiUrl}/pagos/filtrando/${userId}?fechadesde=${fechaDesde}&fechahasta=${fechaHasta}&nombreProveedor=${nombreProveedorFiltro}`;
 
   if (rolUsuario === 'Administrador') {
-    apiUrl = `https://apifolledo.onrender.com/pagos/filtrando?fechadesde=${fechaDesde}&fechahasta=${fechaHasta}&nombreProveedor=${nombreProveedorFiltro}&usuarioFiltrado=${nombreUsuarioFiltro}`;
+    apiUrls = `${apiUrl}/pagos/filtrando?fechadesde=${fechaDesde}&fechahasta=${fechaHasta}&nombreProveedor=${nombreProveedorFiltro}&usuarioFiltrado=${nombreUsuarioFiltro}`;
   }
 
   setIsLoading(true);
 
-  fetch(apiUrl)
+  fetch(apiUrls)
     .then((response) => {
       if (!response.ok) {
         if (response.status >= 500 && response.status <= 503) {

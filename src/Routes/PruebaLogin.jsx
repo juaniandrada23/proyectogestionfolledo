@@ -24,6 +24,7 @@ import Modal from '@mui/material/Modal';
 
 const PruebaLogin = () => {
     isLogged();
+    const apiUrl = process.env.REACT_APP_APIURL;
 
     const [isMobileScreen, setIsMobileScreen] = useState(window.innerWidth <= 600);
     const navigate = useNavigate();
@@ -63,7 +64,7 @@ const PruebaLogin = () => {
       try {
         setIsLoading(true);
   
-        const response = await fetch('https://apifolledo.onrender.com/login/iniciosesion', {
+        const response = await fetch(`${apiUrl}/login/iniciosesion`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

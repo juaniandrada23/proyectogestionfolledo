@@ -10,6 +10,7 @@ import Button from '@mui/material/Button';
 import { MdDelete } from "react-icons/md";
 
 const BotonEliminarPago = ({ pago, actualizarPagos }) => {
+  const apiUrl = process.env.REACT_APP_APIURL;
 
   const [modalOpen, setModalOpen] = useState(false);
   const [pagoAEliminar, setPagoAEliminar] = useState(null);
@@ -41,7 +42,7 @@ const BotonEliminarPago = ({ pago, actualizarPagos }) => {
     setModalOpen(false);
     setSnackbarOpen(false);
   
-    fetch(`https://apifolledo.onrender.com/pagos/${idPago}`, {
+    fetch(`${apiUrl}/pagos/${idPago}`, {
       method: 'DELETE',
     })
       .then(response => {

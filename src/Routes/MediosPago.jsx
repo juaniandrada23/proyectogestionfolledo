@@ -28,6 +28,7 @@ import { AlertTitle } from '@mui/material';
 const MediosPago = () => {
   useAuthorization();
   useTimeout();
+  const apiUrl = process.env.REACT_APP_APIURL;
 
 
   const [mediopago, setMedioPago] = useState([]);
@@ -65,7 +66,7 @@ const MediosPago = () => {
   }, []);
 
   const cargarDatos = () => {
-    fetch('https://apifolledo.onrender.com/mediodepago/nombremediopago')
+    fetch(`${apiUrl}/mediodepago/nombremediopago`)
       .then(response => response.json())
       .then(data => {
         setMedioPago(data);
@@ -82,7 +83,7 @@ const MediosPago = () => {
   const handleBorrar = () => {
     setIsLoadingDelete(true);
 
-    fetch(`https://apifolledo.onrender.com/mediodepago/borrarmediopago/${medioPagoToDelete}`, {
+    fetch(`${apiUrl}/mediodepago/borrarmediopago/${medioPagoToDelete}`, {
       method: 'DELETE',
     })
       .then(response => {
@@ -112,7 +113,7 @@ const MediosPago = () => {
   const handleAgregar = () => {
     setIsLoading(true);
 
-    fetch('https://apifolledo.onrender.com/mediodepago/agregarmediopago', {
+    fetch(`${apiUrl}/mediodepago/agregarmediopago`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -142,7 +143,7 @@ const MediosPago = () => {
   const handleActualizar = () => {
     setIsLoadingEdit(true);
 
-    fetch(`https://apifolledo.onrender.com/mediodepago/actualizarmediopago/${medioPagoSeleccionado}`, {
+    fetch(`${apiUrl}/mediodepago/actualizarmediopago/${medioPagoSeleccionado}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

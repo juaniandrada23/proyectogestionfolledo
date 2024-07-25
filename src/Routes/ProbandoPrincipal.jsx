@@ -25,6 +25,7 @@ import { useTimeout } from '../Functions/timeOut.js';
 const ProbandoPrincipal = () => {
   useAuthorization();
   useTimeout();
+  const apiUrl = process.env.REACT_APP_APIURL;
 
   // Obtén la fecha actual
   const fechaActual = new Date();
@@ -293,11 +294,11 @@ const ProbandoPrincipal = () => {
         return;
       }
 
-      let endpointFiltroDesdeHasta =  `https://apifolledo.onrender.com/principal/filtrando?fechadesde=${fechadesde}&fechahasta=${fechahasta}`;
+      let endpointFiltroDesdeHasta =  `${apiUrl}/principal/filtrando?fechadesde=${fechadesde}&fechahasta=${fechahasta}`;
 
-      let endpointCantidadPagosDesdeHasta =  `https://apifolledo.onrender.com/principal/filtrandocantidad?fechadesde=${fechadesde}&fechahasta=${fechahasta}`; 
+      let endpointCantidadPagosDesdeHasta =  `${apiUrl}/principal/filtrandocantidad?fechadesde=${fechadesde}&fechahasta=${fechahasta}`; 
 
-      let endpointIngresosEgresos =  `https://apifolledo.onrender.com/principal/ingresosegresosgrafico?fechadesde=${fechadesde}&fechahasta=${fechahasta}`; 
+      let endpointIngresosEgresos =  `${apiUrl}/principal/ingresosegresosgrafico?fechadesde=${fechadesde}&fechahasta=${fechahasta}`; 
 
       fetch(endpointFiltroDesdeHasta)
       .then((response) => {
@@ -370,17 +371,17 @@ const ProbandoPrincipal = () => {
 
     // Endpoint consumido para cantidad de pagos
     useEffect(() => {
-      fetch('https://apifolledo.onrender.com/principal/contando')
+      fetch(`${apiUrl}/principal/contando`)
         .then(response => response.json())
         .then(data => {
           setPagosTotal(data);
         })
         .catch(error => console.error('Error al obtener los datos: ', error));
-    }, []);
+    }, [apiUrl]);
 
     // Endpoint para consumir por canvas para cantidad de pagos por año actual
     useEffect(() => {
-      fetch('https://apifolledo.onrender.com/principal/pagosporanio')
+      fetch(`${apiUrl}/principal/pagosporanio`)
         .then(response => response.json())
         .then(data => {
           setTodosPagosPorAño(data);
@@ -389,7 +390,7 @@ const ProbandoPrincipal = () => {
           setCondicion3(false);
         })
         .catch(error => console.error('Error al obtener los datos: ', error));
-    }, []);
+    }, [apiUrl]);
 
     // Endpoint para consumir por canvas para cantidad de pagos por año filtrado
     const filtroPagosPorAño = () => {
@@ -400,11 +401,11 @@ const ProbandoPrincipal = () => {
         return;
       }
 
-      let endpointFiltroPagosPorAño =  `https://apifolledo.onrender.com/principal/pagosporaniofiltrado?añoFiltrado=${añoFiltrado}`;
+      let endpointFiltroPagosPorAño =  `${apiUrl}/principal/pagosporaniofiltrado?añoFiltrado=${añoFiltrado}`;
 
-      let endpointCantidadPorAño =  `https://apifolledo.onrender.com/principal/totalpagofiltradoporanio?añoFiltrado=${añoFiltrado}`;
+      let endpointCantidadPorAño =  `${apiUrl}/principal/totalpagofiltradoporanio?añoFiltrado=${añoFiltrado}`;
 
-      let endpointIngresosEgresosAnioActual =  `https://apifolledo.onrender.com/principal/ingresosegresostotalpagofiltradoporanio?añoFiltrado=${añoFiltrado}`;
+      let endpointIngresosEgresosAnioActual =  `${apiUrl}/principal/ingresosegresostotalpagofiltradoporanio?añoFiltrado=${añoFiltrado}`;
 
 
       fetch(endpointFiltroPagosPorAño)

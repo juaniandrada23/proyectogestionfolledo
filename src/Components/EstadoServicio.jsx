@@ -5,11 +5,12 @@ import { PiWarningOctagonFill } from "react-icons/pi";
 
 const EstadoServicio = () => {
     const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
+    const apiUrl = process.env.REACT_APP_APIURL;
 
     useEffect(() => {
       const fetchData = async () => {
         try {
-          await fetch('https://apifolledo.onrender.com/servidor/estado');
+          await fetch(`${apiUrl}/servidor/estado`);
           setErrorSnackbarOpen(false);
         } catch (error) {
           console.error('Error: servidor caído, inténtelo nuevamente', error);
@@ -24,7 +25,7 @@ const EstadoServicio = () => {
       }, 3000);
   
       return () => clearInterval(intervalId);
-    }, []);
+    }, [apiUrl]);
 
   return (
     <Snackbar anchorOrigin={{

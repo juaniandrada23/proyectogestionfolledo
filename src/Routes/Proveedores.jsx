@@ -23,7 +23,8 @@ import Skeleton from '@mui/material/Skeleton';
 const Proveedores = () => {
   useAuthorization();
   AuthAdmin();
-  
+  const apiUrl = process.env.REACT_APP_APIURL;
+
   // Estado para almacenar la lista de proveedores
   const [proveedores, setProveedores] = useState([]);
   const [modoEdicion, setModoEdicion] = useState(false);
@@ -70,7 +71,7 @@ const Proveedores = () => {
   }, []);
 
   const cargarDatos = () => {
-      fetch('https://apifolledo.onrender.com/proveedores')
+      fetch(`${apiUrl}/proveedores`)
         .then(response => response.json())
         .then(data => {
           setProveedores(data);
@@ -107,7 +108,7 @@ const Proveedores = () => {
         nombre: nuevoProveedor.nombre,
       };
   
-      fetch(`https://apifolledo.onrender.com/proveedores/${idProveedorEditar}`, {
+      fetch(`${apiUrl}/proveedores/${idProveedorEditar}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -132,7 +133,7 @@ const Proveedores = () => {
         })
         .catch(error => console.error('Error al modificar el proveedor', error));
     } else {
-      fetch('https://apifolledo.onrender.com/proveedores', {
+      fetch(`${apiUrl}/proveedores`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -172,7 +173,7 @@ const Proveedores = () => {
 
     setModalOpen(false);
 
-    fetch(`https://apifolledo.onrender.com/proveedores/${id}`, {
+    fetch(`${apiUrl}/proveedores/${id}`, {
       method: 'DELETE',
     })
       .then(response => {

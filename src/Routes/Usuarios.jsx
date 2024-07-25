@@ -24,6 +24,7 @@ import { useTimeout } from '../Functions/timeOut';
 const Usuarios = () => {
   useAuthorization();
   useTimeout();
+  const apiUrl = process.env.REACT_APP_APIURL;
 
   const [modalOpen, setModalOpen] = useState(false);  
   const rolUsuario = localStorage.getItem("userRole");
@@ -48,7 +49,7 @@ const Usuarios = () => {
   const handleBorrarClick = (userId) => {
     setIsLoading2(true);
 
-    fetch(`https://apifolledo.onrender.com/usuarios/${userId}`, {
+    fetch(`${apiUrl}/usuarios/${userId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json'
@@ -80,7 +81,7 @@ const Usuarios = () => {
   const handleAceptarClick = () => {
     setIsLoading(true);
 
-    fetch('https://apifolledo.onrender.com/login/signup', {
+    fetch(`${apiUrl}/login/signup`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -115,7 +116,7 @@ const Usuarios = () => {
   }, []);
 
   const cargarDatos = () => {
-      fetch('https://apifolledo.onrender.com/usuarios/total')
+      fetch(`${apiUrl}/usuarios/total`)
         .then(response => response.json())
         .then(data => {
           setUsuarios(data);
@@ -126,7 +127,7 @@ const Usuarios = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`https://apifolledo.onrender.com/usuarios/datosusuariosesion?idUsuario=${idUsuario}`);
+        const response = await fetch(`${apiUrl}/usuarios/datosusuariosesion?idUsuario=${idUsuario}`);
         const data = await response.json();
         setDatosDelUsuarioSesion(data[0].imagen);
       } catch (error) {
@@ -135,11 +136,11 @@ const Usuarios = () => {
     };
 
     fetchData();
-  }, [idUsuario]);   
+  }, [idUsuario, apiUrl]);   
 
   const fetchData = async () => {
     try {
-      const response = await fetch(`https://apifolledo.onrender.com/usuarios/datosusuariosesion?idUsuario=${idUsuario}`);
+      const response = await fetch(`${apiUrl}/usuarios/datosusuariosesion?idUsuario=${idUsuario}`);
       const data = await response.json();
       setDatosDelUsuarioSesion(data[0].imagen);
     } catch (error) {
@@ -160,7 +161,7 @@ const Usuarios = () => {
                   <img className="object-cover object-top w-full" src='https://images.unsplash.com/photo-1549880338-65ddcdfd017b?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjE0NTg5fQ' alt='Mountain'/>
               </div>
               <div className="mx-auto w-32 h-32 relative -mt-16 border-4 border-white rounded-full overflow-hidden">
-                  <img className="object-cover object-center h-32" src={`${imagenUsuario}`} alt="UserImg"/>
+                  <img className="object-cover object-center w-full h-full" src={`${imagenUsuario}`} alt="UserImg"/>
               </div>
               <div className="text-center mt-2">
                   <h2 className="font-semibold">{nombreDeUsuario}</h2>

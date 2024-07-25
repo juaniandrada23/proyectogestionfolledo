@@ -65,7 +65,8 @@ const Navbar = () => {
               )}
             </div>
           </div>
-
+        
+          {tokenAvailable && (
           <div className="-mr-2 flex md:hidden">
             <button
               onClick={toggleMenu} type="button" className="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-blue-300 hover:bg-blue-800 focus:outline-none focus:bg-blue-800 focus:text-white transition duration-150 ease-in-out"
@@ -76,6 +77,7 @@ const Navbar = () => {
               </svg>
             </button>
           </div>
+          )}
         </div>
 
         <div className={`${isOpen ? 'block' : 'hidden'} md:hidden`}>
