@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import '../Styles/proveedores.css'
+import React, { useState, useEffect, useCallback } from 'react';
+import '../Styles/proveedores.css';
 import Navbar from '../Components/Navbar';
 import Footer from '../Components/Footer';
 import Grid from '@mui/material/Grid';
@@ -11,7 +11,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
-import {TiEdit, TiUserDelete} from "react-icons/ti";
+import { TiEdit, TiUserDelete } from "react-icons/ti";
 import Alert from '@mui/material/Alert';
 import useAuthorization from '../Functions/useAuthorization';
 import { useTimeout } from '../Functions/timeOut';
@@ -25,10 +25,9 @@ const Proveedores = () => {
   AuthAdmin();
   const apiUrl = process.env.REACT_APP_APIURL;
 
-  // Estado para almacenar la lista de proveedores
   const [proveedores, setProveedores] = useState([]);
   const [modoEdicion, setModoEdicion] = useState(false);
-  const [idProveedorEditar, setIdProveedorEditar] = useState(null);  
+  const [idProveedorEditar, setIdProveedorEditar] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [proveedorAEliminar, setProveedorAEliminar] = useState(null);
   const [borradoExitoso, setBorradoExitoso] = useState(false);
@@ -55,32 +54,30 @@ const Proveedores = () => {
   const abrirModalBorrar = (id, nombre) => {
     setModalOpen(true);
     setProveedorAEliminar({ id, nombre });
-  }; 
+  };
 
   const handleCloseSnackbar = () => {
     setSnackbarOpen(false);
-  }; 
-  
-  // Estado para los datos del formulario de agregar proveedores
+  };
+
   const [nuevoProveedor, setNuevoProveedor] = useState({
     nombre: '',
   });
 
+  const cargarDatos = useCallback(() => {
+    fetch(`${apiUrl}/proveedores`)
+      .then(response => response.json())
+      .then(data => {
+        setProveedores(data);
+        setIsLoadingSkeleton(false);
+      })
+      .catch(error => console.error('Error al cargar los proveedores', error));
+  }, [apiUrl]);
+
   useEffect(() => {
     cargarDatos();
-  }, []);
+  }, [cargarDatos]);
 
-  const cargarDatos = () => {
-      fetch(`${apiUrl}/proveedores`)
-        .then(response => response.json())
-        .then(data => {
-          setProveedores(data);
-          setIsLoadingSkeleton(false);
-        })
-        .catch(error => console.error('Error al cargar los proveedores', error));
-  };
-
-  // Función para manejar cambios en el formulario de agregar proveedores
   const handleNuevoProveedorChange = (e) => {
     const { name, value } = e.target;
     setNuevoProveedor({ ...nuevoProveedor, [name]: value });
@@ -102,12 +99,12 @@ const Proveedores = () => {
     }
 
     setLoading(true);
-  
+
     if (modoEdicion) {
       const proveedorModificado = {
         nombre: nuevoProveedor.nombre,
       };
-  
+
       fetch(`${apiUrl}/proveedores/${idProveedorEditar}`, {
         method: 'PUT',
         headers: {
@@ -142,8 +139,8 @@ const Proveedores = () => {
       })
         .then(response => response.json())
         .then(data => {
-            setProveedores([...proveedores, data]);
-            setNuevoProveedor({
+          setProveedores([...proveedores, data]);
+          setNuevoProveedor({
             nombre: '',
           });
           cargarDatos();
@@ -154,23 +151,22 @@ const Proveedores = () => {
         })
         .catch(error => console.error('Error al agregar el proveedor', error));
     }
-  };  
+  };
 
   const modificarProveedor = (id) => {
     const proveedorAEditar = proveedores.find(proveedor => proveedor.id === id);
-  
+
     if (proveedorAEditar) {
       setNuevoProveedor({
         nombre: proveedorAEditar.nombre,
       });
-  
+
       setModoEdicion(true);
       setIdProveedorEditar(id);
     }
   };
-  
-  const borrarProveedor = (id) => {
 
+  const borrarProveedor = (id) => {
     setModalOpen(false);
 
     fetch(`${apiUrl}/proveedores/${id}`, {
@@ -194,11 +190,11 @@ const Proveedores = () => {
         setSnackbarOpen(true);
       }, 1000);
     }
-  }, [borradoExitoso]); 
+  }, [borradoExitoso]);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      <Navbar/>
+      <Navbar />
       <Grid container spacing={2} style={{ flexGrow: 1 }}>
         <Grid item xs={12} lg={8}>
           <div className='tabla'>
@@ -212,26 +208,26 @@ const Proveedores = () => {
                 </tr>
               </thead>
               <tbody>
-              {isLoadingSkeleton ? (
-                    <tr>
-                      <td><Skeleton animation="wave" variant="rounded" width={210} height={30} /></td>
-                      <td><Skeleton animation="wave" variant="rounded" width={210} height={30} /></td>
-                      <td><Skeleton animation="wave" variant="rounded" width={210} height={30} /></td>
-                    </tr>
-                  ) : (
-                proveedores.map((proveedor => (
-                  <tr key={proveedor.id}>
-                    <td>{proveedor.id}</td>
-                    <td>{proveedor.nombre}</td>
-                    <td>
-                      <div className='botonera'>
-                        <button className='modificar' onClick={() => modificarProveedor(proveedor.id)}><TiEdit/></button>
-                        <button className='borrar' onClick={() => abrirModalBorrar(proveedor.id, proveedor.nombre)}><TiUserDelete/></button>
-                      </div>
-                    </td>
+                {isLoadingSkeleton ? (
+                  <tr>
+                    <td><Skeleton animation="wave" variant="rounded" width={210} height={30} /></td>
+                    <td><Skeleton animation="wave" variant="rounded" width={210} height={30} /></td>
+                    <td><Skeleton animation="wave" variant="rounded" width={210} height={30} /></td>
                   </tr>
-                ))))
-              }
+                ) : (
+                  proveedores.map((proveedor => (
+                    <tr key={proveedor.id}>
+                      <td>{proveedor.id}</td>
+                      <td>{proveedor.nombre}</td>
+                      <td>
+                        <div className='botonera'>
+                          <button className='modificar' onClick={() => modificarProveedor(proveedor.id)}><TiEdit /></button>
+                          <button className='borrar' onClick={() => abrirModalBorrar(proveedor.id, proveedor.nombre)}><TiUserDelete /></button>
+                        </div>
+                      </td>
+                    </tr>
+                  )))
+                )}
               </tbody>
             </table>
           </div>
@@ -241,22 +237,22 @@ const Proveedores = () => {
             <h1>{modoEdicion ? `Modificar Proveedor ${idProveedorEditar}` : 'Agregar Proveedor'}</h1>
             <form>
               <div className='formAgregar'>
-                <div style={{display:'flex', flexDirection:'column', justifyContent:'center',textAlign:'center', marginBottom:'10px', color:'red'}}>
-                {error && <Alert severity="error"><strong>{error} </strong></Alert>}
+                <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', textAlign: 'center', marginBottom: '10px', color: 'red' }}>
+                  {error && <Alert severity="error"><strong>{error} </strong></Alert>}
                 </div>
-                <TextField label="Proveedor" name="nombre" value={nuevoProveedor.nombre} onChange={handleNuevoProveedorChange}/>
+                <TextField label="Proveedor" name="nombre" value={nuevoProveedor.nombre} onChange={handleNuevoProveedorChange} />
               </div>
               <div className='btnAgregar'>
-              <button className='agregarProv' type="button" onClick={agregarOEditarProveedor}>
-                {modoEdicion ? 'Modificar proveedor' : 'Agregar proveedor'} <br />
-                {isLoading && <LinearProgress />}
-              </button>
+                <button className='agregarProv' type="button" onClick={agregarOEditarProveedor}>
+                  {modoEdicion ? 'Modificar proveedor' : 'Agregar proveedor'} <br />
+                  {isLoading && <LinearProgress />}
+                </button>
               </div>
             </form>
           </div>
         </Grid>
       </Grid>
-      <Footer style={{ flexShrink: 0 }}/>
+      <Footer style={{ flexShrink: 0 }} />
 
       <Dialog open={modalOpen} onClose={() => setModalOpen(false)} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
         <DialogTitle style={{ backgroundColor: '#006989', color: 'white', marginBottom: '5px' }} id="alert-dialog-title">Confirmar borrado de proveedor</DialogTitle>
@@ -267,7 +263,7 @@ const Proveedores = () => {
             Se borrarán todos los pagos relacionados
           </DialogContentText>
         </DialogContent>
-        <DialogActions style={{display:'flex', flexDirection:'row', justifyContent:'center'}}>
+        <DialogActions style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
           <Button onClick={() => setModalOpen(false)} variant='outlined' color='primary'>
             Cancelar
           </Button>
@@ -277,14 +273,14 @@ const Proveedores = () => {
         </DialogActions>
       </Dialog>
 
-      <EstadoServicio/>
+      <EstadoServicio />
 
       <Snackbar open={snackbarOpen} autoHideDuration={2000} onClose={handleCloseSnackbar} anchorOrigin={isMobileScreen ? { vertical: 'top', horizontal: 'center' } : { vertical: 'bottom', horizontal: 'left' }}>
         <Alert variant='filled' severity="success" sx={{ width: '100%' }}>
           {snackbarMessage}
         </Alert>
       </Snackbar>
-      </div>
+    </div>
   );
 };
 

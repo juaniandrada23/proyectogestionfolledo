@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Grid from '@mui/material/Grid';
 import Navbar from '../Components/Navbar';
 import Footer from '../Components/Footer';
@@ -24,12 +24,10 @@ import { useTimeout } from '../Functions/timeOut';
 import '../Styles/mediosdepago.css';
 import { AlertTitle } from '@mui/material';
 
-
 const MediosPago = () => {
   useAuthorization();
   useTimeout();
   const apiUrl = process.env.REACT_APP_APIURL;
-
 
   const [mediopago, setMedioPago] = useState([]);
   const [nuevoMedioPago, setNuevoMedioPago] = useState('');
@@ -61,11 +59,7 @@ const MediosPago = () => {
     setSnackbarOpen(false);
   }; 
 
-  useEffect(() => {
-    cargarDatos();
-  }, []);
-
-  const cargarDatos = () => {
+  const cargarDatos = useCallback(() => {
     fetch(`${apiUrl}/mediodepago/nombremediopago`)
       .then(response => response.json())
       .then(data => {
@@ -73,7 +67,11 @@ const MediosPago = () => {
         setIsLoadingSkeleton(false);
       })
       .catch(error => console.error('Error al cargar los nombres de los medios de pago', error));
-  };
+  }, [apiUrl]);
+
+  useEffect(() => {
+    cargarDatos();
+  }, [cargarDatos]);
 
   const handleBorrarClick = (nombreMedioPago) => {
     setMedioPagoToDelete(nombreMedioPago);
@@ -221,7 +219,6 @@ const MediosPago = () => {
                     <td>{pagomedio.nombreMedioPago}</td>
                     <td>
                       <div className='botonera'>
-                        {/*  {isLoading && <CircularProgress />}*/}
                         <button className='borrar' onClick={() => handleBorrarClick(pagomedio.nombreMedioPago)}>
                           <MdOutlineMoneyOffCsred />
                         </button>

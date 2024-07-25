@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import Navbar from '../Components/Navbar'
-import Footer from '../Components/Footer'
+import React, { useState, useEffect, useCallback } from 'react';
+import Navbar from '../Components/Navbar';
+import Footer from '../Components/Footer';
 import Grid from '@mui/material/Grid';
 import Avatar from '@mui/material/Avatar';
 import Accordion from '@mui/material/Accordion';
@@ -17,7 +17,7 @@ import Button from '@mui/material/Button';
 import { BiExpandVertical } from "react-icons/bi";
 import { FiUserPlus } from "react-icons/fi";
 import FileUpload from '../Components/FileUpload';
-import EstadoServicio from '../Components/EstadoServicio.jsx'
+import EstadoServicio from '../Components/EstadoServicio.jsx';
 import useAuthorization from '../Functions/useAuthorization';
 import { useTimeout } from '../Functions/timeOut';
 
@@ -26,7 +26,7 @@ const Usuarios = () => {
   useTimeout();
   const apiUrl = process.env.REACT_APP_APIURL;
 
-  const [modalOpen, setModalOpen] = useState(false);  
+  const [modalOpen, setModalOpen] = useState(false);
   const rolUsuario = localStorage.getItem("userRole");
   const idUsuario = localStorage.getItem("userId");
   const nombreDeUsuario = localStorage.getItem("userName");
@@ -44,7 +44,7 @@ const Usuarios = () => {
   const abrirModalBorrar = (id, username) => {
     setModalOpen2(true);
     setUsuarioAEliminar({ id, username });
-  }; 
+  };
 
   const handleBorrarClick = (userId) => {
     setIsLoading2(true);
@@ -55,21 +55,21 @@ const Usuarios = () => {
         'Content-Type': 'application/json'
       }
     })
-    .then(response => {
-      if (response.ok) {
-        console.log('Usuario eliminado exitosamente');
-        cargarDatos();
-        setModalOpen2(false);
-        setIsLoading2(false);
-      } else {
-        console.error('Error al borrar el usuario:', response.statusText);
-      }
-    })
-    .catch(error => {
-      console.error('Error al borrar el usuario:', error);
-    });
+      .then(response => {
+        if (response.ok) {
+          console.log('Usuario eliminado exitosamente');
+          cargarDatos();
+          setModalOpen2(false);
+          setIsLoading2(false);
+        } else {
+          console.error('Error al borrar el usuario:', response.statusText);
+        }
+      })
+      .catch(error => {
+        console.error('Error al borrar el usuario:', error);
+      });
   };
-  
+
   const handleNuevoUsuarioChange = (event) => {
     const { name, value } = event.target;
     setNuevoUsuario(prevState => ({
@@ -91,16 +91,16 @@ const Usuarios = () => {
         password: nuevoUsuario.contraseña
       })
     })
-    .then(response => response.json())
-    .then(data => {
-      console.log('Respuesta de la API:', data);
-      handleModalClose();
-      setIsLoading(false);
-      cargarDatos();
-    })
-    .catch(error => {
-      console.error('Error al agregar el usuario:', error);
-    });
+      .then(response => response.json())
+      .then(data => {
+        console.log('Respuesta de la API:', data);
+        handleModalClose();
+        setIsLoading(false);
+        cargarDatos();
+      })
+      .catch(error => {
+        console.error('Error al agregar el usuario:', error);
+      });
   };
 
   const handleModalOpen = () => {
@@ -111,18 +111,18 @@ const Usuarios = () => {
     setModalOpen(false);
   };
 
+  const cargarDatos = useCallback(() => {
+    fetch(`${apiUrl}/usuarios/total`)
+      .then(response => response.json())
+      .then(data => {
+        setUsuarios(data);
+      })
+      .catch(error => console.error('Error al cargar los usuarios', error));
+  }, [apiUrl]);
+
   useEffect(() => {
     cargarDatos();
-  }, []);
-
-  const cargarDatos = () => {
-      fetch(`${apiUrl}/usuarios/total`)
-        .then(response => response.json())
-        .then(data => {
-          setUsuarios(data);
-        })
-        .catch(error => console.error('Error al cargar los usuarios', error));
-  };
+  }, [cargarDatos]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -136,17 +136,7 @@ const Usuarios = () => {
     };
 
     fetchData();
-  }, [idUsuario, apiUrl]);   
-
-  const fetchData = async () => {
-    try {
-      const response = await fetch(`${apiUrl}/usuarios/datosusuariosesion?idUsuario=${idUsuario}`);
-      const data = await response.json();
-      setDatosDelUsuarioSesion(data[0].imagen);
-    } catch (error) {
-      console.error('Error al obtener los datos: ', error);
-    }
-  };
+  }, [idUsuario, apiUrl]);
 
   return (
     <>
@@ -168,8 +158,8 @@ const Usuarios = () => {
                   <p className="text-gray-500">{rolUsuario}</p>
               </div>
               <div className="p-4 border-t mt-2 flex flex-row">
-                <FileUpload nombreDeUsuario={nombreDeUsuario} idUsuario={idUsuario} cargarDatos={cargarDatos} fetchData={fetchData}/>
-                <button style={{borderRadius:'10px'}} className="block mx-auto font-semibold text-white px-2 py-1 sm:px-4 sm:py-2 transition ease-in-out delay-150 bg-[#006989] hover:bg-[#053F61] duration-300" onClick={handleModalOpen}>
+              <FileUpload nombreDeUsuario={nombreDeUsuario} idUsuario={idUsuario} cargarDatos={cargarDatos} fetchData={cargarDatos} />
+              <button style={{borderRadius:'10px'}} className="block mx-auto font-semibold text-white px-2 py-1 sm:px-4 sm:py-2 transition ease-in-out delay-150 bg-[#006989] hover:bg-[#053F61] duration-300" onClick={handleModalOpen}>
                   <FiUserPlus style={{width:'4vh', height:'4vh'}}></FiUserPlus>
                 </button>
               </div>
