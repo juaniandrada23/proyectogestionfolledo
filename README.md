@@ -1,4 +1,4 @@
-Aplicacion creada para la gestion contable del Licenciado.
+Aplicacion creada para balances.
 
 Para utilizar la aplicacion debes usar este usuario de prueba:
 user: userprueba
