@@ -21,6 +21,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import EstadoServicio from '../Components/EstadoServicio.jsx'
 import useAuthorization from '../Functions/useAuthorization.js';
 import { useTimeout } from '../Functions/timeOut.js';
+import { FaArrowUp, FaArrowDown } from 'react-icons/fa';
 
 const ProbandoPrincipal = () => {
   useAuthorization();
@@ -37,7 +38,7 @@ const ProbandoPrincipal = () => {
   const diaActualConCero = diaActual < 10 ? '0' + diaActual : diaActual.toString();
 
   // Calcula el número del mes anterior
-  let mesAnterior = fechaActual.getMonth();
+  let mesAnterior = fechaActual.getMonth() < 10 ? '0' + fechaActual.getMonth() : fechaActual.getMonth().toString();
   
   // Obtiene el número del año actual
   let añoActual = fechaActual.getFullYear();
@@ -49,7 +50,6 @@ const ProbandoPrincipal = () => {
 
   //-----------------------------------Parametros-------------------------------------
   const [isLoading, setLoading] = useState(false);
-  const [isMobileScreen, setIsMobileScreen] = useState(window.innerWidth <= 600);
   const chart1Ref = useRef(null);
   const chart2Ref = useRef(null);
   const [usdBlue, setUsdBlue] = useState(0);
@@ -91,18 +91,6 @@ const ProbandoPrincipal = () => {
 
     obtenerFechaActual();
   }, []);
-
-    //Logica para hacer un breakpoint para el tamaño de la pantalla de celular
-    const handleWindowResize = () => {
-      setIsMobileScreen(window.innerWidth <= 600);
-    };
-
-    useEffect(() => {
-      window.addEventListener('resize', handleWindowResize);
-      return () => {
-        window.removeEventListener('resize', handleWindowResize);
-      };
-    }, []);
     //-------------------------------------------------------------------------//
 
     // Logica para agregar un array de años para un select
@@ -699,10 +687,10 @@ const ProbandoPrincipal = () => {
                         </div>
                     </div>
                     <p className="text-sm text-blueGray-400 mt-4">
-                        <span className={porcentaje >= 0 ? 'text-red-500 mr-2' : 'text-emerald-500 mr-2'}>
-                          <i className={`fas fa-arrow-${porcentaje >= 0 ? 'up' : 'down'}`}></i> {porcentaje}%
-                        </span>
-                        <span className="whitespace-nowrap">Desde hace un mes</span>
+                      <span className={porcentaje >= 0 ? 'text-emerald-500 mr-2' : 'text-red-500 mr-2'}>
+                        {porcentaje >= 0 ? <FaArrowUp className="inline" /> : <FaArrowDown className="inline" />} {porcentaje}%
+                      </span>
+                      <span className="whitespace-nowrap">Desde hace un mes</span>
                     </p>
                     </div>
                 </div>
@@ -721,15 +709,15 @@ const ProbandoPrincipal = () => {
               </Grid>
             </Grid>
 
-            <Grid className='mb-4' container spacing={2}>
-              <Grid item xs={12} lg={6}>
-                <div className='bg-white mx-2 p-2 rounded-lg'>
-                  <canvas ref={chart1Ref} width={300} height={isMobileScreen ? 270 : 150}></canvas>
+            <Grid className='mb-4 flex justify-center' container spacing={4}>
+              <Grid item xs={11.5} lg={5.9}>
+                <div className='bg-white p-2 rounded-lg w-full h-full'>
+                  <canvas ref={chart1Ref} className='w-64 h-64'></canvas>
                 </div>
               </Grid>
-              <Grid item xs={12} lg={6}>
-                <div className='bg-white mx-2 p-2 rounded-lg'>
-                  <canvas ref={chart2Ref} width={300} height={315}></canvas>
+              <Grid item xs={11.5} lg={5.9}>
+                <div className='bg-white p-2 rounded-lg w-full h-full'>
+                  <canvas ref={chart2Ref} className='w-64 h-64'></canvas>
                 </div>
               </Grid>
             </Grid>

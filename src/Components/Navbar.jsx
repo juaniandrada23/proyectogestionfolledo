@@ -5,8 +5,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Modal from '@mui/material/Modal';
 import ButtonSlice from './ButtonSlice';
 import Avatar from '@mui/material/Avatar';
-import { LuHome } from "react-icons/lu";
-import { CgProfile } from "react-icons/cg";
+import { CgHomeAlt, CgProfile } from "react-icons/cg";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -57,10 +56,8 @@ const Navbar = () => {
             {tokenAvailable && (
               <>
                 <ButtonSlice/>
-                <button className="inline-flex items-center gap-x-1 text-sm font-semibold leading-6 transition ease-in-out delay-150 bg-white hover:-translate-y-1 hover:scale-110 hover:bg-blue-200 duration-300" style={{color:'black', padding:'5px', borderRadius:'50px'}} onClick={() => navigate(`/probandoprincipal/${userId}`)}><LuHome style={{width:'3vh', height:'3vh'}}/></button>
-                <button className='transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300'>
-                  <Avatar style={{backgroundColor:'white'}} alt={`${nombreDelUsuario}`} sx={{ width: 34, height: 34 }} onClick={() => navigate(`/usuarios/${userId}`)}><CgProfile style={{color:'black'}}/></Avatar>
-                </button>
+                <button className='bg-white p-2 rounded-full hover:bg-slate-300' onClick={() => navigate(`/probandoprincipal/${userId}`)}><CgHomeAlt className='text-slate-950 w-4 h-4'/></button>
+                <button className='bg-white p-2 rounded-full hover:bg-slate-300' onClick={() => navigate(`/usuarios/${userId}`)}><CgProfile className='text-slate-950 w-4 h-4'/></button>
               </>
               )}
             </div>
